@@ -31,14 +31,15 @@
 
     <ScrollView
         android:id="@+id/login_form"
-        android:layout_width="363dp"
-        android:layout_height="367dp"
+        android:layout_width="307dp"
+        android:layout_height="371dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.981">
@@ -51,59 +52,62 @@
 
             <EditText
                 android:id="@+id/txtFirstname"
-                android:layout_width="213dp"
+                style="@android:style/Widget.Material.EditText"
+                android:layout_width="363dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_firstname"
                 android:inputType="text"
                 android:maxLines="1"
+                android:paddingLeft="5dp"
                 android:singleLine="true" />
 
             <EditText
                 android:id="@+id/txtLastname"
-                android:layout_width="213dp"
+                style="@android:style/Widget.Material.EditText"
+                android:layout_width="363dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_lastname"
                 android:inputType="text"
                 android:maxLines="1"
+                android:paddingLeft="5dp"
                 android:singleLine="true" />
 
             <EditText
                 android:id="@+id/txtUsername"
-                android:layout_width="213dp"
+                style="@android:style/Widget.Material.EditText"
+                android:layout_width="363dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_username"
                 android:inputType="text"
                 android:maxLines="1"
+                android:paddingLeft="5dp"
                 android:singleLine="true" />
 
             <AutoCompleteTextView
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
+                android:paddingLeft="5dp"
                 android:singleLine="true" />
 
             <EditText
                 android:id="@+id/txtPassword"
-                android:layout_width="276dp"
+                android:layout_width="363dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_password"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
+                android:paddingLeft="5dp"
                 android:singleLine="true" />
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/btnRegisterNow"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="73dp"
@@ -116,14 +120,16 @@
 
     <TextView
         android:id="@+id/txtLogin"
-        android:layout_width="341dp"
-        android:layout_height="34dp"
+        style="@android:style/Widget.Material.TextView"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/login"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/login_form"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/login_form"
         app:layout_constraintVertical_bias="0.957" />

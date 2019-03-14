@@ -24,4 +24,5 @@
     <!--other Strings-->
     <string name="register_now">"You have no account yet? Get one"</string>
     <string name="title_activity_register">Register</string>
+    <string name="logo_description">Logo</string>
 </resources>
