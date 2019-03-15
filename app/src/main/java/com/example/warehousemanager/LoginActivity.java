@@ -72,8 +72,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
+        mAuth = FirebaseAuth.getInstance();
         // Set up the login form.
         txtRegister = findViewById(R.id.txtRegister);
         txtRegister.setOnClickListener(new OnClickListener() {
