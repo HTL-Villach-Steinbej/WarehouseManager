@@ -1,2 +1,0 @@
-# WarehouseManager
-School Project
