@@ -34,7 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
-
         btnRegister = findViewById(R.id.btnRegisterNow);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,8 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
     private void register(){
         TextView txtEmail = findViewById(R.id.txtEmail);
@@ -79,7 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
     }
-
     private void updateUI(FirebaseUser user) {
         if(user != null) {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
