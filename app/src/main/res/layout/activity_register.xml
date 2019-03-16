@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
+
     <!-- Login progress -->
     <ImageView
         android:id="@+id/imageView2"
@@ -29,9 +30,9 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="300dp"
-        android:layout_height="257dp"
+        android:layout_height="371dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,22 +48,53 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <AutoCompleteTextView
-                android:id="@+id/email"
-                android:layout_width="362dp"
+            <EditText
+                android:id="@+id/txtFirstname"
+                style="@android:style/Widget.Material.EditText"
+                android:layout_width="363dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:hint="@string/prompt_email_or_username"
+                android:hint="@string/prompt_firstname"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/txtLastname"
+                style="@android:style/Widget.Material.EditText"
+                android:layout_width="363dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_lastname"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/txtUsername"
+                style="@android:style/Widget.Material.EditText"
+                android:layout_width="363dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_username"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:singleLine="true" />
+
+            <AutoCompleteTextView
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:paddingLeft="5dp"
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/password"
-                android:layout_width="362dp"
+                android:id="@+id/txtPassword"
+                android:layout_width="363dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_password"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -73,27 +105,30 @@
                 android:singleLine="true" />
 
             <Button
-                android:id="@+id/btnLoginNow"
+                android:id="@+id/btnRegisterNow"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="73dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in_short"
+                android:text="@string/action_register"
                 android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>
+
     <TextView
-        android:id="@+id/txtRegister"
+        android:id="@+id/txtLogin"
+        style="@android:style/Widget.Material.TextView"
         android:layout_width="320dp"
         android:layout_height="20dp"
-        android:text="@string/register_now"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/login"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/login_form"
-        app:layout_constraintEnd_toEndOf="@+id/login_form"
-        app:layout_constraintStart_toStartOf="@+id/login_form"
-        app:layout_constraintTop_toTopOf="@+id/login_form"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/login_form"
         app:layout_constraintVertical_bias="0.995" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
