@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LOGIN";
+
     private FirebaseAuth mAuth;
     private Button btnLogin;
     private TextView txtRegister;
@@ -32,15 +34,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //FirebaseApp.initializeApp(this);
-        //mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         btnLogin = findViewById(R.id.btnLoginNow);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, WarehouseActivity.class);
-                startActivity(intent);
+                login();
             }
         });
 
@@ -54,18 +54,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /*@Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-    private void updateUI(FirebaseUser currentUser) {
-
-    }
     private void login(){
-        //TODO: get email and password => editbox
+        TextView emailView = findViewById(R.id.email);
+        String email = emailView.getText().toString();
+        TextView passwordView = findViewById(R.id.password);
+        String password = passwordView.getText().toString();
+
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -82,9 +77,14 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-                        // ...
                     }
                 });
-    }*/
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if(user != null){
+            Intent intent = new Intent(LoginActivity.this, WarehouseActivity.class);
+            startActivity(intent);
+        }
+    }
 }
