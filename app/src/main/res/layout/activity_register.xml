@@ -9,11 +9,10 @@
     android:orientation="vertical"
     tools:context=".RegisterActivity">
 
-    <!-- Login progress -->
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -106,12 +105,13 @@
 
             <Button
                 android:id="@+id/btnRegisterNow"
-                style="@style/Widget.AppCompat.Button"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="73dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_register"
                 android:textStyle="bold" />
+
 
         </LinearLayout>
     </ScrollView>

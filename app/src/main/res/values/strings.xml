@@ -11,4 +11,8 @@
     <string name="prompt_username">Username</string>
     <string name="prompt_lastname">Lastname</string>
     <string name="prompt_firstname">Firstname</string>
+    <string name="existingWarehouse">Join an existing Warehouse</string>
+    <string name="newWarehouse">Create a new Warehouse</string>
+    <string name="or">or</string>
+    <string name="changeAccount">Not your account? Change now</string>
 </resources>
