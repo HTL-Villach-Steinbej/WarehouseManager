@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -34,8 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "REGISTER";
     private FirebaseAuth mAuth;
     private Button btnRegister;
-    private TextView txtEmail;
     private TextView txtPassword;
+    private TextView txtEmail;
     private TextView txtLogin;
 
     @Override

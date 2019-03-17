@@ -9,6 +9,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,6 +20,7 @@ public class WarehouseActivity extends AppCompatActivity {
     private Button btnCreateWarehouse;
     private Button btnJoinWarehouse;
     private FirebaseAuth mAuth;
+    private GoogleSignInAccount account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -32,6 +35,7 @@ public class WarehouseActivity extends AppCompatActivity {
         txtChangeAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(WarehouseActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -50,6 +54,7 @@ public class WarehouseActivity extends AppCompatActivity {
         btnJoinWarehouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
                 Intent intent = new Intent(WarehouseActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
@@ -61,9 +66,22 @@ public class WarehouseActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
     }
 
     private void updateUI(FirebaseUser currentUser) {
+        if(currentUser != null){
+            txtHi = findViewById(R.id.txtHi);
+            txtHi.setText("Hi " + currentUser.getDisplayName() + ".");
+        }
+        else{
+            //TODO: Please Log in!
+        }
+    }
+    private void updateUI(GoogleSignInAccount currentUser) {
         if(currentUser != null){
             txtHi = findViewById(R.id.txtHi);
             txtHi.setText("Hi " + currentUser.getDisplayName() + ".");

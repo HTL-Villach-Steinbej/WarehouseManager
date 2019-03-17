@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,12 +64,25 @@ public class HomeActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
     }
 
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null){
             txtWelcome = findViewById(R.id.txtWelcome);
             txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
+        }
+        else{
+            //TODO: Please Log in!
+        }
+    }
+    private void updateUI(GoogleSignInAccount currentUser) {
+        if(currentUser != null){
+            txtWelcome = findViewById(R.id.txtHi);
+            txtWelcome.setText("Hi " + currentUser.getDisplayName() + ".");
         }
         else{
             //TODO: Please Log in!
