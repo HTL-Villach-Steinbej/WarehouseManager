@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView txtEmail;
     private TextView txtLogin;
 
+    //onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    //Registration
     private void register(){
         TextView txtEmail = findViewById(R.id.txtEmail);
         TextView txtPassword = findViewById(R.id.txtPassword);
@@ -179,6 +181,7 @@ public class RegisterActivity extends AppCompatActivity {
         if(user != null) {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
+            this.finish();
         }
     }
 }

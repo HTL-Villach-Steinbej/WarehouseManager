@@ -2,7 +2,7 @@
     <string name="app_name">Warehouse Manager</string>
     <string name="register_now">No account yet? Sign Up now</string>
     <string name="logo_description">Logo</string>
-    <string name="action_sign_in_short">Log in</string>
+    <string name="action_sign_in_short">Sign in</string>
     <string name="prompt_email_or_username">Email or Username</string>
     <string name="prompt_password">Password</string>
     <string name="login">You have an account already? Log in</string>

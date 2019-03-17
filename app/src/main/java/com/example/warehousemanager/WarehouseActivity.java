@@ -2,6 +2,7 @@ package com.example.warehousemanager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +21,7 @@ public class WarehouseActivity extends AppCompatActivity {
     private Button btnCreateWarehouse;
     private Button btnJoinWarehouse;
     private FirebaseAuth mAuth;
-    private GoogleSignInAccount account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -35,7 +36,7 @@ public class WarehouseActivity extends AppCompatActivity {
         txtChangeAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(WarehouseActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -54,40 +55,26 @@ public class WarehouseActivity extends AppCompatActivity {
         btnJoinWarehouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
                 Intent intent = new Intent(WarehouseActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });
     }
-
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
     }
-
     private void updateUI(FirebaseUser currentUser) {
         if(currentUser != null){
             txtHi = findViewById(R.id.txtHi);
             txtHi.setText("Hi " + currentUser.getDisplayName() + ".");
         }
         else{
-            //TODO: Please Log in!
-        }
-    }
-    private void updateUI(GoogleSignInAccount currentUser) {
-        if(currentUser != null){
-            txtHi = findViewById(R.id.txtHi);
-            txtHi.setText("Hi " + currentUser.getDisplayName() + ".");
-        }
-        else{
-            //TODO: Please Log in!
+            Intent intent = new Intent(WarehouseActivity.this, LoginActivity.class);
+            startActivity(intent);
+            this.finish();
         }
     }
 }
