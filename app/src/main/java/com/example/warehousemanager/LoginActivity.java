@@ -45,8 +45,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+
         emailView = findViewById(R.id.email);
         populateAutoComplete();
+
         passwordView = findViewById(R.id.password);
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         btnLogin = findViewById(R.id.btnLoginNow);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
+
         txtRegister = findViewById(R.id.txtRegister);
         txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     private boolean isEmailValid(String email) {
-        return email.contains("@");
+        return email.contains("@") && email.contains(".");
     }
     private boolean isPasswordValid(String password) {
         return password.length() > 4;

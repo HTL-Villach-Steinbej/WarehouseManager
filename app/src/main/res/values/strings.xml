@@ -9,12 +9,10 @@
     <string name="action_register">Register</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_username">Username</string>
-    <string name="prompt_lastname">Lastname</string>
-    <string name="prompt_firstname">Firstname</string>
     <string name="existingWarehouse">Join an existing Warehouse</string>
     <string name="newWarehouse">Create a new Warehouse</string>
     <string name="or">or</string>
-    <string name="changeAccount">Not your account? Change now</string>
+    <string name="changeAccount">Not you? Switch account</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

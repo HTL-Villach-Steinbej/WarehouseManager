@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class WarehouseActivity extends AppCompatActivity {
     private TextView txtChangeAccount;
+    private TextView txtHi;
     private Button btnCreateWarehouse;
     private Button btnJoinWarehouse;
     private FirebaseAuth mAuth;
@@ -58,12 +59,17 @@ public class WarehouseActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
-        
+        if(currentUser != null){
+            txtHi = findViewById(R.id.txtHi);
+            txtHi.setText("Hi " + currentUser.getDisplayName() + ".");
+        }
+        else{
+            //TODO: Please Log in!
+        }
     }
 }

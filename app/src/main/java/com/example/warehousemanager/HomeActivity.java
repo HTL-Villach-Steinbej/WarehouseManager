@@ -19,7 +19,7 @@ import android.widget.TextView;
 public class HomeActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
-
+    private TextView txtWelcome;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -60,11 +60,17 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null){
+            txtWelcome = findViewById(R.id.txtWelcome);
+            txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
+        }
+        else{
+            //TODO: Please Log in!
+        }
     }
 }
