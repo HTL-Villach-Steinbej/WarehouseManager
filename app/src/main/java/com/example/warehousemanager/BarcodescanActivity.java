@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -23,7 +22,8 @@ import java.io.IOException;
 public class BarcodescanActivity extends AppCompatActivity {
 
     SurfaceView cameraPreview;
-    TextView txtResult;
+    TextView txtQRCODE;
+    TextView txtEAN;
     BarcodeDetector qrcodeDetector;
     BarcodeDetector barcodeDetector;
     CameraSource cameraSource;
@@ -56,7 +56,8 @@ public class BarcodescanActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_barcodescan);
         cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
-        txtResult = (TextView) findViewById(R.id.txtResult);
+        txtQRCODE = (TextView) findViewById(R.id.txtQRCODE);
+        txtEAN=findViewById(R.id.txtEAN);
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.EAN_13 | Barcode.QR_CODE)
                 .build();
@@ -105,19 +106,31 @@ public class BarcodescanActivity extends AppCompatActivity {
                 final SparseArray<Barcode> qrcodes = detections.getDetectedItems();
                 if(qrcodes.size() != 0)
                 {
+                    if(qrcodes.valueAt(0).format==256) {
 
-                    txtResult.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Create vibrate
 
-                            txtResult.setText(qrcodes.valueAt(0).displayValue);
-                        }
-                    });
+                        txtQRCODE.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Create vibrate
+
+                                txtQRCODE.setText(qrcodes.valueAt(0).displayValue);
+                            }
+                        });
+                    }
+                    if(qrcodes.valueAt(0).format==32){
+                        txtEAN.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Create vibrate
+
+                                txtEAN.setText(qrcodes.valueAt(0).displayValue);
+                            }
+                        });
+                    }
                 }
             }
         });
 
     }
 }
-
