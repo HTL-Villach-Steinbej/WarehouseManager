@@ -101,10 +101,10 @@ public class HomeActivity extends AppCompatActivity {
             txtWelcome = findViewById(R.id.txtWelcome);
             txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
         }
-        else{
+        else {
+            this.finish();
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
-            this.finish();
         }
     }
 }

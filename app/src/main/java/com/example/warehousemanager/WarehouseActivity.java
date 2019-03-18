@@ -69,10 +69,10 @@ public class WarehouseActivity extends AppCompatActivity {
             txtHi = findViewById(R.id.txtHi);
             txtHi.setText("Hi " + currentUser.getDisplayName() + ".");
         }
-        else{
+        else {
+            this.finish();
             Intent intent = new Intent(WarehouseActivity.this, LoginActivity.class);
             startActivity(intent);
-            this.finish();
         }
     }
 }

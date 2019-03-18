@@ -187,6 +187,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Google
     private void signIn() {
+        mGoogleSignInClient.signOut();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -234,9 +235,9 @@ public class LoginActivity extends AppCompatActivity {
     //Misc
     private void updateUI(FirebaseUser user) {
         if(user != null){
+            this.finish();
             Intent intent = new Intent(LoginActivity.this, WarehouseActivity.class);
             startActivity(intent);
-            this.finish();
         }
     }
 }

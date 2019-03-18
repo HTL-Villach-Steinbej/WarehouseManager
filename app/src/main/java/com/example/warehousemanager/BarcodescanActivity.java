@@ -51,13 +51,12 @@ public class BarcodescanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_barcodescan);
-        cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
-        txtQRCODE = (TextView) findViewById(R.id.txtQRCODE);
-        txtEAN=findViewById(R.id.txtEAN);
+        cameraPreview = findViewById(R.id.cameraPreview);
+        txtQRCODE = findViewById(R.id.txtQRCODE);
+        txtEAN = findViewById(R.id.txtEAN);
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.EAN_13 | Barcode.QR_CODE)
                 .build();
@@ -91,14 +90,11 @@ public class BarcodescanActivity extends AppCompatActivity {
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
                 cameraSource.stop();
-
             }
         });
-
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-
             }
 
             @Override
@@ -131,6 +127,5 @@ public class BarcodescanActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }

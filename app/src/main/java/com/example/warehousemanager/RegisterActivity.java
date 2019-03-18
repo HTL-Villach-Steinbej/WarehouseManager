@@ -179,9 +179,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void updateUI(FirebaseUser user) {
         if(user != null) {
+            this.finish();
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
-            this.finish();
         }
     }
 }
