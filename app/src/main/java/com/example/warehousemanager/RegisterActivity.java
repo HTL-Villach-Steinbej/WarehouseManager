@@ -42,8 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
     //onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getSupportActionBar().hide();
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //getSupportActionBar().hide();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);

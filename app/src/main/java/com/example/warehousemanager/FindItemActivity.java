@@ -1,24 +1,20 @@
 package com.example.warehousemanager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
-import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.CameraSource;
@@ -26,14 +22,17 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class BarcodescanActivity extends AppCompatActivity {
+public class FindItemActivity extends AppCompatActivity {
 
     private SurfaceView cameraPreview;
     private TextView txtQRCODE;
@@ -43,13 +42,11 @@ public class BarcodescanActivity extends AppCompatActivity {
     private CameraSource cameraSource;
     private CameraSource qrcodecameraSource;
     private Button btnSave;
-    private Camera camera;
-    private Switch flashSwitch;
     private FirebaseAuth mAuth=FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String KEY_QRCODE="QR_CODE";
     private final String KEY_EAN="EAN_CODE";
-   // private DocumentReference mDocRef= FirebaseFirestore.getInstance().document("users/items");
+
 
     final int RequestCameraPermissionID = 1001;
 
@@ -77,34 +74,45 @@ public class BarcodescanActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_barcodescan);
+        setContentView(R.layout.activity_find_item);
         cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
         txtQRCODE = (TextView) findViewById(R.id.txtQRCODE);
         txtEAN=findViewById(R.id.txtEAN);
         btnSave=findViewById(R.id.btnSave);
-        flashSwitch=findViewById(R.id.flashSwitch);
-
-        flashSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            String qrcode=txtQRCODE.getText().toString();
-            String eancode=txtEAN.getText().toString();
 
-            Map<String,Object> item= new HashMap<>();
-            item.put(KEY_EAN,eancode);
-            item.put(KEY_QRCODE,qrcode);
+            final String eanToLookUp=txtEAN.getText().toString();
 
-            db.collection("users").document(mAuth.getCurrentUser().getUid()).collection("Items").add(item);
-                Toast.makeText(BarcodescanActivity.this,
-                        "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));
+                db.collection("users").document(mAuth.getCurrentUser().getUid()).collection("Items").get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+
+                        List<Item> items = new ArrayList<Item>();
+                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                        Item item = documentSnapshot.toObject(Item.class);
+
+                                        if(item.getEAN_CODE().equals(eanToLookUp)){
+                                            items.add(item);
+
+                                        }
+
+                                    }
+                            if(items.size()>0){
+                                Intent remItem = new Intent(FindItemActivity.this, RemoveItemActivity.class);
+                                remItem.putExtra("items",(ArrayList<Item>) items);
+                                startActivity(remItem);
+
+                            }
+
+                            }
+
+                        });
+
+
 
             }
         });
@@ -114,7 +122,6 @@ public class BarcodescanActivity extends AppCompatActivity {
                 .build();
         cameraSource = new CameraSource
                 .Builder(this, barcodeDetector)
-                .setAutoFocusEnabled(true)
                 .build();
 
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -122,7 +129,7 @@ public class BarcodescanActivity extends AppCompatActivity {
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     //Request permission
-                    ActivityCompat.requestPermissions(BarcodescanActivity.this,
+                    ActivityCompat.requestPermissions(FindItemActivity.this,
                             new String[]{Manifest.permission.CAMERA},RequestCameraPermissionID);
                     return;
                 }
@@ -157,18 +164,6 @@ public class BarcodescanActivity extends AppCompatActivity {
                 final SparseArray<Barcode> qrcodes = detections.getDetectedItems();
                 if(qrcodes.size() != 0)
                 {
-                    if(qrcodes.valueAt(0).format==256) {
-
-
-                        txtQRCODE.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Create vibrate
-
-                                txtQRCODE.setText(qrcodes.valueAt(0).displayValue);
-                            }
-                        });
-                    }
                     if(qrcodes.valueAt(0).format==32){
                         txtEAN.post(new Runnable() {
                             @Override
@@ -185,4 +180,3 @@ public class BarcodescanActivity extends AppCompatActivity {
 
     }
 }
-
