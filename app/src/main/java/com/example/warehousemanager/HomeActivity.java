@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,11 +23,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
-
     private TextView txtWelcome;
     private Button btnFind;
     private Button btnScan;
-    private BottomNavigationView navigation;
+    private BottomAppBar navigation;
     private SettingsActivity settingsActivity;
 
     private FirebaseAuth mAuth;
@@ -132,7 +132,7 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
     @Override
     public void onStart() {
