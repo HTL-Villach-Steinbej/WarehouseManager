@@ -28,6 +28,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.android.gms:play-services-vision:17.0.2'
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
+    implementation 'com.facebook.android:facebook-login:[4,5)'
+
 
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
