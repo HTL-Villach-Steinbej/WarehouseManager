@@ -29,7 +29,6 @@
         <activity android:name=".RemoveItemActivity"></activity>
         <activity android:name=".BarcodescanActivity"></activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".WarehouseActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

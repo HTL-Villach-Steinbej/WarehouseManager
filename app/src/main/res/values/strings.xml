@@ -33,5 +33,8 @@
     </string>
     <string name="facebook_app_id">641597852936560</string>
     <string name="fb_login_protocol_scheme">fb641597852936560</string>
+    <string name="title_addProduct">Add</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_settings">Settings</string>
 
 </resources>
