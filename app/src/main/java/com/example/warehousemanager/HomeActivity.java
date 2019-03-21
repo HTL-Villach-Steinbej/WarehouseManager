@@ -23,46 +23,54 @@ import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
     private TextView txtWelcome;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private Button btnFind;
+    private Button btnScan;
+    private BottomNavigationView navigation;
+    private SettingsActivity settingsActivity;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Button btnScan= findViewById(R.id.btnScan);
-        mAuth = FirebaseAuth.getInstance();
 
-        mTextMessage = findViewById(R.id.message);
+        settingsActivity = new SettingsActivity();
+        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_warehouse:
+                        txtWelcome.setText("WAREHOUSE");
+                        btnFind.setVisibility(View.INVISIBLE);
+                        btnScan.setVisibility(View.INVISIBLE);
+                        return true;
+                    case R.id.navigation_add:
+                        txtWelcome.setText("ADD");
+                        btnFind.setVisibility(View.VISIBLE);
+                        btnScan.setVisibility(View.VISIBLE);
+                        return true;
+                    case R.id.navigation_settings:
+                        txtWelcome.setText("SETTINGS");
+                        Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                        btnFind.setVisibility(View.INVISIBLE);
+                        btnScan.setVisibility(View.INVISIBLE);
+                        return true;
+                }
+                return false;
+            }
+        };
+
+        btnScan = findViewById(R.id.btnScan);
+        btnScan.setVisibility(View.INVISIBLE);
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, BarcodescanActivity.class));
-
-
-
             }
                 /*
                 ImageView myImageView = (ImageView) findViewById(R.id.imageView);
@@ -88,7 +96,42 @@ public class HomeActivity extends AppCompatActivity {
             }
             */
         });
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+
+        btnFind = findViewById(R.id.btnFind);
+        btnFind.setVisibility(View.INVISIBLE);
+        btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, FindItemActivity.class));
+            }
+                /*
+                ImageView myImageView = (ImageView) findViewById(R.id.imageView);
+                Bitmap myBitmap = BitmapFactory.decodeResource(
+                        getApplicationContext().getResources(),
+                        R.drawable.eantest);
+                myImageView.setImageBitmap(myBitmap);
+
+                BarcodeDetector detector =
+                        new BarcodeDetector.Builder(getApplicationContext())
+                                .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.EAN_13)
+                                .build();
+                if(!detector.isOperational()){
+                    txtView.setText("Could not set up the detector!");
+                    return;
+                }
+                Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+                SparseArray<Barcode> barcodes = detector.detect(frame);
+
+                Barcode thisCode = barcodes.valueAt(0);
+                TextView txtView = (TextView) findViewById(R.id.textView);
+                txtView.setText(thisCode.rawValue);
+            }
+            */
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
     @Override
@@ -102,10 +145,10 @@ public class HomeActivity extends AppCompatActivity {
             txtWelcome = findViewById(R.id.txtWelcome);
             txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
         }
-        else{
+        else {
+            this.finish();
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
-            this.finish();
         }
     }
 }

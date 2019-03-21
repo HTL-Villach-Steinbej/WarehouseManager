@@ -42,8 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
     //onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getSupportActionBar().hide();
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //getSupportActionBar().hide();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -179,9 +179,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void updateUI(FirebaseUser user) {
         if(user != null) {
+            this.finish();
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
-            this.finish();
         }
     }
 }
