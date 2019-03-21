@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
     private TextView txtWelcome;
     private Button btnFind;
     private Button btnScan;
@@ -34,14 +33,14 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                case R.id.navigation_warehouse:
+                    txtWelcome.setText("WAREHOUSE");
                     return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                case R.id.navigation_add:
+                    txtWelcome.setText("ADD");
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_settings:
+                    txtWelcome.setText("SETTINGS");
                     return true;
             }
             return false;
@@ -117,8 +116,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-
-        mTextMessage = findViewById(R.id.message);
 
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
