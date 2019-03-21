@@ -27,25 +27,8 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnFind;
     private Button btnScan;
     private BottomNavigationView navigation;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private SettingsActivity settingsActivity;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_warehouse:
-                    txtWelcome.setText("WAREHOUSE");
-                    return true;
-                case R.id.navigation_add:
-                    txtWelcome.setText("ADD");
-                    return true;
-                case R.id.navigation_settings:
-                    txtWelcome.setText("SETTINGS");
-                    return true;
-            }
-            return false;
-        }
-    };
     private FirebaseAuth mAuth;
 
     @Override
@@ -53,7 +36,37 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        settingsActivity = new SettingsActivity();
+        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_warehouse:
+                        txtWelcome.setText("WAREHOUSE");
+                        btnFind.setVisibility(View.INVISIBLE);
+                        btnScan.setVisibility(View.INVISIBLE);
+                        return true;
+                    case R.id.navigation_add:
+                        txtWelcome.setText("ADD");
+                        btnFind.setVisibility(View.VISIBLE);
+                        btnScan.setVisibility(View.VISIBLE);
+                        return true;
+                    case R.id.navigation_settings:
+                        txtWelcome.setText("SETTINGS");
+                        Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                        btnFind.setVisibility(View.INVISIBLE);
+                        btnScan.setVisibility(View.INVISIBLE);
+                        return true;
+                }
+                return false;
+            }
+        };
+
         btnScan = findViewById(R.id.btnScan);
+        btnScan.setVisibility(View.INVISIBLE);
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +98,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         btnFind = findViewById(R.id.btnFind);
+        btnFind.setVisibility(View.INVISIBLE);
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
