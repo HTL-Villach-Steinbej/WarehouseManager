@@ -25,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private TextView txtWelcome;
+    private Button btnFind;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -49,9 +50,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Button btnScan= findViewById(R.id.btnScan);
+        btnFind=findViewById(R.id.btnFind);
         mAuth = FirebaseAuth.getInstance();
 
         mTextMessage = findViewById(R.id.message);
@@ -59,6 +62,38 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, BarcodescanActivity.class));
+
+
+
+            }
+                /*
+                ImageView myImageView = (ImageView) findViewById(R.id.imageView);
+                Bitmap myBitmap = BitmapFactory.decodeResource(
+                        getApplicationContext().getResources(),
+                        R.drawable.eantest);
+                myImageView.setImageBitmap(myBitmap);
+
+                BarcodeDetector detector =
+                        new BarcodeDetector.Builder(getApplicationContext())
+                                .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.EAN_13)
+                                .build();
+                if(!detector.isOperational()){
+                    txtView.setText("Could not set up the detector!");
+                    return;
+                }
+                Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+                SparseArray<Barcode> barcodes = detector.detect(frame);
+
+                Barcode thisCode = barcodes.valueAt(0);
+                TextView txtView = (TextView) findViewById(R.id.textView);
+                txtView.setText(thisCode.rawValue);
+            }
+            */
+        });
+        btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, FindItemActivity.class));
 
 
 
@@ -101,10 +136,10 @@ public class HomeActivity extends AppCompatActivity {
             txtWelcome = findViewById(R.id.txtWelcome);
             txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
         }
-        else {
-            this.finish();
+        else{
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
+            this.finish();
         }
     }
 }
