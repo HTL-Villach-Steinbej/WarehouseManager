@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 public class FindItemActivity extends AppCompatActivity {
-
     private SurfaceView cameraPreview;
     private TextView txtQRCODE;
     private TextView txtEAN;
@@ -70,60 +69,10 @@ public class FindItemActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_find_item);
-        cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
-        txtQRCODE = (TextView) findViewById(R.id.txtQRCODE);
-        txtEAN=findViewById(R.id.txtEAN);
-        btnSave=findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            final String eanToLookUp=txtEAN.getText().toString();
-
-                db.collection("users").document(mAuth.getCurrentUser().getUid()).collection("Items").get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-
-                        List<Item> items = new ArrayList<Item>();
-                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                        Item item = documentSnapshot.toObject(Item.class);
-
-                                        if(item.getEAN_CODE().equals(eanToLookUp)){
-                                            items.add(item);
-
-                                        }
-
-                                    }
-                            if(items.size()>0){
-                                Intent remItem = new Intent(FindItemActivity.this, RemoveItemActivity.class);
-                                remItem.putExtra("items",(ArrayList<Item>) items);
-                                startActivity(remItem);
-
-                            }
-
-                            }
-
-                        });
-
-
-
-            }
-        });
-
-        barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.EAN_13 | Barcode.QR_CODE)
-                .build();
-        cameraSource = new CameraSource
-                .Builder(this, barcodeDetector)
-                .build();
-
+        cameraPreview = findViewById(R.id.cameraPreview);
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -143,22 +92,55 @@ public class FindItemActivity extends AppCompatActivity {
 
             @Override
             public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
             }
-
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
                 cameraSource.stop();
-
             }
         });
 
+        txtQRCODE = findViewById(R.id.txtQRCODE);
+
+        txtEAN = findViewById(R.id.txtEAN);
+
+        btnSave = findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            final String eanToLookUp = txtEAN.getText().toString();
+                db.collection("users").document(mAuth.getCurrentUser().getUid()).collection("Items").get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            List<Item> items = new ArrayList<Item>();
+                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                        Item item = documentSnapshot.toObject(Item.class);
+
+                                        if(item.getEAN_CODE().equals(eanToLookUp)){
+                                            items.add(item);
+                                        }
+                                    }
+                            if(items.size()>0){
+                                Intent remItem = new Intent(FindItemActivity.this, RemoveItemActivity.class);
+                                remItem.putExtra("items",(ArrayList<Item>) items);
+                                startActivity(remItem);
+                            }
+                            }
+
+                        });
+            }
+        });
+
+        barcodeDetector = new BarcodeDetector.Builder(this)
+                .setBarcodeFormats(Barcode.EAN_13 | Barcode.QR_CODE)
+                .build();
+        cameraSource = new CameraSource
+                .Builder(this, barcodeDetector)
+                .build();
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-
             }
-
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrcodes = detections.getDetectedItems();
@@ -177,6 +159,5 @@ public class FindItemActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }

@@ -26,6 +26,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView mTextMessage;
     private TextView txtWelcome;
     private Button btnFind;
+    private Button btnScan;
+    private BottomNavigationView navigation;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -49,22 +51,14 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Button btnScan= findViewById(R.id.btnScan);
-        btnFind=findViewById(R.id.btnFind);
-        mAuth = FirebaseAuth.getInstance();
 
-        mTextMessage = findViewById(R.id.message);
+        btnScan = findViewById(R.id.btnScan);
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, BarcodescanActivity.class));
-
-
-
             }
                 /*
                 ImageView myImageView = (ImageView) findViewById(R.id.imageView);
@@ -90,13 +84,12 @@ public class HomeActivity extends AppCompatActivity {
             }
             */
         });
+
+        btnFind = findViewById(R.id.btnFind);
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, FindItemActivity.class));
-
-
-
             }
                 /*
                 ImageView myImageView = (ImageView) findViewById(R.id.imageView);
@@ -122,7 +115,12 @@ public class HomeActivity extends AppCompatActivity {
             }
             */
         });
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        mTextMessage = findViewById(R.id.message);
+
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
     @Override
@@ -136,10 +134,10 @@ public class HomeActivity extends AppCompatActivity {
             txtWelcome = findViewById(R.id.txtWelcome);
             txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
         }
-        else{
+        else {
+            this.finish();
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
-            this.finish();
         }
     }
 }

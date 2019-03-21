@@ -14,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".FindItemActivity"></activity>
+        <activity android:name=".RemoveItemActivity"></activity>
         <activity android:name=".BarcodescanActivity"></activity>
         <activity android:name=".HomeActivity" />
         <activity android:name=".WarehouseActivity" />
