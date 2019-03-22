@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         String paperPassword=Paper.book().read(Prevalent.UserPasswordKey);
         if(paperEmail!=null&&paperPassword!=null){
             if(!TextUtils.isEmpty(paperEmail)&&!TextUtils.isEmpty(paperPassword)){
-
+                comboRemember.setChecked(true);
                 emailView.setText(paperEmail);
                 passwordView.setText(paperPassword);
                 btnLogin.performClick();
