@@ -28,27 +28,28 @@
 
     <ScrollView
         android:id="@+id/login_form"
-        android:layout_width="303dp"
-        android:layout_height="253dp"
+        android:layout_width="310dp"
+        android:layout_height="280dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.89">
+        app:layout_constraintVertical_bias="0.9">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <AutoCompleteTextView
                 android:id="@+id/email"
-                android:layout_width="362dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_email"
@@ -59,7 +60,7 @@
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="362dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:hint="@string/prompt_password"
@@ -74,21 +75,27 @@
             <Button
                 android:id="@+id/btnLoginNow"
                 android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
                 android:drawableLeft="@drawable/check"
                 android:text="@string/action_sign_in_short"
                 android:textStyle="bold" />
 
+            <CheckBox
+                android:id="@+id/comboRemember"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remember Me" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="82dp">
+                android:layout_height="80dp">
 
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/sign_in_button"
-                    android:layout_width="37dp"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="260dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="270dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     app:buttonSize="icon_only"
@@ -99,17 +106,20 @@
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/buttonFacebookLogin"
-                    android:layout_width="246dp"
-                    android:layout_height="28dp"
+                    android:layout_width="250dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
+                    android:layout_marginEnd="44dp"
                     android:layout_marginBottom="8dp"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="0.783" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -119,19 +129,18 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="or"
+                    android:text="@string/or"
                     app:layout_constraintBottom_toTopOf="@+id/buttonFacebookLogin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
     </ScrollView>
 
     <TextView
         android:id="@+id/txtRegister"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -141,6 +150,6 @@
         app:layout_constraintEnd_toEndOf="@+id/login_form"
         app:layout_constraintStart_toStartOf="@+id/login_form"
         app:layout_constraintTop_toBottomOf="@+id/login_form"
-        app:layout_constraintVertical_bias="0.636" />
+        app:layout_constraintVertical_bias="0.6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

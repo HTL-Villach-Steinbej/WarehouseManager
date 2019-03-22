@@ -133,15 +133,15 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+       // fab = findViewById(R.id.fab);
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 txtWelcome.setText("Add");
                 btnFind.setVisibility(View.VISIBLE);
                 btnScan.setVisibility(View.VISIBLE);
             }
-        });
+        });*/
     }
     @Override
     public void onStart() {
