@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -19,11 +21,18 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.SpinnerAdapter;
+import android.widget.Toolbar;
 
+import com.google.android.material.resources.MaterialResources;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
+
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -37,6 +46,7 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity {
+    private PreferenceActivity prefActivity;
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
