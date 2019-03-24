@@ -1,7 +1,7 @@
 package com.example.warehousemanager;
 
 import android.content.Intent;
-import android.opengl.Visibility;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -11,11 +11,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -26,6 +27,9 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton fabAdd;
     private FirebaseAuth mAuth;
     private CoordinatorLayout rootLayout;
+    private LinearLayout linearHead;
+    private LinearLayout linearLeft;
+    private LinearLayout linearRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,17 @@ public class HomeActivity extends AppCompatActivity {
                 fabSearch.hide();
             }
         });
+
+        linearHead = findViewById(R.id.linearHead);
+
+        //LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(linearHead.getWidth() / 2 - 20, 180);
+
+        linearLeft = findViewById(R.id.linearLeft);
+        //linearLeft.setLayoutParams(lp);
+
+        linearRight = findViewById(R.id.linearRight);
+        //linearRight.setLayoutParams(lp);
+
         txtWelcome = findViewById(R.id.txtWelcome);
 
         mAuth = FirebaseAuth.getInstance();
