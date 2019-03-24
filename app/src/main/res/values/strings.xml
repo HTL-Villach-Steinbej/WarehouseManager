@@ -116,5 +116,8 @@
     <string name="pref_title_general">General</string>
     <string name="pref_title_detail">Detail</string>
     <string name="pref_title_notifications">Notifications</string>
+    <string name="title_warehouse_watch">Watch your Warehouse</string>
+    <string name="manager_workers">Manage your employees</string>
+    <string name="warehouse_preferences">Warehouse Preferences</string>
 
 </resources>
