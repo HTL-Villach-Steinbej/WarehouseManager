@@ -19,7 +19,7 @@
 
     <header
         android:fragment="com.example.warehousemanager.SettingsActivity$AccountPreferencesFragment"
-        android:icon="@drawable/outline_account_circle_white_24dp"
+        android:icon="@drawable/outline_account_circle_black_24dp"
         android:title="@string/pref_header_account" />
 
 </preference-headers>

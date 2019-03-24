@@ -119,5 +119,11 @@
     <string name="title_warehouse_watch">Watch your Warehouse</string>
     <string name="manager_workers">Manage your employees</string>
     <string name="warehouse_preferences">Warehouse Preferences</string>
+    <string name="shr_product_title">Manage</string>
+    <string name="shr_product_description">Warehouse</string>
+    <string name="warehouse_emplyoees">Employees</string>
+    <string name="view">View</string>
+    <string name="title_remove_product">Remove</string>
+    <string name="title_product">Product</string>
 
 </resources>
