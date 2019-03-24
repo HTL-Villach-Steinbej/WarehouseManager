@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import io.paperdb.Paper;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -227,6 +229,8 @@ public class SettingsActivity extends PreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     mAuth.signOut();
+                    Paper.book().write(Prevalent.UserEmailKey, "");
+                    Paper.book().write(Prevalent.UserPasswordKey, "");
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                     return false;
                 }
@@ -237,6 +241,7 @@ public class SettingsActivity extends PreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
+
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
