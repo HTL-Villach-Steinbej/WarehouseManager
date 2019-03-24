@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,15 +28,21 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton fabAdd;
     private FirebaseAuth mAuth;
     private CoordinatorLayout rootLayout;
-    private LinearLayout linearHead;
-    private LinearLayout linearLeft;
-    private LinearLayout linearRight;
+    private MaterialCardView cardViewBottom;
+    private MaterialCardView cardViewLeft;
+    private MaterialCardView cardViewRight;
+    private MaterialCardView cardViewBottomLeft;
+    private MaterialCardView cardViewBottomRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        initComponets();
+    }
+
+    private void initComponets() {
         rootLayout = findViewById(R.id.rootHome);
         rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,15 +52,45 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        linearHead = findViewById(R.id.linearHead);
+        cardViewLeft = findViewById(R.id.cardViewLeft);
+        cardViewLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtWelcome.setText("Left clicked");
+            }
+        });
 
-        //LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(linearHead.getWidth() / 2 - 20, 180);
+        cardViewRight = findViewById(R.id.cardViewRight);
+        cardViewRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtWelcome.setText("Right clicked");
+            }
+        });
 
-        linearLeft = findViewById(R.id.linearLeft);
-        //linearLeft.setLayoutParams(lp);
+        cardViewBottom = findViewById(R.id.cardViewBottom);
+        cardViewBottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtWelcome.setText("Right clicked");
+            }
+        });
 
-        linearRight = findViewById(R.id.linearRight);
-        //linearRight.setLayoutParams(lp);
+        cardViewBottomLeft = findViewById(R.id.cardViewBottomLeft);
+        cardViewBottomLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtWelcome.setText("Bottom Left clicked");
+            }
+        });
+
+        cardViewBottomRight = findViewById(R.id.cardViewBottomRight);
+        cardViewBottomRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtWelcome.setText("Bottom Right Clicked");
+            }
+        });
 
         txtWelcome = findViewById(R.id.txtWelcome);
 
@@ -78,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         navigation.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               txtWelcome.setText("Notification");
+                txtWelcome.setText("Notification");
             }
         });
 
