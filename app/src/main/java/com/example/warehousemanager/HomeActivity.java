@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         navigation.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtWelcome.setText("Notification");
+               txtWelcome.setText("Notification");
             }
         });
 
