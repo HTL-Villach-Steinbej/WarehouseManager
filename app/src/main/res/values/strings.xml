@@ -125,5 +125,6 @@
     <string name="view">View</string>
     <string name="title_remove_product">Remove</string>
     <string name="title_product">Product</string>
+    <string name="forgotPassword">Forgot Password?</string>
 
 </resources>

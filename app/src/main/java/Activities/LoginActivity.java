@@ -1,4 +1,4 @@
-package com.example.warehousemanager;
+package Activities;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import Misc.Prevalent;
+import com.example.warehousemanager.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -33,6 +36,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -137,9 +143,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         String paperEmail = Paper.book().read(Prevalent.UserEmailKey);
         String paperPassword = Paper.book().read(Prevalent.UserPasswordKey);
-        if(paperEmail!=null&&paperPassword!=null){
+        if(paperEmail!=null && paperPassword!=null){
             if(!TextUtils.isEmpty(paperEmail)&&!TextUtils.isEmpty(paperPassword)){
                 comboRemember.setChecked(true);
                 emailView.setText(paperEmail);
@@ -211,10 +218,28 @@ public class LoginActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             } else {
+                                if(task.getException().getClass() == FirebaseAuthInvalidUserException.class){
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, "User is not registered",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                else if(task.getException().getClass() == FirebaseAuthEmailException.class){
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, "Email error",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                else if(task.getException().getClass() == FirebaseAuthInvalidCredentialsException.class){
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, "Wrong password",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, "Authentification error",
+                                            Toast.LENGTH_SHORT).show();
+                                }
                                 // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+
                                 updateUI(null);
                             }
                         }
