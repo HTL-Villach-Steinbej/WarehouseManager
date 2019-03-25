@@ -1,5 +1,6 @@
 <application>
-  <component name="DefaultFont">
-    <option name="FONT_FAMILY" value="Source Code Pro" />
+  <component name="TodoConfiguration">
+    <pattern pattern="\btodo\b.*" />
+    <pattern pattern="\bfixme\b.*" />
   </component>
 </application>

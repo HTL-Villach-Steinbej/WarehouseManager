@@ -109,5 +109,21 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_header_account">Account</string>
+    <string name="pref_title_logout">Logout</string>
+    <string name="pref_title_social">Social</string>
+    <string name="pref_title_sync">Syncronisation</string>
+    <string name="pref_title_general">General</string>
+    <string name="pref_title_detail">Detail</string>
+    <string name="pref_title_notifications">Notifications</string>
+    <string name="title_warehouse_watch">Watch your Warehouse</string>
+    <string name="manager_workers">Manage your employees</string>
+    <string name="warehouse_preferences">Warehouse Preferences</string>
+    <string name="shr_product_title">Manage</string>
+    <string name="shr_product_description">Warehouse</string>
+    <string name="warehouse_emplyoees">Employees</string>
+    <string name="view">View</string>
+    <string name="title_remove_product">Remove</string>
+    <string name="title_product">Product</string>
 
 </resources>

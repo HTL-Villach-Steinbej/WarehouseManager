@@ -8,12 +8,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -26,11 +26,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.signin.SignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -38,11 +36,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import org.json.JSONException;
-import org.w3c.dom.Text;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import io.paperdb.Paper;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -58,11 +54,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextView passwordView;
     private SignInButton signInButton;
     private LoginButton loginButton;
+    private CheckBox comboRemember;
 
     //onCreate
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Paper.init(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -72,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
+        comboRemember=findViewById(R.id.comboRemember);
         signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.buttonFacebookLogin);
         loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setText("Sign in with Facebook");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -137,6 +137,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        String paperEmail = Paper.book().read(Prevalent.UserEmailKey);
+        String paperPassword = Paper.book().read(Prevalent.UserPasswordKey);
+        if(paperEmail!=null&&paperPassword!=null){
+            if(!TextUtils.isEmpty(paperEmail)&&!TextUtils.isEmpty(paperPassword)){
+                comboRemember.setChecked(true);
+                emailView.setText(paperEmail);
+                passwordView.setText(paperPassword);
+                btnLogin.performClick();
+            }
+        }
     }
 
     //EmailPasswordLogin
@@ -193,7 +203,10 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
+                                if(comboRemember.isChecked()){
+                                    Paper.book().write(Prevalent.UserEmailKey, emailView.getText().toString());
+                                    Paper.book().write(Prevalent.UserPasswordKey, passwordView.getText().toString());
+                                }
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);

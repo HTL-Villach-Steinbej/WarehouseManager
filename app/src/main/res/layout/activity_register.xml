@@ -29,7 +29,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="300dp"
-        android:layout_height="260dp"
+        android:layout_height="250dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -50,7 +50,7 @@
             <EditText
                 android:id="@+id/txtUsername"
                 style="@android:style/Widget.Material.EditText"
-                android:layout_width="363dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_username"
                 android:inputType="text"
@@ -70,7 +70,7 @@
 
             <EditText
                 android:id="@+id/txtPassword"
-                android:layout_width="363dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:imeActionId="6"
@@ -83,21 +83,17 @@
 
             <Button
                 android:id="@+id/btnRegisterNow"
-                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
-                android:layout_height="73dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/action_register"
                 android:textStyle="bold" />
-
-
         </LinearLayout>
     </ScrollView>
-
     <TextView
         android:id="@+id/txtLogin"
         style="@android:style/Widget.Material.TextView"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
