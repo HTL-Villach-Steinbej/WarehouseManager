@@ -1,4 +1,4 @@
-package com.example.warehousemanager;
+package Misc;
 
 
 import android.os.Parcel;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".LoginActivity"
+    tools:context="Activities.LoginActivity"
     style="@style/AppTheme">
     <!-- Login progress -->
     <ImageView
@@ -30,7 +30,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="310dp"
-        android:layout_height="280dp"
+        android:layout_height="284dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -80,7 +80,8 @@
                 android:layout_marginTop="15dp"
                 android:drawableLeft="@drawable/check"
                 android:text="@string/action_sign_in_short"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:cornerRadius="90dp" />
 
             <CheckBox
                 android:id="@+id/comboRemember"
@@ -88,26 +89,32 @@
                 android:layout_height="wrap_content"
                 android:text="Remember Me" />
 
+            <Space
+                android:layout_width="18dp"
+                android:layout_height="17dp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="0dp" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp">
+                android:layout_height="wrap_content">
 
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/sign_in_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="270dp"
+                    android:layout_width="57dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="252dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     app:buttonSize="icon_only"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.9" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/buttonFacebookLogin"
-                    android:layout_width="250dp"
+                    android:layout_width="232dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginStart="8dp"
@@ -120,21 +127,8 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.8" />
+                    app:layout_constraintVertical_bias="0.555" />
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/or"
-                    app:layout_constraintBottom_toTopOf="@+id/buttonFacebookLogin"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
@@ -152,5 +146,22 @@
         app:layout_constraintStart_toStartOf="@+id/login_form"
         app:layout_constraintTop_toBottomOf="@+id/login_form"
         app:layout_constraintVertical_bias="0.6" />
+
+    <TextView
+        android:id="@+id/txtForgotPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/forgotPassword"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.961" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

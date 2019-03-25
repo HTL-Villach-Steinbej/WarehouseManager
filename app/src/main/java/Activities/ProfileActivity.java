@@ -1,8 +1,10 @@
-package com.example.warehousemanager;
+package Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.warehousemanager.R;
 
 public class ProfileActivity extends AppCompatActivity {
 

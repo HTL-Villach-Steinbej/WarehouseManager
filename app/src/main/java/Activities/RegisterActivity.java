@@ -1,4 +1,4 @@
-package com.example.warehousemanager;
+package Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,22 +12,20 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.example.warehousemanager.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-
-import org.w3c.dom.Text;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -96,7 +94,11 @@ public class RegisterActivity extends AppCompatActivity {
         txtPassword.setError(null);
         boolean cancel = false;
         View focusView = null;
-
+        if (TextUtils.isEmpty(username)){
+            txtUsername.setError(getString(R.string.error_field_required));
+            focusView = txtUsername;
+            cancel = true;
+        }
         if (!TextUtils.isEmpty(password) && ! isPasswordValid(password)) {
             txtPassword.setError(getString(R.string.error_invalid_password));
             focusView = txtPassword;
@@ -139,10 +141,21 @@ public class RegisterActivity extends AppCompatActivity {
                                 updateUI(user);
 
                             } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                if(task.getException().getClass() == FirebaseAuthUserCollisionException.class){
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(RegisterActivity.this, "User is already registered",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                else if(task.getException().getClass() == FirebaseNetworkException.class){
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(RegisterActivity.this, "You are not connected to the interenet",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(RegisterActivity.this, "Autentification error",
+                                            Toast.LENGTH_SHORT).show();
+                                }
                                 updateUI(null);
                             }
                         }
