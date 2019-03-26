@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 txtWelcome.setText("Bottom clicked");
-                //startActivity(new Intent(HomeActivity.this, CanvasActivity.class));
+                startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
             }
         });
 

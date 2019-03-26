@@ -45,7 +45,6 @@ public class FindItemActivity extends AppCompatActivity {
     private final String KEY_QRCODE="QR_CODE";
     private final String KEY_EAN="EAN_CODE";
 
-
     final int RequestCameraPermissionID = 1001;
 
     @Override
@@ -135,6 +134,7 @@ public class FindItemActivity extends AppCompatActivity {
                 .build();
         cameraSource = new CameraSource
                 .Builder(this, barcodeDetector)
+                .setAutoFocusEnabled(true)
                 .build();
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
