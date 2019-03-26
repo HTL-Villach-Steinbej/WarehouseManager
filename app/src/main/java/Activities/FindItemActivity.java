@@ -44,6 +44,7 @@ public class FindItemActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String KEY_QRCODE="QR_CODE";
     private final String KEY_EAN="EAN_CODE";
+    private final String testest="awef";
 
 
     final int RequestCameraPermissionID = 1001;
