@@ -135,6 +135,7 @@ public class FindItemActivity extends AppCompatActivity {
                 .build();
         cameraSource = new CameraSource
                 .Builder(this, barcodeDetector)
+                .setAutoFocusEnabled(true)
                 .build();
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override

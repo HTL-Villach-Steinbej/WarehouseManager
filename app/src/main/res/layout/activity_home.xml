@@ -319,9 +319,9 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@color/colorAccent"
         app:fabAlignmentMode="center"
+        app:navigationIcon="@drawable/outline_account_circle_white_24dp"
         app:fabCradleMargin="3dp"
-        app:menu="@menu/navigation"
-        app:navigationIcon="@drawable/outline_account_circle_white_24dp" />
+        app:menu="@menu/navigation" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

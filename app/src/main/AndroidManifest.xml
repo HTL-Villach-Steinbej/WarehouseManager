@@ -41,12 +41,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name="Activities.FindItemActivity" />
-        <activity android:name="Activities.RemoveItemActivity" />
-        <activity android:name="Activities.BarcodescanActivity" />
-        <activity android:name="Activities.HomeActivity" />
-        <activity android:name="Activities.RegisterActivity" />
-        <activity android:name="Activities.LoginActivity">
+        <activity android:name=".FindItemActivity" />
+        <activity android:name=".RemoveItemActivity" />
+        <activity android:name=".BarcodescanActivity" />
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
