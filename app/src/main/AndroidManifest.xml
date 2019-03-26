@@ -15,8 +15,9 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="Activities.ProfileActivity"></activity>
-        <activity android:name="Activities.CanvasActivity"></activity>
+        <activity android:name="Activities.WatchWarehouse"></activity>
+        <activity android:name="Activities.ProfileActivity" />
+        <activity android:name="Activities.CanvasActivity" />
         <activity
             android:name="Activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
