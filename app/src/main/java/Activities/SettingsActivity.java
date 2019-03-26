@@ -1,4 +1,4 @@
-package com.example.warehousemanager;
+package Activities;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -19,8 +19,9 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.WindowManager;
 
+import Misc.Prevalent;
+import com.example.warehousemanager.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;

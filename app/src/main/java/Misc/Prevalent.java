@@ -1,4 +1,4 @@
-package com.example.warehousemanager;
+package Misc;
 
 
 import com.google.firebase.firestore.auth.User;

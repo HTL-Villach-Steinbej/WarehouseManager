@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".RegisterActivity">
+    tools:context="Activities.RegisterActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -87,7 +87,8 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="15dp"
                 android:text="@string/action_register"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:cornerRadius="90dp" />
         </LinearLayout>
     </ScrollView>
     <TextView

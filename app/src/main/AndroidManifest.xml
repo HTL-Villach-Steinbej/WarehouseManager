@@ -15,9 +15,10 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name="Activities.ProfileActivity"></activity>
+        <activity android:name="Activities.CanvasActivity"></activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="Activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
         <meta-data
@@ -45,9 +46,7 @@
         <activity android:name=".BarcodescanActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" >
-
-
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
