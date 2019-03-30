@@ -69,6 +69,7 @@
     <string name="settings_about_privacy_statement">Privacy Statement</string>
     <string name="settings_about_terms_and_conditions">Terms and Conditions</string>
     <string name="settings_about_version">Version v1.0.0</string>
+    <string name="sendEmail">Request Password</string>
 
     <!-- End Of Strings For The SettingActivity And The Preferences-->
 

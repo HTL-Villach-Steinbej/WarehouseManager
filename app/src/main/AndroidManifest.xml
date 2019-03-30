@@ -47,6 +47,7 @@
         <activity android:name="Activities.BarcodescanActivity" />
         <activity android:name="Activities.HomeActivity" />
         <activity android:name="Activities.RegisterActivity" />
+        <activity android:name="Activities.ForgotPasswordActivity" />
         <activity android:name="Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
