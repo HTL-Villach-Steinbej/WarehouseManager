@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_header_general">
+
+    <Preference
+        android:title="@string/settings_general_report_error"
+        android:key="pref_general_report_error"/>
+    </PreferenceCategory>
+
+    <!-- todo: defaultValue not adapting -->
+    <ListPreference
+        android:defaultValue="English"
+        android:entries="@array/settings_general_languages"
+        android:entryValues="@array/settings_general_languages"
+        android:key="list_preference_1"
+        android:title="@string/settings_general_language" />
+</PreferenceScreen>

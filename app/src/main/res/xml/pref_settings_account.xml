@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_header_account">
+
+        <EditTextPreference
+            android:defaultValue="@string/settings_account_default_name"
+            android:key="pref_account_display_name"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/settings_account_name" />
+
+        <Preference
+            android:title="@string/settings_account_logout"
+            android:key="pref_account_logout"/>
+    </PreferenceCategory>
+</PreferenceScreen>
