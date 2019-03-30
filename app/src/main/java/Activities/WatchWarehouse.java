@@ -9,7 +9,6 @@ import com.example.warehousemanager.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.gridlayout.widget.GridLayout;
-import androidx.appcompat.widget.AppCompatButton;
 
 public class WatchWarehouse extends AppCompatActivity {
 
@@ -18,18 +17,19 @@ public class WatchWarehouse extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_warehouse);
 
-        final GridLayout gridLayout = (GridLayout)findViewById(R.id.gridLayout);
+        final GridLayout gridLayout = findViewById(R.id.gridLayout);
 
-        Button addPasswordButton = (Button)findViewById(R.id.btnAddRegal);
+        Button addPasswordButton = findViewById(R.id.btnAddRegal);
         addPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = getApplicationContext();
                 int childCount = gridLayout.getChildCount();
 
-                AppCompatButton btnRegal = new AppCompatButton(context);
+                Button btnRegal = new Button(context);
                 btnRegal.setText("Regal" + (childCount + 1));
                 gridLayout.addView(btnRegal, childCount);
+                //gridLayout.addView(new Button(context).setText("Regal " + (childCount + 1)), childCount);
 
             }
         });

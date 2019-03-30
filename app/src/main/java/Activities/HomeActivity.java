@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        items = new ArrayList<Item>();
+        items = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -143,7 +143,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-               //TODO: PROFILE ACTIVITY
             }
         });
 
@@ -168,18 +167,26 @@ public class HomeActivity extends AppCompatActivity {
         fabRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, RemoveItemActivity.class).putExtra("items",(ArrayList<Item>) items));
+                startActivity(new Intent(HomeActivity.this, RemoveItemActivity.class).putExtra("items", items));
             }
         });
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtWelcome.setText("Add");
-                fabSearch.show();
-                fabAdd.show();
-                fabRemove.show();
-                fab.setImageDrawable(null);
+                if(fabRemove.isOrWillBeHidden() && fabSearch.isOrWillBeHidden() && fabAdd.isOrWillBeHidden()){
+                    txtWelcome.setText("Add");
+                    fabSearch.show();
+                    fabAdd.show();
+                    fabRemove.show();
+                    fab.setImageDrawable(null);
+                }
+                else{
+                    fabSearch.hide();
+                    fabAdd.hide();
+                    fabRemove.hide();
+                    fab.setImageResource(R.drawable.baseline_add_white_24dp);
+                }
             }
         });
 
