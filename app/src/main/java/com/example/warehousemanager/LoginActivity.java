@@ -44,7 +44,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.firestore.FirebaseFirestore;
 import io.paperdb.Paper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -52,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LOGIN";
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db=FirebaseFirestore.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
     private Button btnLogin;
@@ -300,6 +305,11 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Map<String,String> userData=new HashMap<>();
+
+                            userData.put("uid",user.getUid());
+                            userData.put("email",user.getEmail());
+                            db.collection("users").add(userData);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
