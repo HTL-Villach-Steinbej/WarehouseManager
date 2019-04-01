@@ -44,6 +44,7 @@
         <activity android:name=".WatchWarehouse" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".CanvasActivity" />
+        <activity android:name=".DetailRegalActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />

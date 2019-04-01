@@ -37,51 +37,7 @@
                 android:background="@color/colorPrimary"
                 android:padding="5dp"
                 app:columnCount="10"
-                app:rowCount="10">
-
-                <Button
-                    android:id="@+id/btnRegal1"
-                    android:width="900dp"
-                    android:text="Regal 1"
-                    app:layout_columnSpan="10"
-                    app:layout_gravity="fill"
-                    app:layout_rowSpan="1" />
-
-                <Button
-                    android:id="@+id/btnRegal2"
-                    android:text="Regal 2"
-                    app:layout_columnSpan="10"
-                    app:layout_gravity="fill"
-                    app:layout_rowSpan="1" />
-
-                <Button
-                    android:id="@+id/btnRegal3"
-                    android:text="Regal 3"
-                    app:layout_columnSpan="10"
-                    app:layout_gravity="fill"
-                    app:layout_rowSpan="1" />
-
-                <Button
-                    android:id="@+id/btnRegal4"
-                    android:text="Regal 4"
-                    app:layout_columnSpan="10"
-                    app:layout_gravity="fill"
-                    app:layout_rowSpan="1" />
-
-                <Button
-                    android:id="@+id/btnRegal5"
-                    android:text="Regal 5"
-                    app:layout_columnSpan="5"
-                    app:layout_gravity="left"
-                    app:layout_rowSpan="1" />
-
-                <Button
-                    android:id="@+id/btnRegal6"
-                    android:text="Regal 6"
-                    app:layout_columnSpan="5"
-                    app:layout_gravity="center|end"
-                    app:layout_rowSpan="1" />
-            </androidx.gridlayout.widget.GridLayout>
+                app:rowCount="10"/>
         </HorizontalScrollView>
     </ScrollView>
 
@@ -103,7 +59,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="395dp"
-        android:layout_height="79dp"
+        android:layout_height="96dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -113,7 +69,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.168">
+        app:layout_constraintVertical_bias="0.162">
 
         <Button
             android:id="@+id/btnAddRegal"
