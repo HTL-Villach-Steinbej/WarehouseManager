@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_header_about">
+        <Preference
+            android:title="@string/settings_about_recommend"
+            android:key="pref_about_recommend"/>
+        <Preference
+            android:title="@string/settings_about_notes_and_instructions"
+            android:key="pref_about_notes_and_instructions"/>
+        <Preference
+            android:title="@string/settings_about_impressum"
+            android:key="pref_about_impressum"/>
+        <Preference
+            android:title="@string/settings_about_privacy_statement"
+            android:key="pref_about_privacy_statement"/>
+        <Preference
+            android:title="@string/settings_about_terms_and_conditions"
+            android:key="pref_about_terms and conditions"/>
+        <Preference
+            android:title="@string/settings_about_version"
+            android:key="pref_about_version"
+            android:enabled="false"/>
+    </PreferenceCategory>
+</PreferenceScreen>

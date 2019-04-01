@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import Misc.Item;
+import com.example.warehousemanager.R;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RemoveItemActivity extends AppCompatActivity {
 
@@ -28,7 +30,5 @@ public class RemoveItemActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 items);
         listView.setAdapter(adapter);
-
-
     }
 }

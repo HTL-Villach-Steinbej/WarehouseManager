@@ -1,7 +1,6 @@
 package com.example.warehousemanager;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -16,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import Misc.Item;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -28,9 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FindItemActivity extends AppCompatActivity {
     private SurfaceView cameraPreview;
@@ -45,7 +44,6 @@ public class FindItemActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String KEY_QRCODE="QR_CODE";
     private final String KEY_EAN="EAN_CODE";
-
 
     final int RequestCameraPermissionID = 1001;
 
@@ -136,6 +134,7 @@ public class FindItemActivity extends AppCompatActivity {
                 .build();
         cameraSource = new CameraSource
                 .Builder(this, barcodeDetector)
+                .setAutoFocusEnabled(true)
                 .build();
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
