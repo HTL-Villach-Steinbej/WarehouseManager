@@ -1,4 +1,4 @@
-package Activities;
+package com.example.warehousemanager;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,12 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import Misc.Prevalent;
-import com.example.warehousemanager.R;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.Login;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
