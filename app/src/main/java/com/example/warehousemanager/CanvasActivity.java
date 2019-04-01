@@ -1,4 +1,4 @@
-package Activities;
+package com.example.warehousemanager;
 
 import android.os.Bundle;
 

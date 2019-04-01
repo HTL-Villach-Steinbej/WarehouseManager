@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="Activities.LoginActivity"
+    tools:context=".LoginActivity"
     style="@style/AppTheme">
     <!-- Login progress -->
     <ImageView

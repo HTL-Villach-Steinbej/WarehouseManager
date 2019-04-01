@@ -1,10 +1,10 @@
-package Activities;
+package com.example.warehousemanager;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import Misc.Item;
-import com.example.warehousemanager.R;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.card.MaterialCardView;

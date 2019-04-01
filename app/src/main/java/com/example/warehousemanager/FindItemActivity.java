@@ -1,4 +1,4 @@
-package Activities;
+package com.example.warehousemanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import Misc.Item;
-import com.example.warehousemanager.R;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
