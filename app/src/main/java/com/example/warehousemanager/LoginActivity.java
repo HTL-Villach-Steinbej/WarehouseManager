@@ -309,7 +309,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             userData.put("uid",user.getUid());
                             userData.put("email",user.getEmail());
-                            db.collection("warehouses").add(userData);
+                            db.collection("users").add(userData);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

@@ -94,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 txtWelcome.setText("Right clicked");
+                startActivity(new Intent(HomeActivity.this,AddWorkerActivity.class));
             }
         });
 

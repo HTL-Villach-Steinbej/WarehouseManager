@@ -10,7 +10,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import okio.Utf8;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreateWarehouseActivity extends AppCompatActivity {
@@ -31,11 +33,14 @@ public class CreateWarehouseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(txtWarehouseName.getText().toString())){
-                    Map<String,String> warehouseData=new HashMap<>();
+                    List<String>users= new ArrayList<>();
+                    users.add(mAuth.getCurrentUser().getUid());
+                    Map<String,Object> warehouseData=new HashMap<>();
                     warehouseData.put("name",txtWarehouseName.getText().toString());
-                    warehouseData.put("user",mAuth.getCurrentUser().getUid());
                     warehouseData.put("admin",mAuth.getCurrentUser().getUid());
+                    warehouseData.put("users",users);
                     db.collection("warehouses").add(warehouseData);
+
                 }
             }
         });
