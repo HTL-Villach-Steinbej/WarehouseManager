@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
@@ -25,12 +26,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "REGISTER";
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db=FirebaseFirestore.getInstance();
     private Button btnRegister;
     private TextView txtPassword;
     private TextView txtEmail;
@@ -137,6 +144,20 @@ public class RegisterActivity extends AppCompatActivity {
                                                 }
                                             }
                                         });
+                                Map<String,String> userData=new HashMap<>();
+                                userData.put("uid",user.getUid());
+                                userData.put("email",user.getEmail());
+                                db.collection("users").add(userData).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                        if(task.isSuccessful()){
+
+                                            Toast.makeText(RegisterActivity.this, "Operation successfull", Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Toast.makeText(RegisterActivity.this, "irgendwos is faul", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                                 updateUI(user);
 
                             } else {
