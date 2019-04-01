@@ -10,18 +10,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailRegalActivity extends AppCompatActivity {
     private TextView txtName;
+    private TextView txtCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_regal);
 
-        txtName = findViewById(R.id.txtRegalName);
-
         Intent intent = getIntent();
         Regal regal = (Regal) intent.getSerializableExtra("regal");
 
+        txtName = findViewById(R.id.txtRegalName);
         txtName.setText(regal.getName());
+
+        txtCategory = findViewById(R.id.txtCategory);
+        txtCategory.setText(regal.getRegalType().toString());
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);

@@ -9,18 +9,22 @@ public class Regal implements Serializable {
     private int widthGrid;
     private int heigthGrid;
     private int buttonNr;
+    private String qr_path;
+    private EnumRegalType regalType;
     private List<Item> items;
 
-    public Regal(String name, int width, int height, int buttonNr){
+    public Regal(String name, int width, int height, int buttonNr, String qr_path, EnumRegalType regalType){
         this.name = name;
         this.widthGrid = width;
         this.heigthGrid = height;
         this.buttonNr = buttonNr;
+        this.qr_path = qr_path;
+        this.regalType = regalType;
         items = new ArrayList<>();
     }
 
     public Regal(){
-        this("Default Regal", 3, 1, -99);
+        this("Default Regal", 3, 1, -99, "./defaultQR.png", EnumRegalType.HARDWARE);
     }
 
     public void addItem(Item item){
@@ -75,6 +79,22 @@ public class Regal implements Serializable {
 
     public void setButtonNr(int buttonNr) {
         this.buttonNr = buttonNr;
+    }
+
+    public String getQr_path() {
+        return qr_path;
+    }
+
+    public void setQr_path(String qr_path) {
+        this.qr_path = qr_path;
+    }
+
+    public EnumRegalType getRegalType() {
+        return regalType;
+    }
+
+    public void setRegalType(EnumRegalType regalType) {
+        this.regalType = regalType;
     }
 
     @Override

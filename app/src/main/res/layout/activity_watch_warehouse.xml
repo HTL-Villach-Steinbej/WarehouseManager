@@ -28,6 +28,7 @@
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/gridLayout"
+                android:minWidth="900dp"
                 android:layout_width="900dp"
                 android:layout_height="900dp"
                 android:layout_marginStart="8dp"
