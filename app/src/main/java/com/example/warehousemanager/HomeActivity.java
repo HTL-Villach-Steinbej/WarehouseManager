@@ -85,6 +85,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 txtWelcome.setText("Left clicked");
+                startActivity(new Intent(HomeActivity.this,CreateWarehouseActivity.class));
             }
         });
 
