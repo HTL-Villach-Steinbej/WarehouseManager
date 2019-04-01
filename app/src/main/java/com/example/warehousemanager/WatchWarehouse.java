@@ -8,19 +8,21 @@ import android.widget.Button;
 
 import java.util.TreeMap;
 
+import Misc.EnumRegalType;
 import Misc.Regal;
+import androidmads.library.qrgenearator.QRGEncoder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.gridlayout.widget.GridLayout;
 
 public class WatchWarehouse extends AppCompatActivity {
-
     private TreeMap<Integer, Regal> routingTable;
-
+    //private QRGEncoder qrgEncoder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_warehouse);
 
+        //qrgEncoder = new QRGEncoder(inputValue, null, QRGContents.Type.TEXT, smallerDimension);
         routingTable = new TreeMap<>();
 
         final GridLayout gridLayout = findViewById(R.id.gridLayout);
@@ -31,8 +33,10 @@ public class WatchWarehouse extends AppCompatActivity {
             public void onClick(View view) {
                 Context context = getApplicationContext();
                 int childCount = gridLayout.getChildCount();
+                String qr_path = "./QR_Regal" + (childCount + 1) + ".png";
+                String qr_string = "Regal" + (childCount + 1);
 
-                Regal regal = new Regal("Regal" + (childCount + 1), 3, 1, routingTable.size());
+                Regal regal = new Regal("Regal" + (childCount + 1), 3, 1, routingTable.size(), qr_path, EnumRegalType.HARDWARE);
 
                 final Button btnRegal = new Button(context);
                 btnRegal.setText("Regal" + (childCount + 1));
@@ -53,4 +57,5 @@ public class WatchWarehouse extends AppCompatActivity {
             }
         });
     }
+
 }
