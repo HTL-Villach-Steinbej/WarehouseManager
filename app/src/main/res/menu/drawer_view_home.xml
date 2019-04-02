@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_create_warehouse"
+            android:icon="@drawable/baseline_add_white_24dp"
+            android:title="@string/title_create_warehouse" />
+        <item
+            android:id="@+id/nav_select_warehouse"
+            android:icon="@drawable/baseline_call_received_white_24dp"
+            android:title="@string/title_select_warehouse" />
+        <item
+            android:id="@+id/nav_watch_warehouse"
+            android:icon="@drawable/baseline_search_white_24dp"
+            android:title="@string/title_warehouse_watch" />
+        <item
+            android:id="@+id/nav_manager_warehouse"
+            android:icon="@drawable/baseline_build_white_24dp"
+            android:title="@string/title_manage_warehouse" />
+        <item
+            android:id="@+id/nav_add_employee"
+            android:icon="@drawable/baseline_add_white_24dp"
+            android:title="@string/title_add_employee" />
+        <item
+            android:id="@+id/nav_manage_employyes"
+            android:icon="@drawable/baseline_build_white_24dp"
+            android:title="@string/title_manage_employee" />
+    </group>
+</menu>

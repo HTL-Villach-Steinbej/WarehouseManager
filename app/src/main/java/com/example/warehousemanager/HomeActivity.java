@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton fabRemove;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    public DocumentReference currentWarehouse;
+    public static DocumentReference currentWarehouse;
     private CoordinatorLayout rootLayout;
     private MaterialCardView cardViewBottom;
     private MaterialCardView cardViewLeft;
@@ -41,15 +43,17 @@ public class HomeActivity extends AppCompatActivity {
     private MaterialCardView cardViewBottomLeft;
     private MaterialCardView cardViewBottomRight;
     private ArrayList<Item> items;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //setCurrentWarehouse();
         initComponets();
+        setCurrentWarehouse();
+
     }
-/*
+
     private void setCurrentWarehouse() {
         Query query=db.collection("warehouses").whereArrayContains("users",mAuth.getCurrentUser().getUid());
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -60,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
-    }*/
+    }
 
     private void initComponets() {
         rootLayout = findViewById(R.id.rootHome);
@@ -73,6 +77,41 @@ public class HomeActivity extends AppCompatActivity {
                 fab.setImageResource(R.drawable.baseline_add_white_24dp);
             }
         });
+
+        drawerLayout = findViewById(R.id.drawer_layout_home);
+
+        NavigationView navigationView = findViewById(R.id.nav_view_home);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+                        switch (menuItem.getItemId()){
+                            case R.id.nav_add_employee:
+                                startActivity(new Intent(HomeActivity.this,AddWorkerActivity.class));
+                                break;
+                            case R.id.nav_create_warehouse:
+                                startActivity(new Intent(HomeActivity.this,CreateWarehouseActivity.class));
+                                break;
+                            case R.id.nav_manage_employyes:
+                                break;
+                            case R.id.nav_manager_warehouse:
+                                break;
+                            case R.id.nav_select_warehouse:
+                                break;
+                            case R.id.nav_watch_warehouse:
+                                startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
+                                break;
+                        }
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
 
         items = new ArrayList<>();
 
@@ -91,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-        cardViewLeft = findViewById(R.id.cardViewLeft);
+        /*cardViewLeft = findViewById(R.id.cardViewLeft);
         cardViewLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 txtWelcome.setText("Bottom Right Clicked");
             }
-        });
+        });*/
 
         txtWelcome = findViewById(R.id.txtWelcome);
 
