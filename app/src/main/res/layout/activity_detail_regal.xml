@@ -8,7 +8,7 @@
     android:background="@drawable/layout_rounded_linearlayout">
 
     <LinearLayout
-        android:layout_width="280dp"
+        android:layout_width="249dp"
         android:layout_height="388dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -19,7 +19,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45">
 
         <TextView
             android:id="@+id/txtRegalName"
@@ -34,6 +35,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="29dp" />
+
+        <ImageView
+            android:id="@+id/iamgeViewQR"
+            android:layout_width="match_parent"
+            android:layout_height="136dp"
+            app:srcCompat="@drawable/com_facebook_favicon_blue" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

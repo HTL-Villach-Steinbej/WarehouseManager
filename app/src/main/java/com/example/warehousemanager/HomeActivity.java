@@ -11,9 +11,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton fabRemove;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    public DocumentReference currentWarehouse;
     private CoordinatorLayout rootLayout;
     private MaterialCardView cardViewBottom;
     private MaterialCardView cardViewLeft;
@@ -47,9 +46,21 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        //setCurrentWarehouse();
         initComponets();
     }
+/*
+    private void setCurrentWarehouse() {
+        Query query=db.collection("warehouses").whereArrayContains("users",mAuth.getCurrentUser().getUid());
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot user:queryDocumentSnapshots){
+                    currentWarehouse=user.getReference();
+                }
+            }
+        });
+    }*/
 
     private void initComponets() {
         rootLayout = findViewById(R.id.rootHome);

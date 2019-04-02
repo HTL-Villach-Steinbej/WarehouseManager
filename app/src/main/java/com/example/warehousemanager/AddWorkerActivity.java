@@ -25,6 +25,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     private TextView emailWorker;
     private FirebaseAuth mAuth=FirebaseAuth.getInstance();
     private FirebaseFirestore db= FirebaseFirestore.getInstance();
+    private String workerUID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,27 +37,30 @@ public class AddWorkerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(emailWorker.getText().toString())){
+                    isEmailRegisterd(emailWorker.getText().toString());
+                    if(workerUID!=null) {
+                        CollectionReference citiesRef = db.collection("warehouses");
+                        Query test = citiesRef.whereArrayContains("users", mAuth.getCurrentUser().getUid());
+                        test.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                DocumentReference docRef=null;
+                                Map<String, Object> warehouse = new HashMap<>();
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                    docRef=document.getReference();
+                                    warehouse = document.getData();
+                                    List<String> users = new ArrayList<>();
+                                    users = (List<String>) warehouse.get("users");
+                                    users.add(workerUID);
+                                    warehouse.put("users", users);
 
-                    CollectionReference citiesRef = db.collection("warehouses");
-                    Query test= citiesRef.whereArrayContains("users",mAuth.getCurrentUser().getUid());
-                    test.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            List<Object>waerhouses=new ArrayList<>();
-                            Map<String,Object>warehouse=new HashMap<>();
-                            for(QueryDocumentSnapshot document :queryDocumentSnapshots ){
-                                warehouse=document.getData();
-                                List<String>users=new ArrayList<>();
-                                users=(List<String>) warehouse.get("users");
-                                users.add(emailWorker.getText().toString());
-                                warehouse.put("users",users);
+                                }
 
+
+                                docRef.update(warehouse);
                             }
-                            CollectionReference citiesRef = db.collection("warehouses");
-                            citiesRef.whereArrayContains("users",mAuth.getCurrentUser().getUid());
-                            citiesRef.add(warehouse);
-                        }
-                    });
+                        });
+                    }
 
 
                     db.collection("warehouses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -68,5 +72,27 @@ public class AddWorkerActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void isEmailRegisterd(String email) {
+        //String uid=null;
+        CollectionReference userRef=db.collection("users");
+        Query user=userRef.whereEqualTo("email",email);
+        user.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            String uid=null;
+                for(QueryDocumentSnapshot user:queryDocumentSnapshots){
+                    uid=(String)user.get("uid");
+                    getUidFromWorker(uid);
+                }
+
+            }
+        });
+
+    }
+
+    private void getUidFromWorker(String uid) {
+        workerUID=uid;
     }
 }
