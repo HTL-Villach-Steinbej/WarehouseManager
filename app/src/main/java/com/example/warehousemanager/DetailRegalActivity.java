@@ -1,6 +1,8 @@
 package com.example.warehousemanager;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.EditText;
@@ -33,6 +35,8 @@ public class DetailRegalActivity extends AppCompatActivity {
 
         imgViewQR = findViewById(R.id.iamgeViewQR);
 
+        setImageByByte(regal.getByteQR());
+
         //txtWidth = findViewById(R.id.txtWidth);
         //txtWidth.setText(regal.getWidthGrid());
 
@@ -45,6 +49,15 @@ public class DetailRegalActivity extends AppCompatActivity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width*.8), (int) (height*.6));
+        getWindow().setLayout((int) (width * .8), (int) (height * .6));
+    }
+
+    private void setImageByByte(byte[] arr) {
+        Bitmap bmp = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+        ImageView image = (ImageView) findViewById(R.id.iamgeViewQR);
+
+        image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(),
+                image.getHeight(), false));
+
     }
 }

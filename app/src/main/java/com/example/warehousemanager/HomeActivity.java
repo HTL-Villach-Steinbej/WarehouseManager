@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     private MaterialCardView cardViewBottomLeft;
     private MaterialCardView cardViewBottomRight;
     private ArrayList<Item> items;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,25 @@ public class HomeActivity extends AppCompatActivity {
                 fab.setImageResource(R.drawable.baseline_add_white_24dp);
             }
         });
+
+        drawerLayout = findViewById(R.id.drawer_layout_home);
+
+        NavigationView navigationView = findViewById(R.id.nav_view_home);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
 
         items = new ArrayList<>();
 

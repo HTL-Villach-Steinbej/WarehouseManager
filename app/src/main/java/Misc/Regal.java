@@ -11,16 +11,16 @@ public class Regal implements Serializable {
     private int widthGrid;
     private int heigthGrid;
     private int buttonNr;
-    private Bitmap bitmapQR;
+    private byte[] byteQR;
     private EnumRegalType regalType;
     private List<Item> items;
 
-    public Regal(String name, int width, int height, int buttonNr, Bitmap bitmapQR, EnumRegalType regalType){
+    public Regal(String name, int width, int height, int buttonNr, byte[] byteQR, EnumRegalType regalType){
         this.name = name;
         this.widthGrid = width;
         this.heigthGrid = height;
         this.buttonNr = buttonNr;
-        this.bitmapQR = bitmapQR;
+        this.byteQR = byteQR;
         this.regalType = regalType;
         items = new ArrayList<>();
     }
@@ -79,20 +79,20 @@ public class Regal implements Serializable {
         this.buttonNr = buttonNr;
     }
 
-    public String getQr_path() {
-        return qr_path;
-    }
-
-    public void setQr_path(String qr_path) {
-        this.qr_path = qr_path;
-    }
-
     public EnumRegalType getRegalType() {
         return regalType;
     }
 
     public void setRegalType(EnumRegalType regalType) {
         this.regalType = regalType;
+    }
+
+    public byte[] getByteQR() {
+        return byteQR;
+    }
+
+    public void setByteQR(byte[] byteQR) {
+        this.byteQR = byteQR;
     }
 
     @Override

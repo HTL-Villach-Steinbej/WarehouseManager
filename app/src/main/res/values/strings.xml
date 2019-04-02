@@ -70,8 +70,14 @@
     <string name="settings_about_terms_and_conditions">Terms and Conditions</string>
     <string name="settings_about_version">Version v1.0.0</string>
     <string name="sendEmail">Request Password</string>
+
     <string name="hint_height">Height</string>
     <string name="hint_width">Width</string>
+
+    <string name="title_select_warehouse">Select Warehouse</string>
+    <string name="title_create_warehouse">Create Warehouse</string>
+    <string name="title_manage_employee">Manage Employees</string>
+    <string name="title_add_employee">Add Employee</string>
 
     <!-- End Of Strings For The SettingActivity And The Preferences-->
 
