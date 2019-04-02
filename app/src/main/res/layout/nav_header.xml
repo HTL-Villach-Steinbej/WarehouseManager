@@ -14,5 +14,11 @@
         android:text="WarehouseManager"
         android:textColor="#FFFFFF"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="jonathan.steinberger@gmx.at"
+        android:textColor="#FFFFFF"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"/>
 
 </LinearLayout>
