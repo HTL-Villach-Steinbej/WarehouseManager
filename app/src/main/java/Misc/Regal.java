@@ -1,5 +1,7 @@
 package Misc;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,22 +11,18 @@ public class Regal implements Serializable {
     private int widthGrid;
     private int heigthGrid;
     private int buttonNr;
-    private String qr_path;
+    private Bitmap bitmapQR;
     private EnumRegalType regalType;
     private List<Item> items;
 
-    public Regal(String name, int width, int height, int buttonNr, String qr_path, EnumRegalType regalType){
+    public Regal(String name, int width, int height, int buttonNr, Bitmap bitmapQR, EnumRegalType regalType){
         this.name = name;
         this.widthGrid = width;
         this.heigthGrid = height;
         this.buttonNr = buttonNr;
-        this.qr_path = qr_path;
+        this.bitmapQR = bitmapQR;
         this.regalType = regalType;
         items = new ArrayList<>();
-    }
-
-    public Regal(){
-        this("Default Regal", 3, 1, -99, "./defaultQR.png", EnumRegalType.HARDWARE);
     }
 
     public void addItem(Item item){
