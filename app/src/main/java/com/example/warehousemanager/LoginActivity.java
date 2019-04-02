@@ -41,6 +41,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView txtForgotPassword;
     private SignInButton signInButton;
     private LoginButton loginButton;
+
     private CheckBox comboRemember;
 
     //onCreate
@@ -193,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
         return false;
     }
     private void login(){
-        String email = emailView.getText().toString();
+        final String email = emailView.getText().toString();
         String password = passwordView.getText().toString();
 
         emailView.setError(null);
@@ -227,8 +232,10 @@ public class LoginActivity extends AppCompatActivity {
                                     Paper.book().write(Prevalent.UserEmailKey, emailView.getText().toString());
                                     Paper.book().write(Prevalent.UserPasswordKey, passwordView.getText().toString());
                                 }
+                                ;
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
+
                                 updateUI(user);
                             } else {
                                 if(task.getException().getClass() == FirebaseAuthInvalidUserException.class){

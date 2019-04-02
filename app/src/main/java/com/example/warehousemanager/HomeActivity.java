@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton fabRemove;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    public DocumentReference currentWarehouse;
+    public static DocumentReference currentWarehouse;
     private CoordinatorLayout rootLayout;
     private MaterialCardView cardViewBottom;
     private MaterialCardView cardViewLeft;
@@ -46,10 +46,11 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //setCurrentWarehouse();
         initComponets();
+        setCurrentWarehouse();
+
     }
-/*
+
     private void setCurrentWarehouse() {
         Query query=db.collection("warehouses").whereArrayContains("users",mAuth.getCurrentUser().getUid());
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -60,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
-    }*/
+    }
 
     private void initComponets() {
         rootLayout = findViewById(R.id.rootHome);

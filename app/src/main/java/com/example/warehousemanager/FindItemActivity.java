@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public class FindItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             final String eanToLookUp = txtEAN.getText().toString();
-                db.collection("users").document(mAuth.getCurrentUser().getUid()).collection("Items").get()
+                HomeActivity.currentWarehouse.collection("items").get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
