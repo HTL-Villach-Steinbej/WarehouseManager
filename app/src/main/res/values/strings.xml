@@ -78,6 +78,9 @@
     <string name="title_create_warehouse">Create Warehouse</string>
     <string name="title_manage_employee">Manage Employees</string>
     <string name="title_add_employee">Add Employee</string>
+    <string name="title_header_employees">Employees</string>
+    <string name="title_header_warehouse">Warehouse</string>
+    <string name="title_manage_warehouse">Manage Warehouse</string>
 
     <!-- End Of Strings For The SettingActivity And The Preferences-->
 

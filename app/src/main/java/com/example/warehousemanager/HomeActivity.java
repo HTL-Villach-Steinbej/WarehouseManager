@@ -89,7 +89,23 @@ public class HomeActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         drawerLayout.closeDrawers();
-
+                        switch (menuItem.getItemId()){
+                            case R.id.nav_add_employee:
+                                startActivity(new Intent(HomeActivity.this,AddWorkerActivity.class));
+                                break;
+                            case R.id.nav_create_warehouse:
+                                startActivity(new Intent(HomeActivity.this,CreateWarehouseActivity.class));
+                                break;
+                            case R.id.nav_manage_employyes:
+                                break;
+                            case R.id.nav_manager_warehouse:
+                                break;
+                            case R.id.nav_select_warehouse:
+                                break;
+                            case R.id.nav_watch_warehouse:
+                                startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
+                                break;
+                        }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
 
@@ -114,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-        cardViewLeft = findViewById(R.id.cardViewLeft);
+        /*cardViewLeft = findViewById(R.id.cardViewLeft);
         cardViewLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 txtWelcome.setText("Bottom Right Clicked");
             }
-        });
+        });*/
 
         txtWelcome = findViewById(R.id.txtWelcome);
 
