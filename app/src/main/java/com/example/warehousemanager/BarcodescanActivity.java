@@ -97,7 +97,7 @@ public class BarcodescanActivity extends AppCompatActivity {
             item.put(KEY_EAN,eancode);
             item.put(KEY_QRCODE,qrcode);
 
-            db.collection("users").document(mAuth.getCurrentUser().getUid()).collection("Items").add(item);
+            HomeActivity.currentWarehouse.collection("items").add(item);
                 Toast.makeText(BarcodescanActivity.this,
                         "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));

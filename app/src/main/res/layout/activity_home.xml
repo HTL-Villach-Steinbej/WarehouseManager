@@ -9,7 +9,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <TextView
             android:id="@+id/txtWelcome"
             android:layout_width="358dp"
@@ -45,6 +44,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+
 
                 <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cardViewLeft"
