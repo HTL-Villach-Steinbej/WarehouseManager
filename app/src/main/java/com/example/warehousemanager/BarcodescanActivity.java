@@ -18,11 +18,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -91,16 +94,28 @@ public class BarcodescanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             String qrcode=txtQRCODE.getText().toString();
-            String eancode=txtEAN.getText().toString();
+            final String eancode=txtEAN.getText().toString();
 
             Map<String,Object> item= new HashMap<>();
             item.put(KEY_EAN,eancode);
             item.put(KEY_QRCODE,qrcode);
 
             HomeActivity.currentWarehouse.collection("items").add(item);
-                Toast.makeText(BarcodescanActivity.this,
-                        "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));
+
+                db.collection("items").document(eancode).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.getResult().getData()==null){
+                            Intent ean = new Intent(BarcodescanActivity.this,AddItemInformationActivity.class);
+                            ean.putExtra("ean",eancode);
+                            startActivity(ean);
+                        }else{
+                            startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));
+                            Toast.makeText(BarcodescanActivity.this,
+                                    "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
 
             }
         });
