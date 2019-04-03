@@ -17,12 +17,15 @@ import android.widget.TextView;
 
 import Misc.Item;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -111,19 +114,39 @@ public class FindItemActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            List<Item> items = new ArrayList<Item>();
+                             final List<Item> items = new ArrayList<Item>();
+                             final List<Item> fianlitems = new ArrayList<Item>();
                                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                         Item item = documentSnapshot.toObject(Item.class);
 
                                         if(item.getEAN_CODE().equals(eanToLookUp)){
                                             items.add(item);
                                         }
+
                                     }
-                            if(items.size()>0){
-                                Intent remItem = new Intent(FindItemActivity.this, RemoveItemActivity.class);
-                                remItem.putExtra("items",(ArrayList<Item>) items);
-                                startActivity(remItem);
-                            }
+                                    for(final Item i : items){
+                                        db.collection("items").document(i.getEAN_CODE()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                i.setBrand((String)documentSnapshot.get("brand"));
+                                                i.setName((String)documentSnapshot.get("name"));
+                                                i.setCategory((String)documentSnapshot.get("category"));
+                                                fianlitems.add(i);
+
+
+                                            }
+                                        }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if(fianlitems.size()>0){
+                                                    Intent remItem = new Intent(FindItemActivity.this, RemoveItemActivity.class);
+                                                    remItem.putExtra("items",(ArrayList<Item>) fianlitems);
+                                                    startActivity(remItem);
+                                                }
+                                            }
+                                        });
+                                    }
+
                             }
 
                         });
