@@ -111,6 +111,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="364dp"
         android:text="Speichern"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.909"
