@@ -19,29 +19,56 @@ import java.util.List;
 import java.util.Map;
 
 public class AddItemInformationActivity extends AppCompatActivity {
+    private Spinner spinnerCategoryAddItem;
+    private Button btnSubmitAddItem;
 
-    private Spinner spinnerCategory;
-    private Button btnSubmit;
+    private String ean;
+
+    private FirebaseFirestore db;
+
     private TextView txtBrand;
     private TextView txtName;
     private TextView txtInfo;
-    private String ean;
-    private FirebaseFirestore db=FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Bundle bundle = this.getIntent().getExtras();
         Intent intent = getIntent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item_information);
-        spinnerCategory=findViewById(R.id.spinner);
-        btnSubmit=findViewById(R.id.btnSubmit);
-        txtInfo=findViewById(R.id.txtInfo);
-        txtBrand=findViewById(R.id.txtBrand);
-        txtName=findViewById(R.id.txtName);
-        ean=intent.getStringExtra("ean");
+
+        initComponents(intent);
+    }
+    private void initComponents(Intent intent){
+        db = FirebaseFirestore.getInstance();
+        
+        spinnerCategoryAddItem = findViewById(R.id.spinner);
+
+        btnSubmitAddItem = findViewById(R.id.btnSubmit);
+        btnSubmitAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!TextUtils.isEmpty(txtBrand.getText())&&!TextUtils.isEmpty(txtName.getText()))    {
+                    Map<String,String> item = new HashMap<String,String>();
+                    item.put("brand",txtBrand.getText().toString());
+                    item.put("name",txtName.getText().toString());
+                    item.put("category", spinnerCategoryAddItem.getSelectedItem().toString());
+                    item.put("ean",ean);
+                    db.collection("items").document(ean).set(item);
+                }
+            }
+        });
+
+        txtInfo = findViewById(R.id.txtInfo);
+
+        txtBrand = findViewById(R.id.txtBrand);
+
+        txtName = findViewById(R.id.txtName);
+
+        ean = intent.getStringExtra("ean");
+
         txtInfo.setText("Informationen für Herstellercode: "+ ean);
-        List<String> category= new ArrayList<String>();
+
+        List<String> category= new ArrayList<>();
         category.add("Kühlschränke");
         category.add("Geschirrspüler");
         category.add("Gefriertruhen");
@@ -51,27 +78,10 @@ public class AddItemInformationActivity extends AppCompatActivity {
         category.add("Waschmaschinen");
         category.add("Kühl- Gefrierkombinationen");
         category.add("Kochfelder");
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, category);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(adapter);
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            if(!TextUtils.isEmpty(txtBrand.getText())&&!TextUtils.isEmpty(txtName.getText()))    {
-                Map<String,String> item = new HashMap<String,String>();
-                item.put("brand",txtBrand.getText().toString());
-                item.put("name",txtName.getText().toString());
-                item.put("category",spinnerCategory.getSelectedItem().toString());
-                item.put("ean",ean);
-                db.collection("items").document(ean).set(item);
-            }
-
-
-
-            }
-        });
-
+        spinnerCategoryAddItem.setAdapter(adapter);
     }
 }

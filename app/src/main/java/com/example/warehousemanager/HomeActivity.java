@@ -7,13 +7,13 @@ import Misc.Item;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
+import Misc.Warehouse;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -27,68 +27,69 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-    private TextView txtWelcome;
-    private BottomAppBar navigation;
-    private FloatingActionButton fab;
-    private FloatingActionButton fabSearch;
-    private FloatingActionButton fabAdd;
-    private FloatingActionButton fabRemove;
+    public static DocumentReference currentWarehouseReference;
+
+    private BottomAppBar bottomAppBarHome;
+    private FloatingActionButton fabMainHome;
+    private FloatingActionButton fabSearchHome;
+    private FloatingActionButton fabAddHome;
+    private FloatingActionButton fabRemoveHome;
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    public static DocumentReference currentWarehouse;
-    private CoordinatorLayout rootLayout;
-    private MaterialCardView cardViewBottom;
-    private MaterialCardView cardViewLeft;
-    private MaterialCardView cardViewRight;
-    private MaterialCardView cardViewBottomLeft;
-    private MaterialCardView cardViewBottomRight;
-    private ArrayList<Item> items;
-    private DrawerLayout drawerLayout;
+
+
+    private Warehouse currentWarehouse;
+    private ArrayList<Item> allItems;
+
+    private CoordinatorLayout rootLayoutHome;
+    private DrawerLayout drawerLayoutHome;
+    private NavigationView sideNavViewHome;
+
+    private TextView txtHeaderWarehouse;
+    private TextView txtOwnerWarehouse;
+    private TextView txtWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        initComponets();
+        initComponents();
         setCurrentWarehouse();
-
     }
 
     private void setCurrentWarehouse() {
-        Query query=db.collection("warehouses").whereArrayContains("users",mAuth.getCurrentUser().getUid());
+        Query query = db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid());
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot user:queryDocumentSnapshots){
-                    currentWarehouse=user.getReference();
+                for(QueryDocumentSnapshot user : queryDocumentSnapshots){
+                    currentWarehouseReference = user.getReference();
                 }
             }
         });
     }
 
-    private void initComponets() {
-        rootLayout = findViewById(R.id.rootHome);
-        rootLayout.setOnClickListener(new View.OnClickListener() {
+    private void initComponents() {
+        rootLayoutHome = findViewById(R.id.rootHome);
+        rootLayoutHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabAdd.hide();
-                fabSearch.hide();
-                fabRemove.hide();
-                fab.setImageResource(R.drawable.baseline_add_white_24dp);
+                fabAddHome.hide();
+                fabSearchHome.hide();
+                fabRemoveHome.hide();
+                fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
             }
         });
 
-        drawerLayout = findViewById(R.id.drawer_layout_home);
+        drawerLayoutHome = findViewById(R.id.drawer_layout_home);
 
-        NavigationView navigationView = findViewById(R.id.nav_view_home);
-        navigationView.setNavigationItemSelectedListener(
+        sideNavViewHome = findViewById(R.id.nav_view_home);
+        sideNavViewHome.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        drawerLayout.closeDrawers();
+                        drawerLayoutHome.closeDrawers();
                         switch (menuItem.getItemId()){
                             case R.id.nav_add_employee:
                                 startActivity(new Intent(HomeActivity.this,AddWorkerActivity.class));
@@ -106,14 +107,11 @@ public class HomeActivity extends AppCompatActivity {
                                 startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
                                 break;
                         }
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
                         return true;
                     }
                 });
 
-        items = new ArrayList<>();
+        allItems = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -122,62 +120,35 @@ public class HomeActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<Item> items = new ArrayList<Item>();
+                        List<Item> items = new ArrayList<>();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Item item = documentSnapshot.toObject(Item.class);
                             items.add(item);
                         }
                     }
                 });
-
-        /*cardViewLeft = findViewById(R.id.cardViewLeft);
-        cardViewLeft.setOnClickListener(new View.OnClickListener() {
+        db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid()).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onClick(View v) {
-                txtWelcome.setText("Left clicked");
-                startActivity(new Intent(HomeActivity.this,CreateWarehouseActivity.class));
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot w : queryDocumentSnapshots){
+                    currentWarehouse = new Warehouse(w.get("name").toString());
+                    currentWarehouse.setAdminId(w.get("admin").toString());
+                }
             }
         });
 
-        cardViewRight = findViewById(R.id.cardViewRight);
-        cardViewRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtWelcome.setText("Right clicked");
-                startActivity(new Intent(HomeActivity.this,AddWorkerActivity.class));
-            }
-        });
+        txtHeaderWarehouse = findViewById(R.id.txtTitleWarehouse);
+        txtHeaderWarehouse.setText("MediaMarkt Villach");
 
-        cardViewBottom = findViewById(R.id.cardViewBottom);
-        cardViewBottom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtWelcome.setText("Bottom clicked");
-                startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
-            }
-        });
-
-        cardViewBottomLeft = findViewById(R.id.cardViewBottomLeft);
-        cardViewBottomLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtWelcome.setText("Bottom Left clicked");
-            }
-        });
-
-        cardViewBottomRight = findViewById(R.id.cardViewBottomRight);
-        cardViewBottomRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtWelcome.setText("Bottom Right Clicked");
-            }
-        });*/
+        txtOwnerWarehouse = findViewById(R.id.txtOwnerWarehouse);
+        txtOwnerWarehouse.setText("Owner: Jonathan Steinberger");
 
         txtWelcome = findViewById(R.id.txtWelcome);
 
-        navigation = findViewById(R.id.navigation);
-        navigation.replaceMenu(R.menu.navigation);
-        navigation.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        bottomAppBarHome = findViewById(R.id.navigation);
+        bottomAppBarHome.replaceMenu(R.menu.navigation);
+        bottomAppBarHome.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if(item.getItemId() == R.id.navigation_warehouse){
@@ -191,68 +162,69 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
-        navigation.setNavigationOnClickListener(new View.OnClickListener() {
+        bottomAppBarHome.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
 
-        fabAdd = findViewById(R.id.fabAdd);
-
-        fabAdd.setOnClickListener(new View.OnClickListener() {
+        fabAddHome = findViewById(R.id.fabAdd);
+        fabAddHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, BarcodescanActivity.class));
             }
         });
-        fabSearch = findViewById(R.id.fabSearch);
 
-        fabSearch.setOnClickListener(new View.OnClickListener() {
+        fabSearchHome = findViewById(R.id.fabSearch);
+        fabSearchHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, FindItemActivity.class));
             }
         });
 
-        fabRemove = findViewById(R.id.fabRemove);
-        fabRemove.setOnClickListener(new View.OnClickListener() {
+        fabRemoveHome = findViewById(R.id.fabRemove);
+        fabRemoveHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, RemoveItemActivity.class).putExtra("items", items));
-            }
-        });
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(fabRemove.isOrWillBeHidden() && fabSearch.isOrWillBeHidden() && fabAdd.isOrWillBeHidden()){
-                    txtWelcome.setText("Add");
-                    fabSearch.show();
-                    fabAdd.show();
-                    fabRemove.show();
-                    fab.setImageDrawable(null);
-                }
-                else{
-                    fabSearch.hide();
-                    fabAdd.hide();
-                    fabRemove.hide();
-                    fab.setImageResource(R.drawable.baseline_add_white_24dp);
-                }
+                startActivity(new Intent(HomeActivity.this, RemoveItemActivity.class).putExtra("allItems", allItems));
             }
         });
 
+        fabMainHome = findViewById(R.id.fab);
+        fabMainHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fabRemoveHome.isOrWillBeHidden() && fabSearchHome.isOrWillBeHidden() && fabAddHome.isOrWillBeHidden()){
+                    txtWelcome.setText("Add");
+                    fabSearchHome.show();
+                    fabAddHome.show();
+                    fabRemoveHome.show();
+                    fabMainHome.setImageDrawable(null);
+                }
+                else{
+                    fabSearchHome.hide();
+                    fabAddHome.hide();
+                    fabRemoveHome.hide();
+                    fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
+                }
+            }
+        });
     }
+
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-        fabSearch.hide();
-        fabAdd.hide();
-        fabRemove.hide();
-        fab.setImageResource(R.drawable.baseline_add_white_24dp);
+        fabSearchHome.hide();
+        fabAddHome.hide();
+        fabRemoveHome.hide();
+        fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
     }
+
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null){
             txtWelcome = findViewById(R.id.txtWelcome);

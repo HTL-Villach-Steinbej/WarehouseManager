@@ -29,50 +29,34 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FindItemActivity extends AppCompatActivity {
-    private SurfaceView cameraPreview;
-    private TextView txtQRCODE;
-    private TextView txtEAN;
     private BarcodeDetector qrcodeDetector;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private CameraSource qrcodecameraSource;
+
     private Button btnSave;
-    private FirebaseAuth mAuth=FirebaseAuth.getInstance();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final String KEY_QRCODE="QR_CODE";
-    private final String KEY_EAN="EAN_CODE";
+    private FirebaseFirestore db;
+
+    private SurfaceView cameraPreview;
+    private TextView txtQRCODE;
+    private TextView txtEAN;
 
     final int RequestCameraPermissionID = 1001;
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case RequestCameraPermissionID: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    try {
-                        cameraSource.start(cameraPreview.getHolder());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            break;
-        }
-    }
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_item);
+        initComponents();
+    }
+    private void initComponents(){
+        db = FirebaseFirestore.getInstance();
 
         cameraPreview = findViewById(R.id.cameraPreview);
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -109,43 +93,43 @@ public class FindItemActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            final String eanToLookUp = txtEAN.getText().toString();
-                HomeActivity.currentWarehouse.collection("items").get()
+                final String eanToLookUp = txtEAN.getText().toString();
+                HomeActivity.currentWarehouseReference.collection("items").get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                             final List<Item> items = new ArrayList<Item>();
-                             final List<Item> fianlitems = new ArrayList<Item>();
-                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                        Item item = documentSnapshot.toObject(Item.class);
+                                final List<Item> items = new ArrayList<Item>();
+                                final List<Item> fianlitems = new ArrayList<Item>();
+                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    Item item = documentSnapshot.toObject(Item.class);
 
-                                        if(item.getEAN_CODE().equals(eanToLookUp)){
-                                            items.add(item);
+                                    if(item.getEAN_CODE().equals(eanToLookUp)){
+                                        items.add(item);
+                                    }
+
+                                }
+                                for(final Item i : items){
+                                    db.collection("items").document(i.getEAN_CODE()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            i.setBrand((String)documentSnapshot.get("brand"));
+                                            i.setName((String)documentSnapshot.get("name"));
+                                            i.setCategory((String)documentSnapshot.get("category"));
+                                            fianlitems.add(i);
+
+
                                         }
-
-                                    }
-                                    for(final Item i : items){
-                                        db.collection("items").document(i.getEAN_CODE()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                i.setBrand((String)documentSnapshot.get("brand"));
-                                                i.setName((String)documentSnapshot.get("name"));
-                                                i.setCategory((String)documentSnapshot.get("category"));
-                                                fianlitems.add(i);
-
-
+                                    }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if(fianlitems.size()>0){
+                                                Intent remItem = new Intent(FindItemActivity.this, RemoveItemActivity.class);
+                                                remItem.putExtra("items",(ArrayList<Item>) fianlitems);
+                                                startActivity(remItem);
                                             }
-                                        }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if(fianlitems.size()>0){
-                                                    Intent remItem = new Intent(FindItemActivity.this, RemoveItemActivity.class);
-                                                    remItem.putExtra("items",(ArrayList<Item>) fianlitems);
-                                                    startActivity(remItem);
-                                                }
-                                            }
-                                        });
-                                    }
+                                        }
+                                    });
+                                }
 
                             }
 
@@ -155,10 +139,6 @@ public class FindItemActivity extends AppCompatActivity {
 
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.EAN_13 | Barcode.QR_CODE)
-                .build();
-        cameraSource = new CameraSource
-                .Builder(this, barcodeDetector)
-                .setAutoFocusEnabled(true)
                 .build();
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
@@ -182,5 +162,28 @@ public class FindItemActivity extends AppCompatActivity {
                 }
             }
         });
+
+        cameraSource = new CameraSource
+                .Builder(this, barcodeDetector)
+                .setAutoFocusEnabled(true)
+                .build();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case RequestCameraPermissionID: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    try {
+                        cameraSource.start(cameraPreview.getHolder());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            break;
+        }
     }
 }

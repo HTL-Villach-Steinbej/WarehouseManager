@@ -25,41 +25,44 @@ public class AddWorkerActivity extends AppCompatActivity {
 
     private Button btnAddWorker;
     private TextView emailWorker;
-    private FirebaseAuth mAuth=FirebaseAuth.getInstance();
-    private FirebaseFirestore db= FirebaseFirestore.getInstance();
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_worker);
-        btnAddWorker=findViewById(R.id.btnAddWorker);
-        emailWorker=findViewById(R.id.txtEmailWorker);
+        initComponents();
+    }
+    private void initComponents(){
+        mAuth = FirebaseAuth.getInstance();
 
+        db = FirebaseFirestore.getInstance();
+
+        btnAddWorker=findViewById(R.id.btnAddWorker);
         btnAddWorker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(emailWorker.getText().toString())){
-
                     isEmailRegisterd(emailWorker.getText().toString());
-
-
-
                 }
             }
         });
-    }
 
+        emailWorker=findViewById(R.id.txtEmailWorker);
+    }
     private void isEmailRegisterd(String email) {
-        CollectionReference userRef=db.collection("users");
-        Query user=userRef.whereEqualTo("email",email);
+        CollectionReference userRef = db.collection("users");
+        Query user = userRef.whereEqualTo("email",email);
         user.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-            String uid=null;
+            String uid = null;
                 for(QueryDocumentSnapshot user:queryDocumentSnapshots){
                     uid=(String)user.get("uid");
                     addUserToCurrentWarehouse(uid);
                     }
-                    if(uid==null){
+                    if(uid == null){
                         Toast.makeText(AddWorkerActivity.this, "Diese Email ist nicht registriert", Toast.LENGTH_SHORT).show();
                     }
 
@@ -67,18 +70,18 @@ public class AddWorkerActivity extends AppCompatActivity {
         });
 
     }
-
     private void addUserToCurrentWarehouse(String uid) {
-        final String workerUID=uid;
-        CollectionReference citiesRef = db.collection("warehouses");
-        Query test = citiesRef.whereArrayContains("users", mAuth.getCurrentUser().getUid());
-        test.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        final String workerUID = uid;
+        CollectionReference warehouseReference = db.collection("warehouses");
+
+        Query users = warehouseReference.whereArrayContains("users", mAuth.getCurrentUser().getUid());
+        users.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                DocumentReference docRef=null;
+                DocumentReference docRef = null;
                 Map<String, Object> warehouse = new HashMap<>();
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    docRef=document.getReference();
+                    docRef = document.getReference();
                     warehouse = document.getData();
                     List<String> users = new ArrayList<>();
                     users = (List<String>) warehouse.get("users");
@@ -87,17 +90,13 @@ public class AddWorkerActivity extends AppCompatActivity {
                             users.add(workerUID);
                             warehouse.put("users", users);
                             docRef.update(warehouse);
-                        }else{
+                        } else{
                             Toast.makeText(AddWorkerActivity.this, "Nutzer ist bereits dem Lager zugeteilt", Toast.LENGTH_SHORT).show();
                         }
                     }
-
-
                 }
 
             }
         });
     }
-
-
 }

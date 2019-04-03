@@ -35,87 +35,74 @@ import java.util.Map;
 public class BarcodescanActivity extends AppCompatActivity {
 
     private SurfaceView cameraPreview;
-    private TextView txtQRCODE;
-    private TextView txtEAN;
+
     private BarcodeDetector qrcodeDetector;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private CameraSource qrcodecameraSource;
+
     private Button btnSave;
-    private Camera camera;
     private Switch flashSwitch;
-    private FirebaseAuth mAuth=FirebaseAuth.getInstance();
+    private TextView txtQRCODE;
+    private TextView txtEAN;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     private final String KEY_QRCODE="QR_CODE";
     private final String KEY_EAN="EAN_CODE";
-   // private DocumentReference mDocRef= FirebaseFirestore.getInstance().document("users/items");
 
     final int RequestCameraPermissionID = 1001;
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case RequestCameraPermissionID: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    try {
-                        cameraSource.start(cameraPreview.getHolder());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            break;
-        }
-    }
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_barcodescan);
-        cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
-        txtQRCODE = (TextView) findViewById(R.id.txtQRCODE);
-        txtEAN=findViewById(R.id.txtEAN);
-        btnSave=findViewById(R.id.btnSave);
-        flashSwitch=findViewById(R.id.flashSwitch);
+        initComponents();
+    }
+    private void initComponents(){
+        cameraPreview =  findViewById(R.id.cameraPreview);
 
-        flashSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        txtQRCODE =  findViewById(R.id.txtQRCODE);
 
-            }
-        });
+        txtEAN = findViewById(R.id.txtEAN);
 
+        btnSave = findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            String qrcode=txtQRCODE.getText().toString();
-            final String eancode=txtEAN.getText().toString();
+                String qrcode = txtQRCODE.getText().toString();
+                final String eancode = txtEAN.getText().toString();
 
-            Map<String,Object> item= new HashMap<>();
-            item.put(KEY_EAN,eancode);
-            item.put(KEY_QRCODE,qrcode);
+                Map<String,Object> item = new HashMap<>();
+                item.put(KEY_EAN,eancode);
+                item.put(KEY_QRCODE,qrcode);
 
-            HomeActivity.currentWarehouse.collection("items").add(item);
+                HomeActivity.currentWarehouseReference.collection("items").add(item);
 
                 db.collection("items").document(eancode).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().getData()==null){
-                            Intent ean = new Intent(BarcodescanActivity.this,AddItemInformationActivity.class);
+                        if(task.getResult().getData() == null){
+                            Intent ean = new Intent(BarcodescanActivity.this, AddItemInformationActivity.class);
                             ean.putExtra("ean",eancode);
                             startActivity(ean);
-                        }else{
+                        }
+                        else{
                             startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));
                             Toast.makeText(BarcodescanActivity.this,
                                     "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+
+            }
+        });
+
+        flashSwitch = findViewById(R.id.flashSwitch);
+        flashSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
@@ -193,7 +180,24 @@ public class BarcodescanActivity extends AppCompatActivity {
                 }
             }
         });
-
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case RequestCameraPermissionID: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    try {
+                        cameraSource.start(cameraPreview.getHolder());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            break;
+        }
     }
 }
 

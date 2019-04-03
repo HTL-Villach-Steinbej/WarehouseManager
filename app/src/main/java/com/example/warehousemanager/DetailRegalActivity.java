@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,14 +15,15 @@ public class DetailRegalActivity extends AppCompatActivity {
     private TextView txtName;
     private TextView txtCategory;
     private ImageView imgViewQR;
-    private EditText txtWidth;
-    private EditText txtHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_regal);
+        initComponents();
 
+    }
+    private void initComponents(){
         Intent intent = getIntent();
         Regal regal = (Regal) intent.getSerializableExtra("regal");
 
@@ -37,12 +37,6 @@ public class DetailRegalActivity extends AppCompatActivity {
 
         setImageByByte(regal.getByteQR());
 
-        //txtWidth = findViewById(R.id.txtWidth);
-        //txtWidth.setText(regal.getWidthGrid());
-
-        //txtHeight = findViewById(R.id.txtHeight);
-        //txtHeight.setText(regal.getHeigthGrid());
-
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -51,7 +45,6 @@ public class DetailRegalActivity extends AppCompatActivity {
 
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
     }
-
     private void setImageByByte(byte[] arr) {
         Bitmap bmp = BitmapFactory.decodeByteArray(arr, 0, arr.length);
         ImageView image = (ImageView) findViewById(R.id.iamgeViewQR);

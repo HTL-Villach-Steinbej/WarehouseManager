@@ -19,23 +19,28 @@ public class CreateWarehouseActivity extends AppCompatActivity {
 
     private TextView txtWarehouseName;
     private Button btnAddWorker;
-    private FirebaseAuth mAuth=FirebaseAuth.getInstance();
-    private FirebaseFirestore db=FirebaseFirestore.getInstance();
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_warehouse);
-        txtWarehouseName=findViewById(R.id.txtWarehouseName);
-        btnAddWorker=findViewById(R.id.btnCreateWarehouse);
 
+        mAuth = FirebaseAuth.getInstance();
 
+        db = FirebaseFirestore.getInstance();
+
+        txtWarehouseName = findViewById(R.id.txtWarehouseName);
+
+        btnAddWorker = findViewById(R.id.btnCreateWarehouse);
         btnAddWorker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(txtWarehouseName.getText().toString())){
-                    List<String>users= new ArrayList<>();
+                    List<String>users = new ArrayList<>();
                     users.add(mAuth.getCurrentUser().getUid());
-                    Map<String,Object> warehouseData=new HashMap<>();
+                    Map<String, Object> warehouseData = new HashMap<>();
                     warehouseData.put("name",txtWarehouseName.getText().toString());
                     warehouseData.put("admin",mAuth.getCurrentUser().getUid());
                     warehouseData.put("users",users);

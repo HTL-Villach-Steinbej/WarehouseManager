@@ -37,7 +37,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "REGISTER";
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db=FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
+
     private Button btnRegister;
     private TextView txtPassword;
     private TextView txtEmail;
@@ -46,13 +47,14 @@ public class RegisterActivity extends AppCompatActivity {
     //onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //getSupportActionBar().hide();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        initComponents();
+    }
+    private void initComponents(){
         mAuth = FirebaseAuth.getInstance();
+
+        db = FirebaseFirestore.getInstance();
 
         btnRegister = findViewById(R.id.btnRegisterNow);
         btnRegister.setOnClickListener(new View.OnClickListener() {

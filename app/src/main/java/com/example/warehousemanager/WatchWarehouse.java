@@ -21,6 +21,7 @@ import androidx.gridlayout.widget.GridLayout;
 
 public class WatchWarehouse extends AppCompatActivity {
     private TreeMap<Integer, Regal> routingTable;
+
     private Button addKastale;
     private Button addBigKastale;
 
@@ -30,8 +31,9 @@ public class WatchWarehouse extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_warehouse);
-
-
+        initComponents();
+    }
+    private void initComponents(){
         routingTable = new TreeMap<>();
 
         final GridLayout gridLayout = findViewById(R.id.gridLayout);
@@ -108,13 +110,11 @@ public class WatchWarehouse extends AppCompatActivity {
             }
         });
     }
-    private byte[] ImageToByte(Bitmap bmp)
-    {
+    private byte[] ImageToByte(Bitmap bmp) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         bmp.recycle();
         return  byteArray;
     }
-
 }
