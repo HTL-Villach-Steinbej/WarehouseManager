@@ -27,7 +27,7 @@ import java.util.Map;
 public class AddItemInformationActivity extends AppCompatActivity {
     private Spinner spinnerCategoryAddItem;
     private Button btnSubmitAddItem;
-
+    private ArrayAdapter<String> adapter;
     private String ean;
     private ArrayList<Item> product=null;
     private FirebaseFirestore db;
@@ -42,6 +42,7 @@ public class AddItemInformationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item_information);
         initComponents(intent);
+
         String qrcode=intent.getStringExtra("qrcode");
         try {
             product = (ArrayList<Item>) intent.getSerializableExtra("itemobject");
@@ -51,8 +52,11 @@ public class AddItemInformationActivity extends AppCompatActivity {
         if(product!=null&&qrcode!=null){
             txtName.setText(product.get(0).getName());
             txtBrand.setText(product.get(0).getBrand());
+            spinnerCategoryAddItem.setPrompt(product.get(0).getCategory());
             txtInfo.setText("Hinzufügen zu "+qrcode);
             txtInfo.setVisibility(View.VISIBLE);
+            int postition =adapter.getPosition(product.get(0).getCategory());
+            spinnerCategoryAddItem.setSelection(postition);
 
         }
 
@@ -113,7 +117,7 @@ public class AddItemInformationActivity extends AppCompatActivity {
         category.add("Kühl- Gefrierkombinationen");
         category.add("Kochfelder");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, category);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategoryAddItem.setAdapter(adapter);

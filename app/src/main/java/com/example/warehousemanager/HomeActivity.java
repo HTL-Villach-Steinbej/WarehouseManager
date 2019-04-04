@@ -184,7 +184,7 @@ public class HomeActivity extends AppCompatActivity {
         fabSearchHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, FindItemActivity.class));
+                startActivity(new Intent(HomeActivity.this, SearchItemsActivity.class));
             }
         });
 

@@ -16,11 +16,12 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        android:windowSoftInputMode="stateHidden"
+        <activity android:name=".SearchItemsActivity"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -34,12 +35,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme = "@string/fb_login_protocol_scheme" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".FindItemActivity" android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".FindItemActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".RemoveItemActivity" />
-        <activity android:name=".BarcodescanActivity" android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".BarcodescanActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ManageEmployeesActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
@@ -47,7 +52,9 @@
         <activity android:name=".WatchWarehouse" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".DetailRegalActivity" />
-        <activity android:name=".AddItemInformationActivity" android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AddItemInformationActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".AddWorkerActivity" />
         <activity android:name=".CreateWarehouseActivity" />
         <activity android:name=".SettingsActivity" />
@@ -58,6 +65,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
+
 </manifest>
