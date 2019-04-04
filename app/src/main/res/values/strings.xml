@@ -81,6 +81,9 @@
     <string name="title_header_employees">Employees</string>
     <string name="title_header_warehouse">Warehouse</string>
     <string name="title_manage_warehouse">Manage Warehouse</string>
+    <string name="btn_add_item_title">Add a new Item</string>
+    <string name="title_itmes_list">Items in:</string>
+    <string name="title_items_list">Items in</string>
 
     <!-- End Of Strings For The SettingActivity And The Preferences-->
 

@@ -7,9 +7,13 @@ public class Warehouse implements Serializable {
     private String name;
     private String adminId;
     private ArrayList<String> users;
+    private ArrayList<Regal> regale;
     private ArrayList<Item> items;
     public Warehouse(String name){
         this.name = name;
+        users = new ArrayList<>();
+        regale = new ArrayList<>();
+        items = new ArrayList<>();
     }
 
     public String getName() {
@@ -42,6 +46,14 @@ public class Warehouse implements Serializable {
 
     public void setItems(ArrayList<Item> items) {
         this.items = items;
+    }
+
+    public ArrayList<Regal> getRegale() {
+        return regale;
+    }
+
+    public void setRegale(ArrayList<Regal> regale) {
+        this.regale = regale;
     }
 
     @Override

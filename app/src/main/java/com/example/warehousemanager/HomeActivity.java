@@ -49,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView txtHeaderWarehouse;
     private TextView txtOwnerWarehouse;
     private TextView txtWelcome;
+    private TextView txtSubtitleSidenav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

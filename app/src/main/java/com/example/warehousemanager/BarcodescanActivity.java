@@ -58,9 +58,12 @@ public class BarcodescanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcodescan);
-        initComponents();
+        Intent intent = getIntent();
+        initComponents(intent);
     }
-    private void initComponents(){
+    private void initComponents(Intent intent){
+        String regalName = intent.getExtras().toString();
+
         cameraPreview =  findViewById(R.id.cameraPreview);
 
         txtQRCODE =  findViewById(R.id.txtQRCODE);
@@ -74,7 +77,7 @@ public class BarcodescanActivity extends AppCompatActivity {
                 String qrcode = txtQRCODE.getText().toString();
                 final String eancode = txtEAN.getText().toString();
 
-                Map<String,Object> item = new HashMap<>();
+                Map<String, Object> item = new HashMap<>();
                 item.put(KEY_EAN,eancode);
                 item.put(KEY_QRCODE,qrcode);
 

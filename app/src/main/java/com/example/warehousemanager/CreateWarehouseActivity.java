@@ -1,11 +1,14 @@
 package com.example.warehousemanager;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import okio.Utf8;
@@ -45,7 +48,9 @@ public class CreateWarehouseActivity extends AppCompatActivity {
                     warehouseData.put("admin",mAuth.getCurrentUser().getUid());
                     warehouseData.put("users",users);
                     db.collection("warehouses").add(warehouseData);
-
+                    Toast.makeText(CreateWarehouseActivity.this, "Warehouse Created",
+                            Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(CreateWarehouseActivity.this, HomeActivity.class));
                 }
             }
         });
