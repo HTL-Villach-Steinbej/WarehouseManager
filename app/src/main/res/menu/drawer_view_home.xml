@@ -9,6 +9,7 @@
             android:id="@+id/nav_select_warehouse"
             android:icon="@drawable/baseline_call_received_white_24dp"
             android:title="@string/title_select_warehouse" />
+
         <item
             android:id="@+id/nav_watch_warehouse"
             android:icon="@drawable/baseline_search_white_24dp"

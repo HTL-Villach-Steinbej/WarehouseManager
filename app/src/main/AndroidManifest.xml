@@ -16,6 +16,7 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        android:windowSoftInputMode="stateHidden"
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -36,9 +37,9 @@
                 <data android:scheme = "@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".FindItemActivity" />
+        <activity android:name=".FindItemActivity" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".RemoveItemActivity" />
-        <activity android:name=".BarcodescanActivity" />
+        <activity android:name=".BarcodescanActivity" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ManageEmployeesActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
@@ -46,7 +47,7 @@
         <activity android:name=".WatchWarehouse" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".DetailRegalActivity" />
-        <activity android:name=".AddItemInformationActivity" />
+        <activity android:name=".AddItemInformationActivity" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".AddWorkerActivity" />
         <activity android:name=".CreateWarehouseActivity" />
         <activity android:name=".SettingsActivity" />
@@ -57,5 +58,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 </manifest>
