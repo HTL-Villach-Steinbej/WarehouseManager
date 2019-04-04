@@ -32,7 +32,19 @@
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Go Home" />
+                android:text="Items stored [2.124]" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Top Categorys: Hardware" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Worst Category: Software" />
 
         </LinearLayout>
 
@@ -58,19 +70,19 @@
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MediaMarket Villach" />
+                android:text="No Warehouse selected" />
 
             <TextView
                 android:id="@+id/txtOwnerWarehouse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mitarbeiter: 3" />
+                android:text="n.A." />
 
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Freie Stellplätze: 31" />
+                android:text="n.A" />
 
             <Space
                 android:layout_width="match_parent"
@@ -80,7 +92,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Subscription till: 20.07.2020"
+                android:text="Subscription till: n.A."
                 android:textAlignment="textEnd" />
         </LinearLayout>
 
@@ -129,7 +141,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:padding="5dp"
-            android:text="Your Scedule"
+            android:text="Your Items"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
             android:textSize="10sp"
@@ -210,7 +222,9 @@
             <FrameLayout
                 android:id="@+id/content_frame_home"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent" >
+
+            </FrameLayout>
 
             <com.google.android.material.navigation.NavigationView
                 android:id="@+id/nav_view_home"

@@ -92,7 +92,6 @@ public class HomeActivity extends AppCompatActivity {
 
         sideNavViewHome = findViewById(R.id.nav_view_home);
 
-
         sideNavViewHome.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -256,6 +255,7 @@ public class HomeActivity extends AppCompatActivity {
             if(currentWarehouse != null){
                 txtHeaderWarehouse.setText(currentWarehouse.getName());
                 txtOwnerWarehouse.setText(currentWarehouse.getAdminId());
+                removeSubMenu();
             }
         }
         else {
@@ -263,5 +263,12 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void removeSubMenu() {
+        final Menu m = sideNavViewHome.getMenu();
+        MenuItem item = m.findItem(R.id.nav_select_warehouse);
+        SubMenu sub = item.getSubMenu();
+        sub.clear();
     }
 }
