@@ -1,21 +1,19 @@
 package com.example.warehousemanager;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,19 +37,19 @@ public class AddWorkerActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        btnAddWorker=findViewById(R.id.btnAddWorker);
+        emailWorker = findViewById(R.id.txtEmailWorker);
+
+        btnAddWorker = findViewById(R.id.btnAddWorker);
         btnAddWorker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(emailWorker.getText().toString())){
-                    isEmailRegisterd(emailWorker.getText().toString());
+                    checkEmailAndAdd(emailWorker.getText().toString());
                 }
             }
         });
-
-        emailWorker=findViewById(R.id.txtEmailWorker);
     }
-    private void isEmailRegisterd(String email) {
+    private void checkEmailAndAdd(String email) {
         CollectionReference userRef = db.collection("users");
         Query user = userRef.whereEqualTo("email",email);
         user.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -65,10 +63,8 @@ public class AddWorkerActivity extends AppCompatActivity {
                     if(uid == null){
                         Toast.makeText(AddWorkerActivity.this, "Diese Email ist nicht registriert", Toast.LENGTH_SHORT).show();
                     }
-
             }
         });
-
     }
     private void addUserToCurrentWarehouse(String uid) {
         final String workerUID = uid;
@@ -90,12 +86,13 @@ public class AddWorkerActivity extends AppCompatActivity {
                             users.add(workerUID);
                             warehouse.put("users", users);
                             docRef.update(warehouse);
+                            Toast.makeText(AddWorkerActivity.this, "Erfolg. Nutzer wurde hinzugefügt", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
                         } else{
                             Toast.makeText(AddWorkerActivity.this, "Nutzer ist bereits dem Lager zugeteilt", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-
             }
         });
     }

@@ -18,26 +18,20 @@ public class Item implements Parcelable {
         this.EAN_CODE=EAN_CODE;
         this.QR_CODE=QR_CODE;
     }
-    public String getQR_CODE(){
-        return  QR_CODE;
-    }
-    public String getEAN_CODE(){
-        return  EAN_CODE;
-    }
+
 
     private Item(Parcel in) {
         EAN_CODE = in.readString();
         QR_CODE = in.readString();
-        brand=in.readString();
-        name=in.readString();
-        category=in.readString();
+        brand = in.readString();
+        name = in.readString();
+        category = in.readString();
 
     }
     @Override
     public int describeContents() {
         return 0;
     }
-
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -46,8 +40,8 @@ public class Item implements Parcelable {
         dest.writeString(brand);
         dest.writeString(name);
         dest.writeString(category);
-
     }
+
     public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
         public Item createFromParcel(Parcel in) {
             return new Item(in);
@@ -58,6 +52,14 @@ public class Item implements Parcelable {
 
         }
     };
+
+    public String getQR_CODE(){
+        return  QR_CODE;
+    }
+
+    public String getEAN_CODE(){
+        return  EAN_CODE;
+    }
 
     public void setQR_CODE(String QR_CODE) {
         this.QR_CODE = QR_CODE;
@@ -99,8 +101,7 @@ public class Item implements Parcelable {
 
     @Override
     public String toString() {
-        return EAN_CODE +" "+brand+" "+name+" "+category;
+        return EAN_CODE + " " + brand + " " + name + " " + category;
     }
-// all get , set method
 }
 

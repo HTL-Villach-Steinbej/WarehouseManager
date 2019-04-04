@@ -55,7 +55,6 @@ public class WatchWarehouse extends AppCompatActivity {
                 }
                 Regal regal = new Regal("Regal" + (childCount + 1), 3, 1, routingTable.size(), qr_byte, EnumRegalType.HARDWARE);
 
-
                 final Button btnRegal = new Button(context);
                 btnRegal.setText("Regal" + (childCount + 1));
                 btnRegal.setId(childCount + 10000);
