@@ -135,16 +135,6 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 });
-        db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid()).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot w : queryDocumentSnapshots){
-                    currentWarehouse = new Warehouse(w.get("name").toString());
-                    currentWarehouse.setAdminId(w.get("admin").toString());
-                }
-            }
-        });
 
         txtHeaderWarehouse = findViewById(R.id.txtTitleWarehouse);
         if(currentWarehouse != null)
@@ -227,7 +217,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
         fabSearchHome.hide();
         fabAddHome.hide();
@@ -244,7 +234,16 @@ public class HomeActivity extends AppCompatActivity {
                         SubMenu sub = item.getSubMenu();
                         sub.removeItem(R.id.item1);
                         for (QueryDocumentSnapshot w : queryDocumentSnapshots) {
-                            sub.add(w.get("name").toString());
+                            final QueryDocumentSnapshot wh = w;
+                            sub.add(w.get("name").toString()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    currentWarehouse = new Warehouse(wh.get("name").toString());
+                                    currentWarehouse.setAdminId(wh.get("admin").toString());
+                                    updateUI(currentUser);
+                                    return false;
+                                }
+                            });
                         }
                     }
                 });
@@ -254,6 +253,10 @@ public class HomeActivity extends AppCompatActivity {
         if (currentUser != null){
             txtWelcome = findViewById(R.id.txtWelcome);
             txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
+            if(currentWarehouse != null){
+                txtHeaderWarehouse.setText(currentWarehouse.getName());
+                txtOwnerWarehouse.setText(currentWarehouse.getAdminId());
+            }
         }
         else {
             this.finish();
