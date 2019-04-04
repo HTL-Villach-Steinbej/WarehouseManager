@@ -79,6 +79,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.217" />
 
+    <TextView
+        android:id="@+id/tsd"
+        android:layout_width="165dp"
+        android:layout_height="22dp"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Subscribed till: "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.294" />
+
     <EditText
         android:id="@+id/txtWarehouseName"
         android:layout_width="199dp"
@@ -138,4 +156,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.209" />
+
+    <EditText
+        android:id="@+id/txtSubscribedTill"
+        android:layout_width="199dp"
+        android:layout_height="45dp"
+        android:layout_row="3"
+        android:layout_column="2"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="24.08.2019"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.938"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.284" />
+
+    <TextView
+        android:id="@+id/txtName6"
+        android:layout_width="165dp"
+        android:layout_height="22dp"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Leader: "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.217" />
+
+    <TextView
+        android:id="@+id/txtName5"
+        android:layout_width="165dp"
+        android:layout_height="22dp"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Leader: "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.217" />
 </androidx.constraintlayout.widget.ConstraintLayout>
