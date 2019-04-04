@@ -106,7 +106,6 @@ public class FindItemActivity extends AppCompatActivity {
                                     if(item.getEAN_CODE().equals(eanToLookUp)){
                                         items.add(item);
                                     }
-
                                 }
                                 for(final Item i : items){
                                     db.collection("items").document(i.getEAN_CODE()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

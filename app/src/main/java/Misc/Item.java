@@ -80,6 +80,12 @@ public class Item implements Parcelable {
     public String getName() {
         return name;
     }
+    public String getEANCODE() {
+        return this.EAN_CODE;
+    }
+    public String getQRCODE() {
+        return this.QR_CODE;
+    }
 
     public void setName(String name) {
         this.name = name;

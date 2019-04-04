@@ -46,6 +46,7 @@
     <string name="title_product">Product</string>
     <string name="forgotPassword">Forgot Password?</string>
     <string name="addComonents">Add Componets</string>
+    <string name="SearchItem_SearchButton">Suchen</string>
 
     <!-- Strings For The SettingActivity And The Preferences -->
     <!-- Main -->
