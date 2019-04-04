@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-
+    private int test;
     private Warehouse currentWarehouse;
     private ArrayList<Item> allItems;
     private CoordinatorLayout rootLayoutHome;
@@ -123,17 +123,7 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
-        db.collection("Items").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<Item> items = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Item item = documentSnapshot.toObject(Item.class);
-                            items.add(item);
-                        }
-                    }
-                });
+
 
         txtHeaderWarehouse = findViewById(R.id.txtTitleWarehouse);
         if(currentWarehouse != null)
