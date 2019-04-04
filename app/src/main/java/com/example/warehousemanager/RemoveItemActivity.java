@@ -26,8 +26,8 @@ public class RemoveItemActivity extends AppCompatActivity {
     private void initComponents(Intent intent){
         items = (ArrayList<Item>) intent.getSerializableExtra("items");
 
-        listView=findViewById(R.id.listview);
-        adapter = new ArrayAdapter<Item>(this,
+        listView = findViewById(R.id.listview);
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 items);
         listView.setAdapter(adapter);

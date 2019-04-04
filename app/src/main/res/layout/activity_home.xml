@@ -203,10 +203,11 @@
         <androidx.drawerlayout.widget.DrawerLayout
             android:id="@+id/drawer_layout_home"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="617dp"
+            android:layout_marginBottom="44dp"
             android:fitsSystemWindows="true"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp">
 
             <FrameLayout
                 android:id="@+id/content_frame_home"

@@ -1,6 +1,8 @@
 package com.example.warehousemanager;
 
+import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import Misc.Item;
@@ -15,11 +17,17 @@ import com.google.firebase.firestore.*;
 
 import Misc.Warehouse;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.Group;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.view.ActionProvider;
+import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,10 +46,8 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-
     private Warehouse currentWarehouse;
     private ArrayList<Item> allItems;
-    private MenuItem warehouse;
     private CoordinatorLayout rootLayoutHome;
     private DrawerLayout drawerLayoutHome;
     private NavigationView sideNavViewHome;
@@ -49,7 +55,6 @@ public class HomeActivity extends AppCompatActivity {
     private TextView txtHeaderWarehouse;
     private TextView txtOwnerWarehouse;
     private TextView txtWelcome;
-    private TextView txtSubtitleSidenav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,10 +147,12 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         txtHeaderWarehouse = findViewById(R.id.txtTitleWarehouse);
-        txtHeaderWarehouse.setText("MediaMarkt Villach");
+        if(currentWarehouse != null)
+             txtHeaderWarehouse.setText(currentWarehouse.getName());
 
         txtOwnerWarehouse = findViewById(R.id.txtOwnerWarehouse);
-        txtOwnerWarehouse.setText("Owner: Jonathan Steinberger");
+        if(currentWarehouse != null)
+            txtOwnerWarehouse.setText("Owner: " + currentWarehouse.getAdminId());
 
         txtWelcome = findViewById(R.id.txtWelcome);
 
@@ -226,6 +233,21 @@ public class HomeActivity extends AppCompatActivity {
         fabAddHome.hide();
         fabRemoveHome.hide();
         fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
+
+        //Loading all warehouses witch the usere are in.
+        final Menu m = sideNavViewHome.getMenu();
+        db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid()).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        MenuItem item = m.findItem(R.id.nav_select_warehouse);
+                        SubMenu sub = item.getSubMenu();
+                        sub.removeItem(R.id.item1);
+                        for (QueryDocumentSnapshot w : queryDocumentSnapshots) {
+                            sub.add(w.get("name").toString());
+                        }
+                    }
+                });
     }
 
     private void updateUI(FirebaseUser currentUser) {

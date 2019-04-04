@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_sidenav">
         <item
             android:id="@+id/nav_create_warehouse"
             android:icon="@drawable/baseline_add_white_24dp"
@@ -8,8 +9,11 @@
         <item
             android:id="@+id/nav_select_warehouse"
             android:icon="@drawable/baseline_call_received_white_24dp"
-            android:title="@string/title_select_warehouse" />
-
+            android:title="@string/title_select_warehouse">
+            <menu>
+                <item android:id="@+id/item1" android:title="Placeholder"></item>
+            </menu>
+        </item>
         <item
             android:id="@+id/nav_watch_warehouse"
             android:icon="@drawable/baseline_search_white_24dp"
