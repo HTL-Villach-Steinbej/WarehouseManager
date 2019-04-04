@@ -7,6 +7,9 @@ import android.os.Parcelable;
 public class Item implements Parcelable {
     private String QR_CODE;
     private String EAN_CODE;
+    private String brand;
+    private String name;
+    private String category;
 
     public Item(){
 
@@ -15,16 +18,14 @@ public class Item implements Parcelable {
         this.EAN_CODE=EAN_CODE;
         this.QR_CODE=QR_CODE;
     }
-    public String getQR_CODE(){
-        return  QR_CODE;
-    }
-    public String getEAN_CODE(){
-        return  EAN_CODE;
-    }
+
 
     private Item(Parcel in) {
         EAN_CODE = in.readString();
         QR_CODE = in.readString();
+        brand = in.readString();
+        name = in.readString();
+        category = in.readString();
 
     }
     @Override
@@ -32,13 +33,15 @@ public class Item implements Parcelable {
         return 0;
     }
 
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(QR_CODE);
         dest.writeString(EAN_CODE);
-
+        dest.writeString(brand);
+        dest.writeString(name);
+        dest.writeString(category);
     }
+
     public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
         public Item createFromParcel(Parcel in) {
             return new Item(in);
@@ -50,10 +53,49 @@ public class Item implements Parcelable {
         }
     };
 
+    public String getQR_CODE(){
+        return  QR_CODE;
+    }
+
+    public String getEAN_CODE(){
+        return  EAN_CODE;
+    }
+
+    public void setQR_CODE(String QR_CODE) {
+        this.QR_CODE = QR_CODE;
+    }
+
+    public void setEAN_CODE(String EAN_CODE) {
+        this.EAN_CODE = EAN_CODE;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
-        return QR_CODE +" "+ EAN_CODE;
+        return EAN_CODE + " " + brand + " " + name + " " + category;
     }
-// all get , set method
 }
 

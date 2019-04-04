@@ -18,11 +18,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -32,75 +35,77 @@ import java.util.Map;
 public class BarcodescanActivity extends AppCompatActivity {
 
     private SurfaceView cameraPreview;
-    private TextView txtQRCODE;
-    private TextView txtEAN;
+
     private BarcodeDetector qrcodeDetector;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private CameraSource qrcodecameraSource;
+
     private Button btnSave;
-    private Camera camera;
     private Switch flashSwitch;
-    private FirebaseAuth mAuth=FirebaseAuth.getInstance();
+    private TextView txtQRCODE;
+    private TextView txtEAN;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     private final String KEY_QRCODE="QR_CODE";
     private final String KEY_EAN="EAN_CODE";
-   // private DocumentReference mDocRef= FirebaseFirestore.getInstance().document("users/items");
 
     final int RequestCameraPermissionID = 1001;
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case RequestCameraPermissionID: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    try {
-                        cameraSource.start(cameraPreview.getHolder());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            break;
-        }
-    }
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_barcodescan);
-        cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
-        txtQRCODE = (TextView) findViewById(R.id.txtQRCODE);
-        txtEAN=findViewById(R.id.txtEAN);
-        btnSave=findViewById(R.id.btnSave);
-        flashSwitch=findViewById(R.id.flashSwitch);
+        Intent intent = getIntent();
+        initComponents(intent);
+    }
+    private void initComponents(Intent intent){
+        String regalName = intent.getExtras().toString();
 
-        flashSwitch.setOnClickListener(new View.OnClickListener() {
+        cameraPreview =  findViewById(R.id.cameraPreview);
+
+        txtQRCODE =  findViewById(R.id.txtQRCODE);
+
+        txtEAN = findViewById(R.id.txtEAN);
+
+        btnSave = findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String qrcode = txtQRCODE.getText().toString();
+                final String eancode = txtEAN.getText().toString();
+
+                Map<String, Object> item = new HashMap<>();
+                item.put(KEY_EAN,eancode);
+                item.put(KEY_QRCODE,qrcode);
+
+                HomeActivity.currentWarehouseReference.collection("items").add(item);
+
+                db.collection("items").document(eancode).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.getResult().getData() == null){
+                            Intent ean = new Intent(BarcodescanActivity.this, AddItemInformationActivity.class);
+                            ean.putExtra("ean",eancode);
+                            startActivity(ean);
+                        }
+                        else{
+                            startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));
+                            Toast.makeText(BarcodescanActivity.this,
+                                    "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
 
             }
         });
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        flashSwitch = findViewById(R.id.flashSwitch);
+        flashSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            String qrcode=txtQRCODE.getText().toString();
-            String eancode=txtEAN.getText().toString();
-
-            Map<String,Object> item= new HashMap<>();
-            item.put(KEY_EAN,eancode);
-            item.put(KEY_QRCODE,qrcode);
-
-            HomeActivity.currentWarehouse.collection("items").add(item);
-                Toast.makeText(BarcodescanActivity.this,
-                        "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));
 
             }
         });
@@ -178,7 +183,24 @@ public class BarcodescanActivity extends AppCompatActivity {
                 }
             }
         });
-
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case RequestCameraPermissionID: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    try {
+                        cameraSource.start(cameraPreview.getHolder());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            break;
+        }
     }
 }
 

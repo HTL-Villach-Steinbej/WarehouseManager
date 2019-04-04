@@ -16,17 +16,16 @@ public class ForgotPasswordActivity  extends AppCompatActivity {
     private AutoCompleteTextView email;
     private TextView txtLogin;
     private TextView txtRegister;
+
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
-
-        initComponets();
+        initComponents();
     }
-
-    private void initComponets() {
+    private void initComponents() {
         try{
             mAuth = FirebaseAuth.getInstance();
 

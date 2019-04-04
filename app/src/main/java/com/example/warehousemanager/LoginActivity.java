@@ -59,10 +59,13 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LOGIN";
     private static final int RC_SIGN_IN = 9001;
+
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db=FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
+
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
+
     private Button btnLogin;
     private TextView txtRegister;
     private TextView emailView;
@@ -77,10 +80,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Paper.init(this);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        initComponents();
+    }
+    private void initComponents(){
+        db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
+
+        Paper.init(this);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //Google Login
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

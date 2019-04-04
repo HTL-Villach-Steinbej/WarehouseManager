@@ -38,13 +38,26 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="29dp" />
+            android:layout_height="128dp" />
 
-        <ImageView
-            android:id="@+id/iamgeViewQR"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            app:srcCompat="@drawable/com_facebook_favicon_blue" />
+        <TextView
+            android:id="@+id/txtCategory2"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_items_list" />
+
+        <ListView
+            android:id="@+id/listViewDetail"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <Button
+            android:id="@+id/btnAddProductDetailRegal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_add_item_title"
+            app:cornerRadius="20dp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,15 +15,20 @@ public class ManageEmployeesActivity extends AppCompatActivity {
     private TextView txtEmailWorker;
     private Button btnAddWorker;
 
-    private FirebaseAuth mAuth=FirebaseAuth.getInstance();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_employees);
-        txtEmailWorker=findViewById(R.id.txtWorkerEmail);
-        btnAddWorker=findViewById(R.id.btnAddWorker);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        db = FirebaseFirestore.getInstance();
+
+        txtEmailWorker=findViewById(R.id.txtWorkerEmail);
+
+        btnAddWorker=findViewById(R.id.btnAddWorker);
         btnAddWorker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

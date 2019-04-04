@@ -13,16 +13,17 @@ import com.example.warehousemanager.R;
 import java.util.ArrayList;
 
 public class RemoveItemActivity extends AppCompatActivity {
-
     private ArrayList<Item> items;
     private ArrayAdapter<Item> adapter;
     private ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = this.getIntent().getExtras();
         Intent intent = getIntent();
         setContentView(R.layout.activity_remove_item);
+        initComponents(intent);
+    }
+    private void initComponents(Intent intent){
         items = (ArrayList<Item>) intent.getSerializableExtra("items");
 
         listView=findViewById(R.id.listview);
