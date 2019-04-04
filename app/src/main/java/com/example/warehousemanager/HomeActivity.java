@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Warehouse currentWarehouse;
     private ArrayList<Item> allItems;
-
+    private MenuItem warehouse;
     private CoordinatorLayout rootLayoutHome;
     private DrawerLayout drawerLayoutHome;
     private NavigationView sideNavViewHome;
@@ -85,6 +85,8 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayoutHome = findViewById(R.id.drawer_layout_home);
 
         sideNavViewHome = findViewById(R.id.nav_view_home);
+
+
         sideNavViewHome.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override

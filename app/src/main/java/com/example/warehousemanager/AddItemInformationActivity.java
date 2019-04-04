@@ -1,5 +1,7 @@
 package com.example.warehousemanager;
 
+import Misc.Item;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,7 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -23,7 +29,7 @@ public class AddItemInformationActivity extends AppCompatActivity {
     private Button btnSubmitAddItem;
 
     private String ean;
-
+    private ArrayList<Item> product=null;
     private FirebaseFirestore db;
 
     private TextView txtBrand;
@@ -35,8 +41,23 @@ public class AddItemInformationActivity extends AppCompatActivity {
         Intent intent = getIntent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item_information);
-
         initComponents(intent);
+        String qrcode=intent.getStringExtra("qrcode");
+        try {
+            product = (ArrayList<Item>) intent.getSerializableExtra("itemobject");
+        }catch (Exception ex){
+
+        }
+        if(product!=null&&qrcode!=null){
+            txtName.setText(product.get(0).getName());
+            txtBrand.setText(product.get(0).getBrand());
+            txtInfo.setText("Hinzufügen zu "+qrcode);
+            txtInfo.setVisibility(View.VISIBLE);
+
+        }
+
+
+
     }
     private void initComponents(Intent intent){
         db = FirebaseFirestore.getInstance();
@@ -49,11 +70,24 @@ public class AddItemInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(txtBrand.getText())&&!TextUtils.isEmpty(txtName.getText()))    {
                     Map<String,String> item = new HashMap<String,String>();
-                    item.put("brand",txtBrand.getText().toString());
-                    item.put("name",txtName.getText().toString());
-                    item.put("category", spinnerCategoryAddItem.getSelectedItem().toString());
-                    item.put("ean",ean);
-                    db.collection("items").document(ean).set(item);
+                    item.put("brand",product.get(0).getBrand());
+                    item.put("name",product.get(0).getName());
+                    item.put("category", product.get(0).getCategory());
+                    item.put("ean",product.get(0).getQRCODE());
+                    item.put("qrcode",product.get(0).getEANCODE());
+                    HomeActivity.currentWarehouseReference.collection("items").add(item).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(AddItemInformationActivity.this, "Ware wurde im Lager hinzugefügt", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AddItemInformationActivity.this,BarcodescanActivity.class));
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(AddItemInformationActivity.this, "Fehler beim Speichern der Daten", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
             }
         });

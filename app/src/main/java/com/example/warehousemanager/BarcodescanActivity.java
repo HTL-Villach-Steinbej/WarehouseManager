@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.Item;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -28,7 +31,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,41 +77,49 @@ public class BarcodescanActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String qrcode = txtQRCODE.getText().toString();
+                if(!TextUtils.isEmpty(txtEAN.getText())&& !TextUtils.isEmpty(txtQRCODE.getText())){
+                final String qrcode = txtQRCODE.getText().toString();
                 final String eancode = txtEAN.getText().toString();
+                final Item i = new Item();
+                final ArrayList<Item>items = new ArrayList<Item>();
+                final Intent productInfo= new Intent(BarcodescanActivity.this,AddItemInformationActivity.class);
+                productInfo.putExtra("qrcode",qrcode);
+                    db.collection("items").document(eancode).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            i.setBrand((String)documentSnapshot.get("brand"));
+                            i.setName((String)documentSnapshot.get("name"));
+                            i.setCategory((String)documentSnapshot.get("category"));
+                            i.setEAN_CODE(eancode);
+                            i.setQR_CODE(qrcode);
+                            items.add(i);
 
-                Map<String,Object> item = new HashMap<>();
-                item.put(KEY_EAN,eancode);
-                item.put(KEY_QRCODE,qrcode);
 
-                HomeActivity.currentWarehouseReference.collection("items").add(item);
 
-                db.collection("items").document(eancode).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().getData() == null){
-                            Intent ean = new Intent(BarcodescanActivity.this, AddItemInformationActivity.class);
-                            ean.putExtra("ean",eancode);
-                            startActivity(ean);
                         }
-                        else{
-                            startActivity(new Intent(BarcodescanActivity.this, HomeActivity.class));
-                            Toast.makeText(BarcodescanActivity.this,
-                                    "Ware wurde hinzugefügt", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                    }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(i!=null){
 
+                                productInfo.putExtra("itemobject",(ArrayList<Item>)items);
+
+                            }
+                            startActivity(productInfo);
+                        }
+                    });
+
+
+
+            }else{
+                    Toast.makeText(BarcodescanActivity.this, "Daten sind ungültig", Toast.LENGTH_SHORT).show();
+                }
             }
+
+
         });
 
-        flashSwitch = findViewById(R.id.flashSwitch);
-        flashSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
 
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.EAN_13 | Barcode.QR_CODE)
