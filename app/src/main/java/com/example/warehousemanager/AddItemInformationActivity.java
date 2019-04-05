@@ -31,7 +31,7 @@ public class AddItemInformationActivity extends AppCompatActivity {
     private String ean;
     private ArrayList<Item> product=null;
     private FirebaseFirestore db;
-
+    private boolean foundItem;
     private TextView txtBrand;
     private TextView txtName;
     private TextView txtInfo;
@@ -74,16 +74,18 @@ public class AddItemInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(txtBrand.getText())&&!TextUtils.isEmpty(txtName.getText()))    {
                     Map<String,String> item = new HashMap<String,String>();
-                    item.put("brand",product.get(0).getBrand());
-                    item.put("name",product.get(0).getName());
-                    item.put("category", product.get(0).getCategory());
-                    item.put("ean",product.get(0).getQRCODE());
-                    item.put("qrcode",product.get(0).getEANCODE());
+                    item.put("brand",txtBrand.getText().toString().trim());
+                    item.put("name",txtName.getText().toString().trim());
+                    item.put("category",spinnerCategoryAddItem.getSelectedItem().toString());
+                    item.put("ean",product.get(0).getEANCODE().trim());
+                    item.put("qrcode",product.get(0).getQRCODE().trim());
+
                     HomeActivity.currentWarehouseReference.collection("items").add(item).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(AddItemInformationActivity.this, "Ware wurde im Lager hinzugefügt", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddItemInformationActivity.this,BarcodescanActivity.class));
+
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -91,6 +93,11 @@ public class AddItemInformationActivity extends AppCompatActivity {
                             Toast.makeText(AddItemInformationActivity.this, "Fehler beim Speichern der Daten", Toast.LENGTH_SHORT).show();
                         }
                     });
+                    if(!foundItem){
+                        item.remove("qrcode");
+                        db.collection("items").document(item.get("ean")).set(item);
+                    }
+                    startActivity(new Intent(AddItemInformationActivity.this,BarcodescanActivity.class));
 
                 }
             }
@@ -103,6 +110,8 @@ public class AddItemInformationActivity extends AppCompatActivity {
         txtName = findViewById(R.id.txtName);
 
         ean = intent.getStringExtra("ean");
+        foundItem=intent.getBooleanExtra("itemfound",true);
+
 
         txtInfo.setText("Informationen für Herstellercode: "+ ean);
 

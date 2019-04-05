@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
@@ -84,6 +85,7 @@ public class BarcodescanActivity extends AppCompatActivity {
                 final ArrayList<Item>items = new ArrayList<Item>();
                 final Intent productInfo= new Intent(BarcodescanActivity.this,AddItemInformationActivity.class);
                 productInfo.putExtra("qrcode",qrcode);
+
                     db.collection("items").document(eancode).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -93,6 +95,10 @@ public class BarcodescanActivity extends AppCompatActivity {
                             i.setEAN_CODE(eancode);
                             i.setQR_CODE(qrcode);
                             items.add(i);
+                            if(documentSnapshot.get("brand")==null) {
+                                productInfo.putExtra("itemfound", false);
+                            }
+                            productInfo.putExtra("itemobject",items);
 
 
 
@@ -100,12 +106,14 @@ public class BarcodescanActivity extends AppCompatActivity {
                     }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if(i!=null){
-
-                                productInfo.putExtra("itemobject",(ArrayList<Item>)items);
-
-                            }
                             startActivity(productInfo);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            i.setQR_CODE(qrcode);
+                            i.setEAN_CODE(eancode);
+                            productInfo.putExtra("itemfound",false);
                         }
                     });
 

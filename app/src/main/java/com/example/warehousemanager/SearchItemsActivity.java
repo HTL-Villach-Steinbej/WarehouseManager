@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchItemsActivity extends AppCompatActivity {
 
@@ -40,20 +41,14 @@ public class SearchItemsActivity extends AppCompatActivity {
     private ListView listView;
 
     private ArrayAdapter<Item> adapter;
+    private ArrayAdapter<String> adapterCombo;
     private TableLayout tableView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_items);
-        txtBrand=findViewById(R.id.txtBrand);
-        txtName=findViewById(R.id.txtBezeichnung);
-        txtRegal=findViewById(R.id.txtRegal);
-        comboCategory=findViewById(R.id.comboCategory);
-        btnSearch=findViewById(R.id.btnSearch);
-        listView=findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                lookUpProducts);
+        initComponents();
+
 
 
 
@@ -77,15 +72,22 @@ public class SearchItemsActivity extends AppCompatActivity {
                                 tmp.setCategory((String)item.get("category"));
                                 tmp.setName((String)item.get("name"));
                                 tmp.setBrand((String)item.get("brand"));
+
                                 lookUpProducts.add(tmp);
+
                             }
+
                             }
                         }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(!TextUtils.isEmpty(txtRegal.getText())) {
-                                checkIfRegalIsValid(txtRegal.getText().toString());
-                            }
+                                if(!TextUtils.isEmpty(txtRegal.getText())) {
+                                    checkIfRegalIsValid(txtRegal.getText().toString());
+                                }
+                                if(comboCategory.getSelectedItem().toString()!=null){
+                                    checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
+                                }
+
                                 adapter.addAll(lookUpProducts);
                                 listView.setAdapter(adapter);
                             }
@@ -100,14 +102,69 @@ public class SearchItemsActivity extends AppCompatActivity {
         });
 
     }
-    private void checkIfRegalIsValid(String regalNr){
-        ArrayList<Item>tmp=new ArrayList<>();
+
+    private void checkIfCategoryIsValid(String category) {
+        ArrayList<Item>tmp=new ArrayList<Item>();
         for(Item i : lookUpProducts){
-            if(i.getQRCODE().equals(regalNr)){
+            if(!i.getCategory().equals(category)){
+                adapter.remove(i);
+
+            }else {
                 tmp.add(i);
             }
+
         }
+
         lookUpProducts=tmp;
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+    }
+
+
+    private void initComponents() {
+        txtBrand=findViewById(R.id.txtBrand);
+        txtName=findViewById(R.id.txtBezeichnung);
+        txtRegal=findViewById(R.id.txtRegal);
+        comboCategory=findViewById(R.id.comboCategory);
+        btnSearch=findViewById(R.id.btnSearch);
+        listView=findViewById(R.id.listView);
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+        List<String> category= new ArrayList<>();
+        category.add("Kühlschränke");
+        category.add("Geschirrspüler");
+        category.add("Gefriertruhen");
+        category.add("Waschtrockner");
+        category.add("Trockner");
+        category.add("Herde");
+        category.add("Waschmaschinen");
+        category.add("Kühl- Gefrierkombinationen");
+        category.add("Kochfelder");
+
+        adapterCombo = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, category);
+        adapterCombo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        comboCategory.setAdapter(adapterCombo);
+    }
+
+    private void checkIfRegalIsValid(String regalNr){
+    ArrayList<Item>tmp=new ArrayList<Item>();
+        for(Item i : lookUpProducts){
+            if(!i.getQRCODE().equals(regalNr)){
+                adapter.remove(i);
+
+            }else {
+                tmp.add(i);
+            }
+
+        }
+
+        lookUpProducts=tmp;
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
     }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
