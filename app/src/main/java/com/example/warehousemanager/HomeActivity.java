@@ -1,8 +1,6 @@
 package com.example.warehousemanager;
 
-import android.content.ClipData;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import Misc.Item;
@@ -17,14 +15,10 @@ import com.google.firebase.firestore.*;
 
 import Misc.Warehouse;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.Group;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.view.ActionProvider;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -32,10 +26,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     public static DocumentReference currentWarehouseReference;
+    public static Warehouse currentWarehouse;
+
+    private ArrayList<Item> allItemsSelectedWarehouse;
 
     private BottomAppBar bottomAppBarHome;
     private FloatingActionButton fabMainHome;
@@ -46,34 +42,48 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    private Warehouse currentWarehouse;
-    private ArrayList<Item> allItems;
     private CoordinatorLayout rootLayoutHome;
     private DrawerLayout drawerLayoutHome;
     private NavigationView sideNavViewHome;
 
     private TextView txtHeaderWarehouse;
     private TextView txtOwnerWarehouse;
+    private TextView txtSubscribedTill;
+    private TextView txtExistsSince;
+
+    private TextView txtItemsHeader;
+    private TextView txtItemsTopCat;
+    private TextView txtItemsWorstCat;
     private TextView txtWelcome;
+
+    private MenuItem menuItemChangeWarehouse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initComponents();
-        setCurrentWarehouse();
+        if(currentWarehouse != null)
+            setCurrentWarehouseReference();
     }
 
-    private void setCurrentWarehouse() {
-        Query query = db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid());
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot user : queryDocumentSnapshots){
-                    currentWarehouseReference = user.getReference();
+    private void setCurrentWarehouseReference() {
+        if(currentWarehouse != null){
+            Query query = db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid());
+            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for(QueryDocumentSnapshot user : queryDocumentSnapshots){
+                        if(user.get("admin").toString() == currentWarehouse.getAdminId()){
+                            currentWarehouseReference = user.getReference();
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
+        else{
+            currentWarehouseReference = null;
+        }
     }
 
     private void initComponents() {
@@ -91,7 +101,6 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayoutHome = findViewById(R.id.drawer_layout_home);
 
         sideNavViewHome = findViewById(R.id.nav_view_home);
-
         sideNavViewHome.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -118,32 +127,27 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-        allItems = new ArrayList<>();
+        allItemsSelectedWarehouse = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
-        db.collection("Items").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<Item> items = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Item item = documentSnapshot.toObject(Item.class);
-                            items.add(item);
-                        }
-                    }
-                });
 
         txtHeaderWarehouse = findViewById(R.id.txtTitleWarehouse);
-        if(currentWarehouse != null)
-             txtHeaderWarehouse.setText(currentWarehouse.getName());
 
         txtOwnerWarehouse = findViewById(R.id.txtOwnerWarehouse);
-        if(currentWarehouse != null)
-            txtOwnerWarehouse.setText("Owner: " + currentWarehouse.getAdminId());
+
+        txtExistsSince = findViewById(R.id.txtExistsSince);
+
+        txtSubscribedTill = findViewById(R.id.txtSubscribedTill);
 
         txtWelcome = findViewById(R.id.txtWelcome);
+
+        txtItemsHeader = findViewById(R.id.txtItemsHeader);
+
+        txtItemsTopCat = findViewById(R.id.txtTopCat);
+
+        txtItemsWorstCat = findViewById(R.id.txtWorstCat);
 
         bottomAppBarHome = findViewById(R.id.navigation);
         bottomAppBarHome.replaceMenu(R.menu.navigation);
@@ -188,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
         fabRemoveHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, RemoveItemActivity.class).putExtra("allItems", allItems));
+                startActivity(new Intent(HomeActivity.this, RemoveItemActivity.class));
             }
         });
 
@@ -217,13 +221,71 @@ public class HomeActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+
         fabSearchHome.hide();
         fabAddHome.hide();
         fabRemoveHome.hide();
         fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
 
         //Loading all warehouses witch the usere are in.
+        loadAndFillWarehouses();
+        loadItems();
+        updateUI(currentUser);
+    }
+
+    private void loadItems() {
+        try {
+            if (currentWarehouseReference != null) {
+                currentWarehouseReference.collection("items").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot item : queryDocumentSnapshots) {
+                            Item i = new Item();
+                            i.setBrand(item.get("brand").toString());
+                            i.setCategory(item.get("category").toString());
+                            i.setEAN_CODE(item.get("ean").toString());
+                            i.setName(item.get("name").toString());
+                            i.setQR_CODE(item.get("qrcode").toString());
+                            allItemsSelectedWarehouse.add(i);
+                        }
+                    }
+                });
+            } else {
+                throw new Exception("There is no Warehouse selected yet");
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    private void updateUI(FirebaseUser currentUser) {
+        try {
+            if (currentUser != null) {
+                txtWelcome = findViewById(R.id.txtWelcome);
+                txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
+                if (currentWarehouse != null) {
+                    setCurrentWarehouseReference();
+                    txtHeaderWarehouse.setText(currentWarehouse.getName());
+                    txtOwnerWarehouse.setText("Admin: " + currentWarehouse.getAdminId());
+                    txtSubscribedTill.setText("Subscribed till: " + currentWarehouse.getSubscribtionEnd());
+                    txtExistsSince.setText("Exists since: " + currentWarehouse.getCreate());
+                    txtItemsWorstCat.setText("Worst Category: Software");
+                    txtItemsTopCat.setText("Top Category: Hardware");
+                    txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
+                    removeSubMenu();
+                } else {
+                    txtHeaderWarehouse.setText("n.A.");
+                    txtOwnerWarehouse.setText("Owner: n.A.");
+                }
+            } else {
+                this.finish();
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    private void loadAndFillWarehouses(){
         final Menu m = sideNavViewHome.getMenu();
         db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid()).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -239,7 +301,9 @@ public class HomeActivity extends AppCompatActivity {
                                 public boolean onMenuItemClick(MenuItem item) {
                                     currentWarehouse = new Warehouse(wh.get("name").toString());
                                     currentWarehouse.setAdminId(wh.get("admin").toString());
-                                    updateUI(currentUser);
+                                    currentWarehouse.setCreate(wh.get("created").toString());
+                                    currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                    updateUI(mAuth.getCurrentUser());
                                     return false;
                                 }
                             });
@@ -247,26 +311,20 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    private void updateUI(FirebaseUser currentUser) {
-        if (currentUser != null){
-            txtWelcome = findViewById(R.id.txtWelcome);
-            txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
-            if(currentWarehouse != null){
-                txtHeaderWarehouse.setText(currentWarehouse.getName());
-                txtOwnerWarehouse.setText(currentWarehouse.getAdminId());
-                removeSubMenu();
-            }
-        }
-        else {
-            this.finish();
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
-    }
-
     private void removeSubMenu() {
         final Menu m = sideNavViewHome.getMenu();
+        if(menuItemChangeWarehouse != null){
+            m.removeItem(menuItemChangeWarehouse.getItemId());
+        }
+        menuItemChangeWarehouse = m.add("Change your current Warehouse").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                currentWarehouse = null;
+                updateUI(mAuth.getCurrentUser());
+                loadAndFillWarehouses();
+                return true;
+            }
+        });
         MenuItem item = m.findItem(R.id.nav_select_warehouse);
         SubMenu sub = item.getSubMenu();
         sub.clear();

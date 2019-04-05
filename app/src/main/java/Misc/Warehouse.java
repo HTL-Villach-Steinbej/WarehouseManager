@@ -1,11 +1,14 @@
 package Misc;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Warehouse implements Serializable {
     private String name;
     private String adminId;
+    private String create;
+    private String subscribtionEnd;
     private ArrayList<String> users;
     private ArrayList<Regal> regale;
     private ArrayList<Item> items;
@@ -50,6 +53,22 @@ public class Warehouse implements Serializable {
 
     public ArrayList<Regal> getRegale() {
         return regale;
+    }
+
+    public String getCreate() {
+        return create;
+    }
+
+    public void setCreate(String create) {
+        this.create = create;
+    }
+
+    public String getSubscribtionEnd() {
+        return subscribtionEnd;
+    }
+
+    public void setSubscribtionEnd(String subscribtionEnd) {
+        this.subscribtionEnd = subscribtionEnd;
     }
 
     public void setRegale(ArrayList<Regal> regale) {

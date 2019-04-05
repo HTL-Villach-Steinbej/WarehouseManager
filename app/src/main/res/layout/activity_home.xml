@@ -29,22 +29,23 @@
             app:layout_constraintVertical_bias="0.644">
 
             <TextView
+                android:id="@+id/txtItemsHeader"
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Items stored [2.124]" />
+                android:text="Items stored [n.A.]" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/txtTopCat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Top Categorys: Hardware" />
+                android:text="Top Categorys: n.A." />
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/txtWorstCat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Worst Category: Software" />
+                android:text="Worst Category: n.A." />
 
         </LinearLayout>
 
@@ -79,7 +80,7 @@
                 android:text="n.A." />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/txtExistsSince"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="n.A" />
@@ -89,7 +90,7 @@
                 android:layout_height="72dp" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/txtSubscribedTill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Subscription till: n.A."
