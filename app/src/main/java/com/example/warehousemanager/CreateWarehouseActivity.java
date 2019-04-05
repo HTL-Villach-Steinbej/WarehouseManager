@@ -24,7 +24,6 @@ import java.util.Map;
 public class CreateWarehouseActivity extends AppCompatActivity {
 
     private TextView txtWarehouseName;
-    private TextView txtFreeSpace;
     private TextView txtSubscribedTill;
     private Button btnAddWorker;
 

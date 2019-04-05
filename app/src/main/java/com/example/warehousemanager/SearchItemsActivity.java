@@ -4,11 +4,15 @@ import Misc.Item;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -24,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchItemsActivity extends AppCompatActivity {
 
@@ -32,48 +37,88 @@ public class SearchItemsActivity extends AppCompatActivity {
     private TextView txtRegal;
     private Spinner comboCategory;
     private Button btnSearch;
-    private ArrayList<Item>lookUpProducts;
+    private ArrayList<Item>lookUpProducts=new ArrayList<Item>();
+    private ListView listView;
+
+    private ArrayAdapter<Item> adapter;
+    private ArrayAdapter<String> adapterCombo;
     private TableLayout tableView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_items);
-        txtBrand=findViewById(R.id.txtBrand);
-        txtName=findViewById(R.id.txtName);
-        txtRegal=findViewById(R.id.txtRegal);
-        comboCategory=findViewById(R.id.comboCategory);
-        btnSearch=findViewById(R.id.btnSearch);
-        tableView=findViewById(R.id.tableView);
-        Button test = new Button(this);
-        test.setText("hallo");
-
-        TableRow tr_head = new TableRow(this);
-        tr_head.setBackgroundColor(Color.GRAY);        // part1
-        tr_head.setLayoutParams(new TableRow.LayoutParams(
-                TableRow.LayoutParams.MATCH_PARENT,
-                TableRow.LayoutParams.WRAP_CONTENT));
-        tr_head.addView(test);
-        tableView.addView(tr_head, new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        initComponents();
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TextUtils.isEmpty(txtBrand.getText())&&!TextUtils.isEmpty(txtName.toString())&&!TextUtils.isEmpty(txtRegal.toString())) {
+                adapter.clear();
+                hideKeyboard(SearchItemsActivity.this);
+                if(!TextUtils.isEmpty(txtBrand.getText())||!TextUtils.isEmpty(txtName.getText())||!TextUtils.isEmpty(txtRegal.getText())) {
 
-                    if(TextUtils.isEmpty(txtBrand.getText())) {
-                        HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("brand", txtBrand.toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    if(!TextUtils.isEmpty(txtBrand.getText())) {
+                        HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("brand", txtBrand.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot item :queryDocumentSnapshots){
-                                lookUpProducts.add(item.toObject(Item.class));
-                            }
+
+
                             }
                         }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(!TextUtils.isEmpty(txtRegal.getText())) {
-                                checkIfRegalIsValid(txtRegal.getText().toString());
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot item : task.getResult()){
+                                        Item tmp= new Item();
+                                        tmp.setQR_CODE((String)item.get("qrcode"));
+                                        tmp.setEAN_CODE((String)item.get("ean"));
+                                        tmp.setCategory((String)item.get("category"));
+                                        tmp.setName((String)item.get("name"));
+                                        tmp.setBrand((String)item.get("brand"));
+
+                                        lookUpProducts.add(tmp);
+                                    }
+                                    if(!TextUtils.isEmpty(txtRegal.getText())) {
+                                        checkIfRegalIsValid(txtRegal.getText().toString());
+                                    }
+                                    if(comboCategory.getSelectedItem().toString()!="") {
+                                        checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
+                                    }
+                                    listView.setAdapter(adapter);
+                                }
                             }
+                        });
+                    }
+                    else if(!TextUtils.isEmpty(txtRegal.getText())) {
+                        HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("qrcode", txtRegal.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot item : task.getResult()){
+                                        Item tmp= new Item();
+                                        tmp.setQR_CODE((String)item.get("qrcode"));
+                                        tmp.setEAN_CODE((String)item.get("ean"));
+                                        tmp.setCategory((String)item.get("category"));
+                                        tmp.setName((String)item.get("name"));
+                                        tmp.setBrand((String)item.get("brand"));
+
+                                        lookUpProducts.add(tmp);
+                                    }
+                                    if(!TextUtils.isEmpty(txtBrand.getText())) {
+                                        checkIfBrandIsValid(txtBrand.getText().toString());
+
+                                    }
+                                    if(comboCategory.getSelectedItem().toString()!="") {
+                                        checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
+                                    }
+
+                                    adapter.addAll(lookUpProducts);
+                                    listView.setAdapter(adapter);
+                                }
                             }
                         });
                     }
@@ -82,13 +127,84 @@ public class SearchItemsActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
-    private void checkIfRegalIsValid(String regalNr){
+
+    private void checkIfBrandIsValid(String brand) {
+        ArrayList<Item>tmp=new ArrayList<Item>();
         for(Item i : lookUpProducts){
-            if(!i.getCategory().equals(regalNr)){
-                lookUpProducts.remove(i);
+            if(i.getCategory().equals(brand)){
+                tmp.add(i);
             }
         }
+        lookUpProducts=tmp;
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+    }
+
+    private void checkIfCategoryIsValid(String category) {
+        ArrayList<Item>tmp=new ArrayList<Item>();
+        for(Item i : lookUpProducts){
+            if(i.getCategory().equals(category)){
+                tmp.add(i);
+            }
+        }
+        lookUpProducts=tmp;
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+    }
+
+    private void initComponents() {
+        txtBrand=findViewById(R.id.txtBrand);
+        txtName=findViewById(R.id.txtBezeichnung);
+        txtRegal=findViewById(R.id.txtRegal);
+        comboCategory=findViewById(R.id.comboCategory);
+        btnSearch=findViewById(R.id.btnSearch);
+        listView=findViewById(R.id.listView);
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+        List<String> category= new ArrayList<>();
+        category.add("");
+        category.add("Kühlschränke");
+        category.add("Geschirrspüler");
+        category.add("Gefriertruhen");
+        category.add("Waschtrockner");
+        category.add("Trockner");
+        category.add("Herde");
+        category.add("Waschmaschinen");
+        category.add("Kühl- Gefrierkombinationen");
+        category.add("Kochfelder");
+
+        adapterCombo = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, category);
+        adapterCombo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        comboCategory.setAdapter(adapterCombo);
+    }
+
+    private void checkIfRegalIsValid(String regalNr){
+    ArrayList<Item>tmp=new ArrayList<Item>();
+        for(Item i : lookUpProducts){
+            if(i.getQRCODE().equals(regalNr)){
+
+                tmp.add(i);
+            }
+        }
+
+        lookUpProducts=tmp;
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

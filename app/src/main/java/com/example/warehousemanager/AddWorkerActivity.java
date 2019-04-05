@@ -30,7 +30,13 @@ public class AddWorkerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_worker);
-        initComponents();
+        try{
+            initComponents();
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+
     }
     private void initComponents(){
         mAuth = FirebaseAuth.getInstance();
@@ -49,51 +55,52 @@ public class AddWorkerActivity extends AppCompatActivity {
             }
         });
     }
-    private void checkEmailAndAdd(String email) {
+    private void checkEmailAndAdd(String email){
         CollectionReference userRef = db.collection("users");
-        Query user = userRef.whereEqualTo("email",email);
+        Query user = userRef.whereEqualTo("email", email);
         user.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
             String uid = null;
-                for(QueryDocumentSnapshot user:queryDocumentSnapshots){
-                    uid=(String)user.get("uid");
-                    addUserToCurrentWarehouse(uid);
+                for(QueryDocumentSnapshot user : queryDocumentSnapshots){
+                    uid = (String)user.get("uid");
+                    try {
+                        addUserToCurrentWarehouse(uid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    if(uid == null){
-                        Toast.makeText(AddWorkerActivity.this, "Diese Email ist nicht registriert", Toast.LENGTH_SHORT).show();
-                    }
-            }
-        });
-    }
-    private void addUserToCurrentWarehouse(String uid) {
-        final String workerUID = uid;
-        CollectionReference warehouseReference = db.collection("warehouses");
-
-        Query users = warehouseReference.whereArrayContains("users", mAuth.getCurrentUser().getUid());
-        users.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                DocumentReference docRef = null;
-                Map<String, Object> warehouse = new HashMap<>();
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    docRef = document.getReference();
-                    warehouse = document.getData();
-                    List<String> users = new ArrayList<>();
-                    users = (List<String>) warehouse.get("users");
-                    if(users.size()>0){
-                        if(!users.contains(workerUID)){
-                            users.add(workerUID);
-                            warehouse.put("users", users);
-                            docRef.update(warehouse);
-                            Toast.makeText(AddWorkerActivity.this, "Erfolg. Nutzer wurde hinzugefügt", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
-                        } else{
-                            Toast.makeText(AddWorkerActivity.this, "Nutzer ist bereits dem Lager zugeteilt", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                }
+                if(uid == null){
+                    Toast.makeText(AddWorkerActivity.this, "Diese Email ist noch nicht nicht registriert", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+    private void addUserToCurrentWarehouse(String uid) throws Exception {
+        final String workerUID = uid;
+        if(HomeActivity.currentWarehouseReference != null){
+            HomeActivity.currentWarehouseReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    List<String> users = (List<String>) documentSnapshot.get("users");
+                    if(users.size() > 0){
+                        if(!users.contains(workerUID)){
+                            users.add(workerUID);
+                            HomeActivity.currentWarehouseReference.update("users", users);
+                            Toast.makeText(AddWorkerActivity.this, "Erfolg. Nutzer wurde hinzugefügt", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
+                        }
+                        else{
+                            Toast.makeText(AddWorkerActivity.this, "User is already connected to the Warehouse", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
+                        }
+                    }
+                }
+            });
+        }
+        else{
+            Toast.makeText(AddWorkerActivity.this, "Please select a Warehouse", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
+        }
     }
 }

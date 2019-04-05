@@ -10,7 +10,22 @@
     tools:context=".LoginActivity"
     style="@style/AppTheme">
     <!-- Login progress -->
-    <ImageView
+    <Misc.GifImageView
+        android:id="@+id/GifImageView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.5"/>
+
+    <!--<ImageView
         android:id="@+id/imageView2"
         android:layout_width="230dp"
         android:layout_height="230dp"
@@ -25,7 +40,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10" />
+        app:layout_constraintVertical_bias="0.10" />-->
 
     <ScrollView
         android:id="@+id/login_form"

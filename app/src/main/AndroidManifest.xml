@@ -16,7 +16,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchItemsActivity"></activity>
+        <activity android:name=".SearchItemsActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
