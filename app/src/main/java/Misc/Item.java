@@ -21,8 +21,9 @@ public class Item implements Parcelable {
 
 
     private Item(Parcel in) {
-        EAN_CODE = in.readString();
         QR_CODE = in.readString();
+        EAN_CODE = in.readString();
+
         brand = in.readString();
         name = in.readString();
         category = in.readString();
@@ -101,7 +102,7 @@ public class Item implements Parcelable {
 
     @Override
     public String toString() {
-        return EAN_CODE + " " + brand + " " + name + " " + category;
+        return QR_CODE + " " + brand + " " + name + " " + category;
     }
 }
 

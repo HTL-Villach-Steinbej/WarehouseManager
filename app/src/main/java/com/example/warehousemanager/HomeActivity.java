@@ -101,6 +101,7 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayoutHome = findViewById(R.id.drawer_layout_home);
 
         sideNavViewHome = findViewById(R.id.nav_view_home);
+
         sideNavViewHome.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -127,7 +128,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-        allItemsSelectedWarehouse = new ArrayList<>();
+        allItems = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
 
