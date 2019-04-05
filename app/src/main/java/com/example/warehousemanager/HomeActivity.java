@@ -5,9 +5,7 @@ import android.os.Bundle;
 
 import Misc.Item;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -17,7 +15,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 import Misc.Warehouse;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -103,7 +100,6 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayoutHome = findViewById(R.id.drawer_layout_home);
 
         sideNavViewHome = findViewById(R.id.nav_view_home);
-
         sideNavViewHome.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -111,12 +107,13 @@ public class HomeActivity extends AppCompatActivity {
                         drawerLayoutHome.closeDrawers();
                         switch (menuItem.getItemId()){
                             case R.id.nav_add_employee:
-                                startActivity(new Intent(HomeActivity.this,AddWorkerActivity.class));
+                                startActivity(new Intent(HomeActivity.this, AddWorkerActivity.class));
                                 break;
                             case R.id.nav_create_warehouse:
-                                startActivity(new Intent(HomeActivity.this,CreateWarehouseActivity.class));
+                                startActivity(new Intent(HomeActivity.this, CreateWarehouseActivity.class));
                                 break;
                             case R.id.nav_manage_employyes:
+                                startActivity(new Intent(HomeActivity.this, ManageEmployeesActivity.class));
                                 break;
                             case R.id.nav_manager_warehouse:
                                 break;
@@ -218,9 +215,8 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
-        loadAndFillWarehouses();
+        loadAndSetWarehouse();
     }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -231,11 +227,8 @@ public class HomeActivity extends AppCompatActivity {
         fabRemoveHome.hide();
         fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
 
-        //Loading all warehouses witch the usere are in.
         updateUI(currentUser);
     }
-
-
     private void updateUI(FirebaseUser currentUser) {
         try {
             setCurrentWarehouseReference();
@@ -260,7 +253,6 @@ public class HomeActivity extends AppCompatActivity {
                     txtItemsWorstCat.setText("Worst Category: Software");
                     txtItemsTopCat.setText("Top Category: Hardware");
                     txtItemsHeader.setText("Items in your Warehouse[n.A.]");
-
                 }
             } else {
                 this.finish();
@@ -297,35 +289,45 @@ public class HomeActivity extends AppCompatActivity {
             System.out.println(ex.getMessage());
         }
     }
-    private void loadAndFillWarehouses(){
+    private void loadAndSetWarehouse(){
         final Menu m = sideNavViewHome.getMenu();
         db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid()).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        MenuItem item = m.findItem(R.id.nav_select_warehouse);
-                        SubMenu sub = item.getSubMenu();
-                        sub.removeItem(R.id.item1);
-                        for (QueryDocumentSnapshot w : queryDocumentSnapshots) {
-                            final QueryDocumentSnapshot wh = w;
-                            sub.add(w.get("name").toString()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        if(queryDocumentSnapshots.getDocuments().size() > 1){
+                            MenuItem item = m.findItem(R.id.nav_select_warehouse);
+                            SubMenu sub = item.getSubMenu();
+                            sub.removeItem(R.id.item1);
+                            for (QueryDocumentSnapshot w : queryDocumentSnapshots) {
+                                final QueryDocumentSnapshot wh = w;
+                                sub.add(w.get("name").toString()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        db.collection("users").whereEqualTo("uid", mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                currentWarehouse = new Warehouse(wh.get("name").toString());
+                                                currentWarehouse.setAdminId(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
+                                                currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
+                                                currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                            }
+                                        });
+                                        return true;
+                                    }
+                                });
+                            }
+                        }
+                        else if(queryDocumentSnapshots.getDocuments().size() == 1){
+                            final DocumentSnapshot wh = queryDocumentSnapshots.getDocuments().get(0);
+                            db.collection("users").whereEqualTo("uid", mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
-                                public boolean onMenuItemClick(MenuItem item) {
-                                    db.collection("users").whereEqualTo("uid", mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            updateUI(mAuth.getCurrentUser());
-                                        }
-                                    }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            currentWarehouse = new Warehouse(wh.get("name").toString());
-                                            currentWarehouse.setAdminId(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
-                                            currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
-                                            currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
-                                        }
-                                    });
-                                    return true;
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshotsUser) {
+                                    currentWarehouse = new Warehouse(wh.get("name").toString());
+                                    currentWarehouse.setAdminId(queryDocumentSnapshotsUser.getDocuments().get(0).get("email").toString());
+                                    currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
+                                    currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                    updateUI(mAuth.getCurrentUser());
                                 }
                             });
                         }
@@ -342,12 +344,12 @@ public class HomeActivity extends AppCompatActivity {
         if(menuItemChangeWarehouse != null){
             m.removeItem(menuItemChangeWarehouse.getItemId());
         }
-        menuItemChangeWarehouse = m.add("Change your current Warehouse").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        menuItemChangeWarehouse = m.add("Change your Warehouse").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 currentWarehouse = null;
                 updateUI(mAuth.getCurrentUser());
-                loadAndFillWarehouses();
+                loadAndSetWarehouse();
                 return true;
             }
         });
