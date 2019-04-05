@@ -43,7 +43,7 @@ public class AddItemInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_item_information);
         initComponents(intent);
 
-        String qrcode=intent.getStringExtra("qrcode");
+        String qrcode = intent.getStringExtra("qrcode");
         try {
             product = (ArrayList<Item>) intent.getSerializableExtra("itemobject");
         }catch (Exception ex){

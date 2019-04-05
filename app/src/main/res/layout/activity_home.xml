@@ -33,18 +33,21 @@
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Items stored [n.A.]" />
 
             <TextView
                 android:id="@+id/txtTopCat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Top Categorys: n.A." />
 
             <TextView
                 android:id="@+id/txtWorstCat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Worst Category: n.A." />
 
         </LinearLayout>
@@ -71,18 +74,21 @@
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="No Warehouse selected" />
 
             <TextView
                 android:id="@+id/txtOwnerWarehouse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="n.A." />
 
             <TextView
                 android:id="@+id/txtExistsSince"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="n.A" />
 
             <Space
@@ -93,6 +99,7 @@
                 android:id="@+id/txtSubscribedTill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Subscription till: n.A."
                 android:textAlignment="textEnd" />
         </LinearLayout>

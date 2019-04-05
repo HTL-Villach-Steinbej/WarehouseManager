@@ -5,27 +5,35 @@ import android.os.Bundle;
 
 import Misc.Item;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 import Misc.Warehouse;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
     public static DocumentReference currentWarehouseReference;
@@ -63,21 +71,15 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initComponents();
-        if(currentWarehouse != null)
-            setCurrentWarehouseReference();
+        setCurrentWarehouseReference();
     }
 
     private void setCurrentWarehouseReference() {
         if(currentWarehouse != null){
-            Query query = db.collection("warehouses").whereArrayContains("users", mAuth.getCurrentUser().getUid());
-            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            db.collection("warehouses").whereEqualTo("name", currentWarehouse.getName()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    for(QueryDocumentSnapshot user : queryDocumentSnapshots){
-                        if(user.get("admin").toString() == currentWarehouse.getAdminId()){
-                            currentWarehouseReference = user.getReference();
-                        }
-                    }
+                    currentWarehouseReference = queryDocumentSnapshots.getDocuments().get(0).getReference();
                 }
             });
         }
@@ -128,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-        allItems = new ArrayList<>();
+        allItemsSelectedWarehouse = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -216,6 +218,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+        loadAndFillWarehouses();
     }
 
     @Override
@@ -229,11 +232,45 @@ public class HomeActivity extends AppCompatActivity {
         fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
 
         //Loading all warehouses witch the usere are in.
-        loadAndFillWarehouses();
-        loadItems();
         updateUI(currentUser);
     }
 
+
+    private void updateUI(FirebaseUser currentUser) {
+        try {
+            setCurrentWarehouseReference();
+            if (currentUser != null) {
+                txtWelcome = findViewById(R.id.txtWelcome);
+                txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
+                if (currentWarehouse != null) {
+                    loadItems();
+                    txtHeaderWarehouse.setText(currentWarehouse.getName());
+                    txtOwnerWarehouse.setText("Admin: " + currentWarehouse.getAdminId());
+                    txtSubscribedTill.setText("Subscribed till: " + currentWarehouse.getSubscribtionEnd());
+                    txtExistsSince.setText("Exists since: " + currentWarehouse.getCreate());
+                    txtItemsWorstCat.setText("Worst Category: Software");
+                    txtItemsTopCat.setText("Top Category: Hardware");
+                    txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
+                    removeSubMenu();
+                } else {
+                    txtHeaderWarehouse.setText("n.A.");
+                    txtOwnerWarehouse.setText("Admin: n.A.");
+                    txtSubscribedTill.setText("Subscribed till: n.A.");
+                    txtExistsSince.setText("Exists since: 10.10.2005");
+                    txtItemsWorstCat.setText("Worst Category: Software");
+                    txtItemsTopCat.setText("Top Category: Hardware");
+                    txtItemsHeader.setText("Items in your Warehouse[n.A.]");
+
+                }
+            } else {
+                this.finish();
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
     private void loadItems() {
         try {
             if (currentWarehouseReference != null) {
@@ -248,39 +285,13 @@ public class HomeActivity extends AppCompatActivity {
                             i.setName(item.get("name").toString());
                             i.setQR_CODE(item.get("qrcode").toString());
                             allItemsSelectedWarehouse.add(i);
+                            txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
                         }
                     }
                 });
             } else {
+                Toast.makeText(HomeActivity.this, "No Warehouse selected", Toast.LENGTH_LONG).show();
                 throw new Exception("There is no Warehouse selected yet");
-            }
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
-    }
-    private void updateUI(FirebaseUser currentUser) {
-        try {
-            if (currentUser != null) {
-                txtWelcome = findViewById(R.id.txtWelcome);
-                txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
-                if (currentWarehouse != null) {
-                    setCurrentWarehouseReference();
-                    txtHeaderWarehouse.setText(currentWarehouse.getName());
-                    txtOwnerWarehouse.setText("Admin: " + currentWarehouse.getAdminId());
-                    txtSubscribedTill.setText("Subscribed till: " + currentWarehouse.getSubscribtionEnd());
-                    txtExistsSince.setText("Exists since: " + currentWarehouse.getCreate());
-                    txtItemsWorstCat.setText("Worst Category: Software");
-                    txtItemsTopCat.setText("Top Category: Hardware");
-                    txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
-                    removeSubMenu();
-                } else {
-                    txtHeaderWarehouse.setText("n.A.");
-                    txtOwnerWarehouse.setText("Owner: n.A.");
-                }
-            } else {
-                this.finish();
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                startActivity(intent);
             }
         }catch (Exception ex){
             System.out.println(ex.getMessage());
@@ -300,17 +311,31 @@ public class HomeActivity extends AppCompatActivity {
                             sub.add(w.get("name").toString()).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                                 @Override
                                 public boolean onMenuItemClick(MenuItem item) {
-                                    currentWarehouse = new Warehouse(wh.get("name").toString());
-                                    currentWarehouse.setAdminId(wh.get("admin").toString());
-                                    currentWarehouse.setCreate(wh.get("created").toString());
-                                    currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
-                                    updateUI(mAuth.getCurrentUser());
-                                    return false;
+                                    db.collection("users").whereEqualTo("uid", mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            updateUI(mAuth.getCurrentUser());
+                                        }
+                                    }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            currentWarehouse = new Warehouse(wh.get("name").toString());
+                                            currentWarehouse.setAdminId(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
+                                            currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
+                                            currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                        }
+                                    });
+                                    return true;
                                 }
                             });
                         }
                     }
                 });
+    }
+    private String getTimeStringFromTimestamp(Timestamp t){
+        final Calendar cal = Calendar.getInstance(Locale.GERMAN);
+        cal.setTimeInMillis(t.getSeconds() * 1000);
+        return DateFormat.format("dd.MM.yyyy", cal).toString();
     }
     private void removeSubMenu() {
         final Menu m = sideNavViewHome.getMenu();
