@@ -86,6 +86,7 @@ public class SearchItemsActivity extends AppCompatActivity {
                             if(!TextUtils.isEmpty(txtRegal.getText())) {
                                 checkIfRegalIsValid(txtRegal.getText().toString());
                             }
+                                adapter.addAll(lookUpProducts);
                                 listView.setAdapter(adapter);
                             }
                         });
