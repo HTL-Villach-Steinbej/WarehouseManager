@@ -61,7 +61,7 @@ public class SearchItemsActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for(QueryDocumentSnapshot item :queryDocumentSnapshots){
-                                Item tmp= new Item();
+                                Item tmp = new Item();
                                 tmp.setQR_CODE((String)item.get("qrcode"));
                                 tmp.setEAN_CODE((String)item.get("ean"));
                                 tmp.setCategory((String)item.get("category"));
@@ -69,9 +69,7 @@ public class SearchItemsActivity extends AppCompatActivity {
                                 tmp.setBrand((String)item.get("brand"));
 
                                 lookUpProducts.add(tmp);
-
                             }
-
                             }
                         }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -149,13 +147,10 @@ public class SearchItemsActivity extends AppCompatActivity {
         for(Item i : lookUpProducts){
             if(!i.getQRCODE().equals(regalNr)){
                 adapter.remove(i);
-
-            }else {
+            } else {
                 tmp.add(i);
             }
-
         }
-
         lookUpProducts=tmp;
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
