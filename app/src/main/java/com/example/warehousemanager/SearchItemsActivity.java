@@ -49,11 +49,6 @@ public class SearchItemsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_items);
         initComponents();
 
-
-
-
-
-
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
