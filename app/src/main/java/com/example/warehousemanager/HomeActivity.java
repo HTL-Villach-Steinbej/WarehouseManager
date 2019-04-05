@@ -236,15 +236,12 @@ public class HomeActivity extends AppCompatActivity {
                 txtWelcome = findViewById(R.id.txtWelcome);
                 txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
                 if (currentWarehouse != null) {
-                    loadItems();
                     txtHeaderWarehouse.setText(currentWarehouse.getName());
                     txtOwnerWarehouse.setText("Admin: " + currentWarehouse.getAdminId());
                     txtSubscribedTill.setText("Subscribed till: " + currentWarehouse.getSubscribtionEnd());
                     txtExistsSince.setText("Exists since: " + currentWarehouse.getCreate());
                     txtItemsWorstCat.setText("Worst Category: Software");
                     txtItemsTopCat.setText("Top Category: Hardware");
-                    txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
-                    removeSubMenu();
                 } else {
                     txtHeaderWarehouse.setText("n.A.");
                     txtOwnerWarehouse.setText("Admin: n.A.");
@@ -278,6 +275,7 @@ public class HomeActivity extends AppCompatActivity {
                             i.setQR_CODE(item.get("qrcode").toString());
                             allItemsSelectedWarehouse.add(i);
                             txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
+                            updateUI(mAuth.getCurrentUser());
                         }
                     }
                 });
@@ -311,6 +309,9 @@ public class HomeActivity extends AppCompatActivity {
                                                 currentWarehouse.setAdminId(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
                                                 currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
                                                 currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                                loadItems();
+                                                removeSubMenu();
+                                                updateUI(mAuth.getCurrentUser());
                                             }
                                         });
                                         return true;
@@ -327,6 +328,8 @@ public class HomeActivity extends AppCompatActivity {
                                     currentWarehouse.setAdminId(queryDocumentSnapshotsUser.getDocuments().get(0).get("email").toString());
                                     currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
                                     currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                    loadItems();
+                                    removeSubMenu();
                                     updateUI(mAuth.getCurrentUser());
                                 }
                             });

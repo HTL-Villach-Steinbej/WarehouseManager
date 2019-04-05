@@ -83,8 +83,6 @@ public class SearchItemsActivity extends AppCompatActivity {
                                     if(comboCategory.getSelectedItem().toString()!="") {
                                         checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
                                     }
-
-                                    adapter.addAll(lookUpProducts);
                                     listView.setAdapter(adapter);
                                 }
                             }
@@ -94,7 +92,6 @@ public class SearchItemsActivity extends AppCompatActivity {
                         HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("qrcode", txtRegal.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
 
                             }
                         }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -125,15 +122,11 @@ public class SearchItemsActivity extends AppCompatActivity {
                             }
                         });
                     }
-
-
-
                 }else{
                     Toast.makeText(SearchItemsActivity.this, "Überprüfen Sie Ihre Eingabe", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
 
     private void checkIfBrandIsValid(String brand) {
@@ -141,11 +134,8 @@ public class SearchItemsActivity extends AppCompatActivity {
         for(Item i : lookUpProducts){
             if(i.getCategory().equals(brand)){
                 tmp.add(i);
-
             }
-
         }
-
         lookUpProducts=tmp;
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
@@ -157,17 +147,13 @@ public class SearchItemsActivity extends AppCompatActivity {
         for(Item i : lookUpProducts){
             if(i.getCategory().equals(category)){
                 tmp.add(i);
-
             }
-
         }
-
         lookUpProducts=tmp;
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 lookUpProducts);
     }
-
 
     private void initComponents() {
         txtBrand=findViewById(R.id.txtBrand);
