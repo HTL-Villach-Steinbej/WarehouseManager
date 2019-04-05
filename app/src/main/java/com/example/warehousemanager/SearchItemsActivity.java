@@ -80,9 +80,9 @@ public class SearchItemsActivity extends AppCompatActivity {
                                     if(!TextUtils.isEmpty(txtRegal.getText())) {
                                         checkIfRegalIsValid(txtRegal.getText().toString());
                                     }
-
-                                    checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
-
+                                    if(comboCategory.getSelectedItem().toString()!="") {
+                                        checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
+                                    }
 
                                     adapter.addAll(lookUpProducts);
                                     listView.setAdapter(adapter);
@@ -90,6 +90,42 @@ public class SearchItemsActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    else if(!TextUtils.isEmpty(txtRegal.getText())) {
+                        HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("qrcode", txtRegal.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot item : task.getResult()){
+                                        Item tmp= new Item();
+                                        tmp.setQR_CODE((String)item.get("qrcode"));
+                                        tmp.setEAN_CODE((String)item.get("ean"));
+                                        tmp.setCategory((String)item.get("category"));
+                                        tmp.setName((String)item.get("name"));
+                                        tmp.setBrand((String)item.get("brand"));
+
+                                        lookUpProducts.add(tmp);
+                                    }
+                                    if(!TextUtils.isEmpty(txtBrand.getText())) {
+                                        checkIfBrandIsValid(txtBrand.getText().toString());
+
+                                    }
+                                    if(comboCategory.getSelectedItem().toString()!="") {
+                                        checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
+                                    }
+
+                                    adapter.addAll(lookUpProducts);
+                                    listView.setAdapter(adapter);
+                                }
+                            }
+                        });
+                    }
+
 
 
                 }else{
@@ -100,14 +136,28 @@ public class SearchItemsActivity extends AppCompatActivity {
 
     }
 
+    private void checkIfBrandIsValid(String brand) {
+        ArrayList<Item>tmp=new ArrayList<Item>();
+        for(Item i : lookUpProducts){
+            if(i.getCategory().equals(brand)){
+                tmp.add(i);
+
+            }
+
+        }
+
+        lookUpProducts=tmp;
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+    }
+
     private void checkIfCategoryIsValid(String category) {
         ArrayList<Item>tmp=new ArrayList<Item>();
         for(Item i : lookUpProducts){
-            if(!i.getCategory().equals(category)){
-
-
-            }else {
+            if(i.getCategory().equals(category)){
                 tmp.add(i);
+
             }
 
         }
@@ -130,6 +180,7 @@ public class SearchItemsActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 lookUpProducts);
         List<String> category= new ArrayList<>();
+        category.add("");
         category.add("Kühlschränke");
         category.add("Geschirrspüler");
         category.add("Gefriertruhen");
@@ -149,13 +200,10 @@ public class SearchItemsActivity extends AppCompatActivity {
     private void checkIfRegalIsValid(String regalNr){
     ArrayList<Item>tmp=new ArrayList<Item>();
         for(Item i : lookUpProducts){
-            if(!i.getQRCODE().equals(regalNr)){
+            if(i.getQRCODE().equals(regalNr)){
 
-
-            }else {
                 tmp.add(i);
             }
-
         }
 
         lookUpProducts=tmp;
