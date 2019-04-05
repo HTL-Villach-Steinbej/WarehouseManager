@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import Misc.GifImageView;
 import Misc.Prevalent;
 
 import com.facebook.AccessToken;
@@ -48,11 +49,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.firestore.FirebaseFirestore;
 import io.paperdb.Paper;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -75,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton loginButton;
 
     private CheckBox comboRemember;
+    GifImageView gifImageView;
 
     //onCreate
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +84,9 @@ public class LoginActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
+
+        gifImageView = findViewById(R.id.GifImageView);
+        gifImageView.setGifImageResource(R.drawable.giphy);
 
         Paper.init(this);
 
