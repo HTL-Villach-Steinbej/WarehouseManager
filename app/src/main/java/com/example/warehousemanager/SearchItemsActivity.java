@@ -60,29 +60,33 @@ public class SearchItemsActivity extends AppCompatActivity {
                         HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("brand", txtBrand.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot item :queryDocumentSnapshots){
-                                Item tmp = new Item();
-                                tmp.setQR_CODE((String)item.get("qrcode"));
-                                tmp.setEAN_CODE((String)item.get("ean"));
-                                tmp.setCategory((String)item.get("category"));
-                                tmp.setName((String)item.get("name"));
-                                tmp.setBrand((String)item.get("brand"));
 
-                                lookUpProducts.add(tmp);
-                            }
+
                             }
                         }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(!TextUtils.isEmpty(txtRegal.getText())) {
-                                    checkIfRegalIsValid(txtRegal.getText().toString());
-                                }
-                                if(comboCategory.getSelectedItem().toString()!=null){
-                                    checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
-                                }
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot item : task.getResult()){
+                                        Item tmp= new Item();
+                                        tmp.setQR_CODE((String)item.get("qrcode"));
+                                        tmp.setEAN_CODE((String)item.get("ean"));
+                                        tmp.setCategory((String)item.get("category"));
+                                        tmp.setName((String)item.get("name"));
+                                        tmp.setBrand((String)item.get("brand"));
 
-                                adapter.addAll(lookUpProducts);
-                                listView.setAdapter(adapter);
+                                        lookUpProducts.add(tmp);
+                                    }
+                                    if(!TextUtils.isEmpty(txtRegal.getText())) {
+                                        checkIfRegalIsValid(txtRegal.getText().toString());
+                                    }
+
+                                    checkIfCategoryIsValid(comboCategory.getSelectedItem().toString());
+
+
+                                    adapter.addAll(lookUpProducts);
+                                    listView.setAdapter(adapter);
+                                }
                             }
                         });
                     }
@@ -147,10 +151,13 @@ public class SearchItemsActivity extends AppCompatActivity {
         for(Item i : lookUpProducts){
             if(!i.getQRCODE().equals(regalNr)){
                 adapter.remove(i);
-            } else {
+
+            }else {
                 tmp.add(i);
             }
+
         }
+
         lookUpProducts=tmp;
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
