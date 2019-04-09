@@ -74,7 +74,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initComponents();
-        startActivity(new Intent(HomeActivity.this, LogActivity.class));
     }
 
     private void initComponents() {
