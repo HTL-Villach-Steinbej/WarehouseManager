@@ -85,6 +85,9 @@
     <string name="btn_add_item_title">Add a new Item</string>
     <string name="title_itmes_list">Items in:</string>
     <string name="title_items_list">Items in</string>
+    <string name="title_items_container">Your Items</string>
+    <string name="title_warehouse_container">Your Warehouse</string>
+    <string name="title_all_items">All Items in the Warehouse</string>
 
     <!-- End Of Strings For The SettingActivity And The Preferences-->
 

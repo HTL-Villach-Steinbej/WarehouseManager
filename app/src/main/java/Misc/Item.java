@@ -50,7 +50,6 @@ public class Item implements Parcelable {
 
         public Item[] newArray(int size) {
             return new Item[size];
-
         }
     };
 
@@ -102,7 +101,7 @@ public class Item implements Parcelable {
 
     @Override
     public String toString() {
-        return QR_CODE + " " + brand + " " + name + " " + category;
+        return "[" + category + "] " + name                                                                      ;
     }
 }
 

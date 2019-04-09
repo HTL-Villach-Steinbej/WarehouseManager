@@ -16,13 +16,9 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchItemsActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -32,16 +28,16 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
         <activity
             android:name=".FindItemActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".SearchItemsActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".RemoveItemActivity" />
         <activity
             android:name=".BarcodescanActivity"
@@ -53,12 +49,11 @@
         <activity android:name=".WatchWarehouse" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".DetailRegalActivity" />
-        <activity
-            android:name=".AddItemInformationActivity"
-            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".AddItemInformationActivity" />
         <activity android:name=".AddWorkerActivity" />
         <activity android:name=".CreateWarehouseActivity" />
         <activity android:name=".SettingsActivity" />
+        <activity android:name=".AllItemsActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,5 +62,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
