@@ -80,17 +80,19 @@ public class AddItemInformationActivity extends AppCompatActivity {
                     item.put("ean",product.get(0).getEANCODE().trim());
                     item.put("qrcode",product.get(0).getQRCODE().trim());
 
+
                     HomeActivity.currentWarehouseReference.collection("items").add(item).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(AddItemInformationActivity.this, "Ware wurde im Lager hinzugefügt", Toast.LENGTH_SHORT).show();
-
+                            LogActivity.AddLogMessage(AddItemInformationActivity.this, "Done: Adding Item!");
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(AddItemInformationActivity.this, "Fehler beim Speichern der Daten", Toast.LENGTH_SHORT).show();
+                            LogActivity.AddLogMessage(AddItemInformationActivity.this, "Error: Adding Item");
                         }
                     });
                     if(!foundItem){

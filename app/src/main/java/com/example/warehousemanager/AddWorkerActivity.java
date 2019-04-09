@@ -88,10 +88,12 @@ public class AddWorkerActivity extends AppCompatActivity {
                             users.add(workerUID);
                             HomeActivity.currentWarehouseReference.update("users", users);
                             Toast.makeText(AddWorkerActivity.this, "Erfolg. Nutzer wurde hinzugefügt", Toast.LENGTH_SHORT).show();
+                            LogActivity.AddLogMessage(AddWorkerActivity.this, "Done: Adding Worker!");
                             startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
                         }
                         else{
                             Toast.makeText(AddWorkerActivity.this, "User is already connected to the Warehouse", Toast.LENGTH_SHORT).show();
+                            LogActivity.AddLogMessage(AddWorkerActivity.this, "Error: Adding Worker!");
                             startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
                         }
                     }

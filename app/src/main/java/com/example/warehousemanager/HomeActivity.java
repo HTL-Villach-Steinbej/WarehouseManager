@@ -21,6 +21,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -72,6 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initComponents();
+        startActivity(new Intent(HomeActivity.this, LogActivity.class));
     }
 
     private void initComponents() {
@@ -160,7 +162,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomAppBarHome.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+               startActivity(new Intent(HomeActivity.this, LogActivity.class));
             }
         });
 
@@ -299,13 +301,15 @@ public class HomeActivity extends AppCompatActivity {
                                                 setCurrentWarehouseReference();
                                                 loadItems();
                                                 removeSubMenu();
-                                                //updateUI(mAuth.getCurrentUser());
+                                                updateUI(mAuth.getCurrentUser());
+                                                LogActivity.AddLogMessage(HomeActivity.this, "New Warehouse selected" + currentWarehouse);
                                             }
                                         });
                                         return true;
                                     }
                                 });
                             }
+                            updateUI(mAuth.getCurrentUser());
                         }
                         else if(queryDocumentSnapshots.getDocuments().size() == 1){
                             final DocumentSnapshot wh = queryDocumentSnapshots.getDocuments().get(0);
@@ -319,7 +323,8 @@ public class HomeActivity extends AppCompatActivity {
                                     setCurrentWarehouseReference();
                                     loadItems();
                                     removeSubMenu();
-                                    //updateUI(mAuth.getCurrentUser());
+                                    updateUI(mAuth.getCurrentUser());
+                                    LogActivity.AddLogMessage(HomeActivity.this, "New Warehouse selected" + currentWarehouse);
                                 }
                             });
                         }

@@ -95,13 +95,11 @@ public class BarcodescanActivity extends AppCompatActivity {
                             i.setEAN_CODE(eancode);
                             i.setQR_CODE(qrcode);
                             items.add(i);
+                            LogActivity.AddLogMessage(BarcodescanActivity.this, "Done: Scanned EAN!");
                             if(documentSnapshot.get("brand")==null) {
                                 productInfo.putExtra("itemfound", false);
                             }
                             productInfo.putExtra("itemobject",items);
-
-
-
                         }
                     }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -116,12 +114,10 @@ public class BarcodescanActivity extends AppCompatActivity {
                             productInfo.putExtra("itemfound",false);
                         }
                     });
-
-
-
-            }else{
-                    Toast.makeText(BarcodescanActivity.this, "Daten sind ungültig", Toast.LENGTH_SHORT).show();
-                }
+            }
+            else{
+                Toast.makeText(BarcodescanActivity.this, "Daten sind ungültig", Toast.LENGTH_SHORT).show();
+            }
             }
 
 

@@ -129,6 +129,7 @@ public class FindItemActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
+                                LogActivity.AddLogMessage(FindItemActivity.this, "Done: Found Item!");
 
                             }
 
