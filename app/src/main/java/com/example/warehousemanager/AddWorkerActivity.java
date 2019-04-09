@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -88,12 +89,12 @@ public class AddWorkerActivity extends AppCompatActivity {
                             users.add(workerUID);
                             HomeActivity.currentWarehouseReference.update("users", users);
                             Toast.makeText(AddWorkerActivity.this, "Erfolg. Nutzer wurde hinzugefügt", Toast.LENGTH_SHORT).show();
-                            LogActivity.AddLogMessage(AddWorkerActivity.this, "Done: Adding Worker!");
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), "Done: Adding Worker!");
                             startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
                         }
                         else{
                             Toast.makeText(AddWorkerActivity.this, "User is already connected to the Warehouse", Toast.LENGTH_SHORT).show();
-                            LogActivity.AddLogMessage(AddWorkerActivity.this, "Error: Adding Worker!");
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), "Error: Adding Worker!");
                             startActivity(new Intent(AddWorkerActivity.this, HomeActivity.class));
                         }
                     }

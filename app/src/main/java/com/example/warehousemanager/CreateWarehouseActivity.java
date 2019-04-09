@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -57,7 +59,7 @@ public class CreateWarehouseActivity extends AppCompatActivity {
                     db.collection("warehouses").add(warehouseData);
                     Toast.makeText(CreateWarehouseActivity.this, "Warehouse Created",
                             Toast.LENGTH_SHORT).show();
-                    LogActivity.AddLogMessage(CreateWarehouseActivity.this, "Done: Creating Warehouse!");
+                    WarehouseLogger.addLog(mAuth.getCurrentUser(), "Done: Creating Warehouse!");
                     startActivity(new Intent(CreateWarehouseActivity.this, HomeActivity.class));
                 }
             }

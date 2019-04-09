@@ -255,7 +255,7 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@color/colorAccent"
         app:fabAlignmentMode="center"
-        app:navigationIcon="@drawable/outline_account_circle_white_24dp"
+        app:navigationIcon="@drawable/baseline_format_list_bulleted_white_24dp"
         app:fabCradleMargin="3dp"
         app:menu="@menu/navigation" />
 

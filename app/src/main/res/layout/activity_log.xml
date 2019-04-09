@@ -3,6 +3,28 @@
     android:id="@+id/logWindow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LogWindow"
+        android:textColor="@color/colorPrimary"
+        android:textAlignment="center"
+        style="@style/TextAppearance.MaterialComponents.Overline"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="600dp">
+
+        <TextView
+            android:id="@+id/txtLogText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/colorPrimary" />
+    </ScrollView>
 
 </LinearLayout>

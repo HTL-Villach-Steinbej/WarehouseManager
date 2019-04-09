@@ -1,6 +1,7 @@
 package com.example.warehousemanager;
 
 import Misc.Item;
+import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -25,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AddItemInformationActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
     private Spinner spinnerCategoryAddItem;
     private Button btnSubmitAddItem;
     private ArrayAdapter<String> adapter;
@@ -40,6 +45,8 @@ public class AddItemInformationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         super.onCreate(savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_add_item_information);
         initComponents(intent);
 
@@ -85,14 +92,14 @@ public class AddItemInformationActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(AddItemInformationActivity.this, "Ware wurde im Lager hinzugefügt", Toast.LENGTH_SHORT).show();
-                            LogActivity.AddLogMessage(AddItemInformationActivity.this, "Done: Adding Item!");
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), "Done: Adding Item!");
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(AddItemInformationActivity.this, "Fehler beim Speichern der Daten", Toast.LENGTH_SHORT).show();
-                            LogActivity.AddLogMessage(AddItemInformationActivity.this, "Error: Adding Item");
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), "Error: Adding Item");
                         }
                     });
                     if(!foundItem){

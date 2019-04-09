@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 import Misc.Warehouse;
+import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -148,15 +149,12 @@ public class HomeActivity extends AppCompatActivity {
         bottomAppBarHome.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(item.getItemId() == R.id.navigation_warehouse){
-                    txtWelcome.setText("Warehouse");
-                }
-                else if(item.getItemId() == R.id.navigation_settings){
+               if(item.getItemId() == R.id.navigation_settings){
                     txtWelcome.setText("Settings");
                     Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
                     startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
         bottomAppBarHome.setNavigationOnClickListener(new View.OnClickListener() {
@@ -302,7 +300,7 @@ public class HomeActivity extends AppCompatActivity {
                                                 loadItems();
                                                 removeSubMenu();
                                                 updateUI(mAuth.getCurrentUser());
-                                                LogActivity.AddLogMessage(HomeActivity.this, "New Warehouse selected" + currentWarehouse);
+                                                WarehouseLogger.addLog(mAuth.getCurrentUser(), "New Warehouse selected (" + currentWarehouse + ")");
                                             }
                                         });
                                         return true;
@@ -322,9 +320,14 @@ public class HomeActivity extends AppCompatActivity {
                                     currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
                                     setCurrentWarehouseReference();
                                     loadItems();
-                                    removeSubMenu();
                                     updateUI(mAuth.getCurrentUser());
-                                    LogActivity.AddLogMessage(HomeActivity.this, "New Warehouse selected" + currentWarehouse);
+                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), "New Warehouse selected (" + currentWarehouse + ")");
+                                    if(menuItemChangeWarehouse != null){
+                                        m.removeItem(menuItemChangeWarehouse.getItemId());
+                                    }
+                                    MenuItem item = m.findItem(R.id.nav_select_warehouse);
+                                    SubMenu sub = item.getSubMenu();
+                                    sub.clear();
                                 }
                             });
                         }
