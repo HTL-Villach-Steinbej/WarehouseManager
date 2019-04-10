@@ -15,16 +15,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 import Misc.Warehouse;
+import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +64,9 @@ public class HomeActivity extends AppCompatActivity {
     private TextView txtItemsWorstCat;
     private TextView txtWelcome;
 
+    private LinearLayout containerWarehouse;
+    private LinearLayout conatainerItems;
+
     private MenuItem menuItemChangeWarehouse;
 
     @Override
@@ -68,21 +74,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initComponents();
-        setCurrentWarehouseReference();
-    }
-
-    private void setCurrentWarehouseReference() {
-        if(currentWarehouse != null){
-            db.collection("warehouses").whereEqualTo("name", currentWarehouse.getName()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    currentWarehouseReference = queryDocumentSnapshots.getDocuments().get(0).getReference();
-                }
-            });
-        }
-        else{
-            currentWarehouseReference = null;
-        }
     }
 
     private void initComponents() {
@@ -116,11 +107,13 @@ public class HomeActivity extends AppCompatActivity {
                                 startActivity(new Intent(HomeActivity.this, ManageEmployeesActivity.class));
                                 break;
                             case R.id.nav_manager_warehouse:
-                                break;
-                            case R.id.nav_select_warehouse:
+                                startActivity(new Intent(HomeActivity.this, ManageWarehouseActivity.class));
                                 break;
                             case R.id.nav_watch_warehouse:
                                 startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
+                                break;
+                            case R.id.nav_all_items:
+                                startActivity(new Intent(HomeActivity.this, AllItemsActivity.class));
                                 break;
                         }
                         return true;
@@ -154,21 +147,18 @@ public class HomeActivity extends AppCompatActivity {
         bottomAppBarHome.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(item.getItemId() == R.id.navigation_warehouse){
-                    txtWelcome.setText("Warehouse");
-                }
-                else if(item.getItemId() == R.id.navigation_settings){
+               if(item.getItemId() == R.id.navigation_settings){
                     txtWelcome.setText("Settings");
                     Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
                     startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
         bottomAppBarHome.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+               startActivity(new Intent(HomeActivity.this, LogActivity.class));
             }
         });
 
@@ -215,6 +205,21 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+        containerWarehouse = findViewById(R.id.contailer_warehouse);
+        containerWarehouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, AllItemsActivity.class));
+            }
+        });
+
+        conatainerItems = findViewById(R.id.container_items);
+        conatainerItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, AllItemsActivity.class));
+            }
+        });
         loadAndSetWarehouse();
     }
     @Override
@@ -242,16 +247,10 @@ public class HomeActivity extends AppCompatActivity {
                     txtExistsSince.setText("Exists since: " + currentWarehouse.getCreate());
                     txtItemsWorstCat.setText("Worst Category: Software");
                     txtItemsTopCat.setText("Top Category: Hardware");
-                } else {
-                    txtHeaderWarehouse.setText("n.A.");
-                    txtOwnerWarehouse.setText("Admin: n.A.");
-                    txtSubscribedTill.setText("Subscribed till: n.A.");
-                    txtExistsSince.setText("Exists since: 10.10.2005");
-                    txtItemsWorstCat.setText("Worst Category: Software");
-                    txtItemsTopCat.setText("Top Category: Hardware");
-                    txtItemsHeader.setText("Items in your Warehouse[n.A.]");
+                    txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
                 }
-            } else {
+            }
+            else {
                 this.finish();
                 Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -260,31 +259,17 @@ public class HomeActivity extends AppCompatActivity {
             System.out.println(ex.getMessage());
         }
     }
-    private void loadItems() {
-        try {
-            if (currentWarehouseReference != null) {
-                currentWarehouseReference.collection("items").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot item : queryDocumentSnapshots) {
-                            Item i = new Item();
-                            i.setBrand(item.get("brand").toString());
-                            i.setCategory(item.get("category").toString());
-                            i.setEAN_CODE(item.get("ean").toString());
-                            i.setName(item.get("name").toString());
-                            i.setQR_CODE(item.get("qrcode").toString());
-                            allItemsSelectedWarehouse.add(i);
-                            txtItemsHeader.setText("Items in your Warehouse[" + allItemsSelectedWarehouse.size() + "]");
-                            updateUI(mAuth.getCurrentUser());
-                        }
-                    }
-                });
-            } else {
-                Toast.makeText(HomeActivity.this, "No Warehouse selected", Toast.LENGTH_LONG).show();
-                throw new Exception("There is no Warehouse selected yet");
-            }
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
+    private void setCurrentWarehouseReference() {
+        if(currentWarehouse != null){
+            db.collection("warehouses").whereEqualTo("name", currentWarehouse.getName()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    currentWarehouseReference = queryDocumentSnapshots.getDocuments().get(0).getReference();
+                }
+            });
+        }
+        else{
+            currentWarehouseReference = null;
         }
     }
     private void loadAndSetWarehouse(){
@@ -309,33 +294,74 @@ public class HomeActivity extends AppCompatActivity {
                                                 currentWarehouse.setAdminId(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
                                                 currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
                                                 currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                                setCurrentWarehouseReference();
                                                 loadItems();
                                                 removeSubMenu();
                                                 updateUI(mAuth.getCurrentUser());
+                                                WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.WAREHOUSE, "Done: selected");
                                             }
                                         });
                                         return true;
                                     }
                                 });
                             }
+                            updateUI(mAuth.getCurrentUser());
                         }
                         else if(queryDocumentSnapshots.getDocuments().size() == 1){
                             final DocumentSnapshot wh = queryDocumentSnapshots.getDocuments().get(0);
-                            db.collection("users").whereEqualTo("uid", mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            db.collection("users").whereEqualTo("uid", wh.get("admin").toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshotsUser) {
                                     currentWarehouse = new Warehouse(wh.get("name").toString());
                                     currentWarehouse.setAdminId(queryDocumentSnapshotsUser.getDocuments().get(0).get("email").toString());
                                     currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
                                     currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
+                                    setCurrentWarehouseReference();
                                     loadItems();
-                                    removeSubMenu();
                                     updateUI(mAuth.getCurrentUser());
+                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.WAREHOUSE, "Done: selected");
+                                    if(menuItemChangeWarehouse != null){
+                                        m.removeItem(menuItemChangeWarehouse.getItemId());
+                                    }
+                                    MenuItem item = m.findItem(R.id.nav_select_warehouse);
+                                    SubMenu sub = item.getSubMenu();
+                                    sub.clear();
                                 }
                             });
                         }
                     }
                 });
+    }
+    private void loadItems() {
+        try {
+            if (currentWarehouseReference != null) {
+                if(allItemsSelectedWarehouse != null){
+                    allItemsSelectedWarehouse.clear();
+                    currentWarehouseReference.collection("items").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot item : queryDocumentSnapshots) {
+                                Item i = new Item();
+                                i.setBrand(item.get("brand").toString());
+                                i.setCategory(item.get("category").toString());
+                                i.setEAN_CODE(item.get("ean").toString());
+                                i.setName(item.get("name").toString());
+                                i.setQR_CODE(item.get("qrcode").toString());
+                                allItemsSelectedWarehouse.add(i);
+                            }
+                            updateUI(mAuth.getCurrentUser());
+                        }
+                    });
+                }
+                else{
+                    throw new Exception("allItems-List is not set yet!");
+                }
+            } else {
+                Toast.makeText(HomeActivity.this, "No Warehouse selected", Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
     private String getTimeStringFromTimestamp(Timestamp t){
         final Calendar cal = Calendar.getInstance(Locale.GERMAN);
@@ -350,7 +376,6 @@ public class HomeActivity extends AppCompatActivity {
         menuItemChangeWarehouse = m.add("Change your Warehouse").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                currentWarehouse = null;
                 updateUI(mAuth.getCurrentUser());
                 loadAndSetWarehouse();
                 return true;

@@ -1,6 +1,7 @@
 package com.example.warehousemanager;
 
 import Misc.Item;
+import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -31,15 +33,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchItemsActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
 
     private TextView txtBrand;
     private TextView txtName;
     private TextView txtRegal;
     private Spinner comboCategory;
     private Button btnSearch;
-    private ArrayList<Item>lookUpProducts=new ArrayList<Item>();
     private ListView listView;
 
+    private ArrayList<Item>lookUpProducts=new ArrayList<Item>();
     private ArrayAdapter<Item> adapter;
     private ArrayAdapter<String> adapterCombo;
     private TableLayout tableView;
@@ -48,25 +51,51 @@ public class SearchItemsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_items);
         initComponents();
+    }
 
+    private void initComponents() {
+        mAuth = FirebaseAuth.getInstance();
+        txtBrand=findViewById(R.id.txtBrand);
+        txtName=findViewById(R.id.txtBezeichnung);
+        txtRegal=findViewById(R.id.txtRegal);
+        comboCategory=findViewById(R.id.comboCategory);
+        btnSearch=findViewById(R.id.btnSearch);
+        listView=findViewById(R.id.listView);
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                lookUpProducts);
+        List<String> category= new ArrayList<>();
+        category.add("");
+        category.add("Kühlschränke");
+        category.add("Geschirrspüler");
+        category.add("Gefriertruhen");
+        category.add("Waschtrockner");
+        category.add("Trockner");
+        category.add("Herde");
+        category.add("Waschmaschinen");
+        category.add("Kühl- Gefrierkombinationen");
+        category.add("Kochfelder");
+
+        adapterCombo = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, category);
+        adapterCombo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        comboCategory.setAdapter(adapterCombo);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 adapter.clear();
                 hideKeyboard(SearchItemsActivity.this);
                 if(!TextUtils.isEmpty(txtBrand.getText())||!TextUtils.isEmpty(txtName.getText())||!TextUtils.isEmpty(txtRegal.getText())) {
-
                     if(!TextUtils.isEmpty(txtBrand.getText())) {
                         HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("brand", txtBrand.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-
                             }
                         }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()){
+                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Search");
                                     for(QueryDocumentSnapshot item : task.getResult()){
                                         Item tmp= new Item();
                                         tmp.setQR_CODE((String)item.get("qrcode"));
@@ -98,6 +127,7 @@ public class SearchItemsActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()){
+                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Search");
                                     for(QueryDocumentSnapshot item : task.getResult()){
                                         Item tmp= new Item();
                                         tmp.setQR_CODE((String)item.get("qrcode"));
@@ -123,12 +153,12 @@ public class SearchItemsActivity extends AppCompatActivity {
                         });
                     }
                 }else{
+                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Error: Search");
                     Toast.makeText(SearchItemsActivity.this, "Überprüfen Sie Ihre Eingabe", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
     private void checkIfBrandIsValid(String brand) {
         ArrayList<Item>tmp=new ArrayList<Item>();
         for(Item i : lookUpProducts){
@@ -153,34 +183,6 @@ public class SearchItemsActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 lookUpProducts);
-    }
-
-    private void initComponents() {
-        txtBrand=findViewById(R.id.txtBrand);
-        txtName=findViewById(R.id.txtBezeichnung);
-        txtRegal=findViewById(R.id.txtRegal);
-        comboCategory=findViewById(R.id.comboCategory);
-        btnSearch=findViewById(R.id.btnSearch);
-        listView=findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                lookUpProducts);
-        List<String> category= new ArrayList<>();
-        category.add("");
-        category.add("Kühlschränke");
-        category.add("Geschirrspüler");
-        category.add("Gefriertruhen");
-        category.add("Waschtrockner");
-        category.add("Trockner");
-        category.add("Herde");
-        category.add("Waschmaschinen");
-        category.add("Kühl- Gefrierkombinationen");
-        category.add("Kochfelder");
-
-        adapterCombo = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, category);
-        adapterCombo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        comboCategory.setAdapter(adapterCombo);
     }
 
     private void checkIfRegalIsValid(String regalNr){

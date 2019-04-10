@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FindItemActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+
     private BarcodeDetector qrcodeDetector;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
@@ -56,6 +59,7 @@ public class FindItemActivity extends AppCompatActivity {
         initComponents();
     }
     private void initComponents(){
+        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         cameraPreview = findViewById(R.id.cameraPreview);
@@ -129,6 +133,7 @@ public class FindItemActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
+                                WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Find");
 
                             }
 

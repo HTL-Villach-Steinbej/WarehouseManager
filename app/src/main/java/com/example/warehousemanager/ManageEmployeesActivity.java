@@ -1,6 +1,7 @@
 package com.example.warehousemanager;
 
 import Misc.Warehouse;
+import Misc.WarehouseLogger;
 import Misc.WarehouseUser;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class ManageEmployeesActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private ArrayList<String> listUser;
+    private ArrayAdapter<String> listAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,8 @@ public class ManageEmployeesActivity extends AppCompatActivity {
             }
         });
         listViewManageEmp = findViewById(R.id.listViewManageEmp);
-        listViewManageEmp.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listUser));
+        listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listUser);
+        listViewManageEmp.setAdapter(listAdapter);
     }
     @Override
     public void onStart(){
@@ -64,11 +67,19 @@ public class ManageEmployeesActivity extends AppCompatActivity {
         HomeActivity.currentWarehouseReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                listUser =  (ArrayList<String>) documentSnapshot.getData().get("users");
+                listUser.clear();
+                ArrayList<String> cache = (ArrayList<String>) documentSnapshot.getData().get("users");
+                for(String u : cache){
+                    db.collection("users").whereEqualTo("uid", u).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            listUser.add(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.EMPLOYEE, "Done: Loading");
+                            listAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
                 Toast.makeText(ManageEmployeesActivity.this, "Data up to Date", Toast.LENGTH_SHORT);
-
-                listViewManageEmp.setAdapter(new ArrayAdapter<>(ManageEmployeesActivity.this, android.R.layout.simple_list_item_1, listUser));
-                listViewManageEmp.refreshDrawableState();
             }
         });
     }

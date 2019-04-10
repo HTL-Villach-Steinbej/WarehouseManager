@@ -1,6 +1,7 @@
 package com.example.warehousemanager;
 
 import Misc.Item;
+import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -83,7 +84,7 @@ public class BarcodescanActivity extends AppCompatActivity {
                 final String eancode = txtEAN.getText().toString();
                 final Item i = new Item();
                 final ArrayList<Item>items = new ArrayList<Item>();
-                final Intent productInfo= new Intent(BarcodescanActivity.this,AddItemInformationActivity.class);
+                final Intent productInfo = new Intent(BarcodescanActivity.this, AddItemInformationActivity.class);
                 productInfo.putExtra("qrcode",qrcode);
 
                     db.collection("items").document(eancode).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -95,13 +96,11 @@ public class BarcodescanActivity extends AppCompatActivity {
                             i.setEAN_CODE(eancode);
                             i.setQR_CODE(qrcode);
                             items.add(i);
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Scan");
                             if(documentSnapshot.get("brand")==null) {
                                 productInfo.putExtra("itemfound", false);
                             }
                             productInfo.putExtra("itemobject",items);
-
-
-
                         }
                     }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -116,12 +115,10 @@ public class BarcodescanActivity extends AppCompatActivity {
                             productInfo.putExtra("itemfound",false);
                         }
                     });
-
-
-
-            }else{
-                    Toast.makeText(BarcodescanActivity.this, "Daten sind ungültig", Toast.LENGTH_SHORT).show();
-                }
+            }
+            else{
+                Toast.makeText(BarcodescanActivity.this, "Daten sind ungültig", Toast.LENGTH_SHORT).show();
+            }
             }
 
 
