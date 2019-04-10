@@ -59,7 +59,7 @@ public class CreateWarehouseActivity extends AppCompatActivity {
                     db.collection("warehouses").add(warehouseData);
                     Toast.makeText(CreateWarehouseActivity.this, "Warehouse Created",
                             Toast.LENGTH_SHORT).show();
-                    WarehouseLogger.addLog(mAuth.getCurrentUser(), "Done: Creating Warehouse!");
+                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.WAREHOUSE, "Done: Creating");
                     startActivity(new Intent(CreateWarehouseActivity.this, HomeActivity.class));
                 }
             }

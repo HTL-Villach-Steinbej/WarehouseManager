@@ -84,7 +84,7 @@ public class BarcodescanActivity extends AppCompatActivity {
                 final String eancode = txtEAN.getText().toString();
                 final Item i = new Item();
                 final ArrayList<Item>items = new ArrayList<Item>();
-                final Intent productInfo= new Intent(BarcodescanActivity.this,AddItemInformationActivity.class);
+                final Intent productInfo = new Intent(BarcodescanActivity.this, AddItemInformationActivity.class);
                 productInfo.putExtra("qrcode",qrcode);
 
                     db.collection("items").document(eancode).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -96,7 +96,7 @@ public class BarcodescanActivity extends AppCompatActivity {
                             i.setEAN_CODE(eancode);
                             i.setQR_CODE(qrcode);
                             items.add(i);
-                            WarehouseLogger.addLog(mAuth.getCurrentUser(), "Done: Scanned EAN!");
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Scan");
                             if(documentSnapshot.get("brand")==null) {
                                 productInfo.putExtra("itemfound", false);
                             }

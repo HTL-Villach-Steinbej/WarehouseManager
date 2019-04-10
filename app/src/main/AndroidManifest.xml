@@ -47,7 +47,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".WatchWarehouse" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ManageWarehouseActivity" />
         <activity android:name=".DetailRegalActivity" />
         <activity android:name=".AddItemInformationActivity" />
         <activity android:name=".AddWorkerActivity" />

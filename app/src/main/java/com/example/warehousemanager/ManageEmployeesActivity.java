@@ -74,7 +74,7 @@ public class ManageEmployeesActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             listUser.add(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
-                            WarehouseLogger.addLog(mAuth.getCurrentUser(), "=> " + queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.EMPLOYEE, "Done: Loading");
                             listAdapter.notifyDataSetChanged();
                         }
                     });

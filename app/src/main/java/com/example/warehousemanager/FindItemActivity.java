@@ -133,7 +133,7 @@ public class FindItemActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                                WarehouseLogger.addLog(mAuth.getCurrentUser(), "Done: Found Item!");
+                                WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Find");
 
                             }
 

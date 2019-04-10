@@ -107,8 +107,7 @@ public class HomeActivity extends AppCompatActivity {
                                 startActivity(new Intent(HomeActivity.this, ManageEmployeesActivity.class));
                                 break;
                             case R.id.nav_manager_warehouse:
-                                break;
-                            case R.id.nav_select_warehouse:
+                                startActivity(new Intent(HomeActivity.this, ManageWarehouseActivity.class));
                                 break;
                             case R.id.nav_watch_warehouse:
                                 startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
@@ -299,7 +298,7 @@ public class HomeActivity extends AppCompatActivity {
                                                 loadItems();
                                                 removeSubMenu();
                                                 updateUI(mAuth.getCurrentUser());
-                                                WarehouseLogger.addLog(mAuth.getCurrentUser(), "New Warehouse selected (" + currentWarehouse + ")");
+                                                WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.WAREHOUSE, "Done: selected");
                                             }
                                         });
                                         return true;
@@ -320,7 +319,7 @@ public class HomeActivity extends AppCompatActivity {
                                     setCurrentWarehouseReference();
                                     loadItems();
                                     updateUI(mAuth.getCurrentUser());
-                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), "New Warehouse selected (" + currentWarehouse + ")");
+                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.WAREHOUSE, "Done: selected");
                                     if(menuItemChangeWarehouse != null){
                                         m.removeItem(menuItemChangeWarehouse.getItemId());
                                     }
