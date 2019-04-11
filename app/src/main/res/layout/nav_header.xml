@@ -14,12 +14,14 @@
         android:text="WarehouseManager"
         android:textColor="#FFFFFF"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
+
     <TextView
+        android:id="@+id/subtitleSideNavHome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/subtitleSideNavHome"
-        android:text="jonathan.steinberger@gmx.at"
-        android:textColor="#FFFFFF"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"/>
+        android:singleLine="true"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

@@ -77,6 +77,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
         rootLayoutHome = findViewById(R.id.rootHome);
         rootLayoutHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayoutHome = findViewById(R.id.drawer_layout_home);
 
         sideNavViewHome = findViewById(R.id.nav_view_home);
+
         sideNavViewHome.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -116,9 +120,7 @@ public class HomeActivity extends AppCompatActivity {
 
         allItemsSelectedWarehouse = new ArrayList<>();
 
-        mAuth = FirebaseAuth.getInstance();
 
-        db = FirebaseFirestore.getInstance();
 
         txtHeaderWarehouse = findViewById(R.id.txtTitleWarehouse);
 
@@ -232,6 +234,9 @@ public class HomeActivity extends AppCompatActivity {
         try {
             setCurrentWarehouseReference();
             if (currentUser != null) {
+                TextView tv = findViewById(R.id.subtitleSideNavHome);
+                if(tv != null)
+                    tv.setText(mAuth.getCurrentUser().getEmail());
                 txtWelcome = findViewById(R.id.txtWelcome);
                 txtWelcome.setText("Welcome to the home-screen " + currentUser.getDisplayName());
                 if (currentWarehouse != null) {

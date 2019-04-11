@@ -88,6 +88,7 @@
     <string name="title_items_container">Your Items</string>
     <string name="title_warehouse_container">Your Warehouse</string>
     <string name="title_all_items">All Items in the Warehouse</string>
+    <string name="subtitle_header_sidenav">test@test.gmail,com</string>
 
     <!-- End Of Strings For The SettingActivity And The Preferences-->
 
