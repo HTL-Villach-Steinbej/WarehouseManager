@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Warehouse implements Serializable {
+    private String id;
     private String name;
     private String adminId;
     private String create;
@@ -17,6 +18,14 @@ public class Warehouse implements Serializable {
         users = new ArrayList<>();
         regale = new ArrayList<>();
         items = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -36,6 +45,8 @@ public class Warehouse implements Serializable {
     }
 
     public ArrayList<String> getUsers() {
+        if(users == null)
+            users = new ArrayList<>();
         return users;
     }
 

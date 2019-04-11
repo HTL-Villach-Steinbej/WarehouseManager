@@ -290,9 +290,12 @@ public class HomeActivity extends AppCompatActivity {
                                         db.collection("users").whereEqualTo("uid", mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                ArrayList<String> users = (ArrayList<String>) wh.get("users");
                                                 currentWarehouse = new Warehouse(wh.get("name").toString());
+                                                currentWarehouse.setId(wh.getId());
                                                 currentWarehouse.setAdminId(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
                                                 currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
+                                                currentWarehouse.setUsers(users);
                                                 currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
                                                 setCurrentWarehouseReference();
                                                 loadItems();
@@ -312,7 +315,10 @@ public class HomeActivity extends AppCompatActivity {
                             db.collection("users").whereEqualTo("uid", wh.get("admin").toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshotsUser) {
+                                    ArrayList<String> users = (ArrayList<String>) wh.get("users");
                                     currentWarehouse = new Warehouse(wh.get("name").toString());
+                                    currentWarehouse.setUsers(users);
+                                    currentWarehouse.setId(wh.getId());
                                     currentWarehouse.setAdminId(queryDocumentSnapshotsUser.getDocuments().get(0).get("email").toString());
                                     currentWarehouse.setCreate(getTimeStringFromTimestamp((Timestamp) wh.get("created")));
                                     currentWarehouse.setSubscribtionEnd(wh.get("subscribed_till").toString());
