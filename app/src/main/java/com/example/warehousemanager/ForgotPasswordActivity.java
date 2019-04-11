@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import Misc.GlobalMethods;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ForgotPasswordActivity  extends AppCompatActivity {
@@ -28,6 +29,8 @@ public class ForgotPasswordActivity  extends AppCompatActivity {
     private void initComponents() {
         try{
             mAuth = FirebaseAuth.getInstance();
+
+            GlobalMethods.hideKeyboard(ForgotPasswordActivity.this);
 
             email = findViewById(R.id.email);
 

@@ -97,9 +97,6 @@ public class HomeActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         drawerLayoutHome.closeDrawers();
                         switch (menuItem.getItemId()){
-                            case R.id.nav_add_employee:
-                                startActivity(new Intent(HomeActivity.this, AddWorkerActivity.class));
-                                break;
                             case R.id.nav_create_warehouse:
                                 startActivity(new Intent(HomeActivity.this, CreateWarehouseActivity.class));
                                 break;
@@ -108,9 +105,6 @@ public class HomeActivity extends AppCompatActivity {
                                 break;
                             case R.id.nav_manager_warehouse:
                                 startActivity(new Intent(HomeActivity.this, ManageWarehouseActivity.class));
-                                break;
-                            case R.id.nav_watch_warehouse:
-                                startActivity(new Intent(HomeActivity.this, WatchWarehouse.class));
                                 break;
                             case R.id.nav_all_items:
                                 startActivity(new Intent(HomeActivity.this, AllItemsActivity.class));

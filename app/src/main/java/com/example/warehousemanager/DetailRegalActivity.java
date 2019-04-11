@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import Misc.GlobalMethods;
 import Misc.Item;
 import Misc.Regal;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,8 @@ public class DetailRegalActivity extends AppCompatActivity {
     private void initComponents(){
         Intent intent = getIntent();
         final Regal regal = (Regal) intent.getSerializableExtra("regal");
+
+        GlobalMethods.hideKeyboard(DetailRegalActivity.this);
 
         listViewDetail = findViewById(R.id.listViewDetail);
         ArrayList<Item> items = (ArrayList<Item>)regal.getItems();

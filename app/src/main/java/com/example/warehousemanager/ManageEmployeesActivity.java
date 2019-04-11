@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.GlobalMethods;
 import Misc.Warehouse;
 import Misc.WarehouseLogger;
 import Misc.WarehouseUser;
@@ -45,6 +46,8 @@ public class ManageEmployeesActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
+
+        GlobalMethods.hideKeyboard(ManageEmployeesActivity.this);
 
         listUser = new ArrayList<>();
         btnRefresh = findViewById(R.id.btnRefresh);

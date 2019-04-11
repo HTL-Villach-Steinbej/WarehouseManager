@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import Misc.GlobalMethods;
 import Misc.Item;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,8 @@ public class AllItemsActivity extends AppCompatActivity {
     private void initComponents() {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        GlobalMethods.hideKeyboard(AllItemsActivity.this);
 
         allItems = new ArrayList<>();
         allCategories = new ArrayList<>();

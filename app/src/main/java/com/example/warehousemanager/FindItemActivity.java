@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.GlobalMethods;
 import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +62,8 @@ public class FindItemActivity extends AppCompatActivity {
     private void initComponents(){
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        GlobalMethods.hideKeyboard(FindItemActivity.this);
 
         cameraPreview = findViewById(R.id.cameraPreview);
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {

@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.GlobalMethods;
 import Misc.Item;
 import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
@@ -84,7 +85,7 @@ public class SearchItemsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 adapter.clear();
-                hideKeyboard(SearchItemsActivity.this);
+                GlobalMethods.hideKeyboard(SearchItemsActivity.this);
                 if(!TextUtils.isEmpty(txtBrand.getText())||!TextUtils.isEmpty(txtName.getText())||!TextUtils.isEmpty(txtRegal.getText())) {
                     if(!TextUtils.isEmpty(txtBrand.getText())) {
                         HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("brand", txtBrand.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -198,15 +199,5 @@ public class SearchItemsActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 lookUpProducts);
-    }
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

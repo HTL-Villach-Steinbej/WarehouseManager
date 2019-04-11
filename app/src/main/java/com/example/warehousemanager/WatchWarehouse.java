@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.TreeMap;
 
 import Misc.EnumRegalType;
+import Misc.GlobalMethods;
 import Misc.Regal;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -35,6 +36,8 @@ public class WatchWarehouse extends AppCompatActivity {
     }
     private void initComponents(){
         routingTable = new TreeMap<>();
+
+        GlobalMethods.hideKeyboard(WatchWarehouse.this);
 
         final GridLayout gridLayout = findViewById(R.id.gridLayout);
 

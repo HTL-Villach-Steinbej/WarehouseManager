@@ -33,29 +33,42 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FindItemActivity"
+        <activity android:name=".FindItemActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".SearchItemsActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".RemoveItemActivity" />
-        <activity
-            android:name=".BarcodescanActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".RemoveItemActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".BarcodescanActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".ManageEmployeesActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".WatchWarehouse" />
-        <activity android:name=".ManageWarehouseActivity" />
-        <activity android:name=".DetailRegalActivity" />
-        <activity android:name=".AddItemInformationActivity" />
-        <activity android:name=".AddWorkerActivity" />
-        <activity android:name=".CreateWarehouseActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".AllItemsActivity" />
-        <activity android:name=".LogActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".ManageEmployeesActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".HomeActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".RegisterActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ForgotPasswordActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".WatchWarehouse"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ManageWarehouseActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".DetailRegalActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".AddItemInformationActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".AddWorkerActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".CreateWarehouseActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".SettingsActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".AllItemsActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".LogActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

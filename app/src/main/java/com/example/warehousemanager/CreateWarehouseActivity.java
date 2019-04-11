@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import Misc.GlobalMethods;
 import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ public class CreateWarehouseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_warehouse);
 
         mAuth = FirebaseAuth.getInstance();
+
+        GlobalMethods.hideKeyboard(CreateWarehouseActivity.this);
 
         db = FirebaseFirestore.getInstance();
 

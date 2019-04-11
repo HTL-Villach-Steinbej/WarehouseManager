@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.GlobalMethods;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -55,6 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
+
+        GlobalMethods.hideKeyboard(RegisterActivity.this);
 
         btnRegister = findViewById(R.id.btnRegisterNow);
         btnRegister.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.GlobalMethods;
 import Misc.Item;
 import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
@@ -70,6 +71,8 @@ public class BarcodescanActivity extends AppCompatActivity {
     }
     private void initComponents(){
         cameraPreview =  findViewById(R.id.cameraPreview);
+
+        GlobalMethods.hideKeyboard(BarcodescanActivity.this);
 
         txtQRCODE =  findViewById(R.id.txtQRCODE);
 

@@ -16,12 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import Misc.GifImageView;
+import Misc.GlobalMethods;
 import Misc.Prevalent;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.Login;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -84,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
+
+        GlobalMethods.hideKeyboard(LoginActivity.this);
 
         gifImageView = findViewById(R.id.GifImageView);
         gifImageView.setGifImageResource(R.drawable.giphy);

@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import Misc.GlobalMethods;
 import Misc.Item;
 import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
@@ -72,6 +73,8 @@ public class AddItemInformationActivity extends AppCompatActivity {
     }
     private void initComponents(Intent intent){
         db = FirebaseFirestore.getInstance();
+
+        GlobalMethods.hideKeyboard(AddItemInformationActivity.this);
         
         spinnerCategoryAddItem = findViewById(R.id.spinner);
 

@@ -15,10 +15,6 @@
             </menu>
         </item>
         <item
-            android:id="@+id/nav_watch_warehouse"
-            android:icon="@drawable/baseline_search_white_24dp"
-            android:title="@string/title_warehouse_watch" />
-        <item
             android:id="@+id/nav_all_items"
             android:icon="@drawable/baseline_search_white_24dp"
             android:title="@string/title_all_items" />
@@ -26,10 +22,6 @@
             android:id="@+id/nav_manager_warehouse"
             android:icon="@drawable/baseline_build_white_24dp"
             android:title="@string/title_manage_warehouse" />
-        <item
-            android:id="@+id/nav_add_employee"
-            android:icon="@drawable/baseline_add_white_24dp"
-            android:title="@string/title_add_employee" />
         <item
             android:id="@+id/nav_manage_employyes"
             android:icon="@drawable/baseline_build_white_24dp"

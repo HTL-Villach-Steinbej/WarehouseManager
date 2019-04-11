@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import Misc.GlobalMethods;
 import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ public class AddWorkerActivity extends AppCompatActivity {
     }
     private void initComponents(){
         mAuth = FirebaseAuth.getInstance();
+
+        GlobalMethods.hideKeyboard(AddWorkerActivity.this);
 
         db = FirebaseFirestore.getInstance();
 
