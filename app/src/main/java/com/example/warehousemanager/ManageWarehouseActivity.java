@@ -74,10 +74,12 @@ public class ManageWarehouseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(updateFlag){
+                    btnEditWarehouse.setText("Edit");
                     saveCurrentState();
                     changeEditable(false);
                 }
                 else{
+                    btnEditWarehouse.setText("Done");
                     updateFlag = true;
                     changeEditable(true);
                 }

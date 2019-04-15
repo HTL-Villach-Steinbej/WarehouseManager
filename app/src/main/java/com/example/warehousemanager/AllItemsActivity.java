@@ -33,6 +33,7 @@ public class AllItemsActivity extends AppCompatActivity {
     private Button btnResetFilter;
     private TextView etxBeschreibung;
     private TextView etxBrand;
+    private TextView txtSelectedItems;
     private Spinner spinnerCategory;
 
     private ArrayList<Item> allItems;
@@ -69,6 +70,7 @@ public class AllItemsActivity extends AppCompatActivity {
 
         etxBeschreibung = findViewById(R.id.etxBezeichnung);
         etxBrand = findViewById(R.id.etxBrand);
+        txtSelectedItems = findViewById(R.id.txtSelectedItems);
 
         btnFilter = findViewById(R.id.btnFilter);
         btnFilter.setOnClickListener(new View.OnClickListener() {
@@ -131,82 +133,102 @@ public class AllItemsActivity extends AppCompatActivity {
                         allItems.add(i);
                     }
                     adapterItems.notifyDataSetChanged();
+                    txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                 }
                 else{
                     Toast.makeText(AllItemsActivity.this, "Something went wrong with the database", Toast.LENGTH_SHORT);
+                    txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                 }
+
             }
         });
+
     }
-    private void loadItems(String brand, String description){
+    private void loadItems(final String brand, final String description){
         if(brand.isEmpty() && description.isEmpty()){
             loadAllItems();
         }
         else if(brand.isEmpty() && !description.isEmpty()){
-            HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("name", description).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            HomeActivity.currentWarehouseReference.collection("items").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if(task.isSuccessful()){
                         allItems.clear();
                         for(DocumentSnapshot item : task.getResult().getDocuments()){
-                            Item i = new Item();
-                            i.setQR_CODE(item.get("qrcode").toString());
-                            i.setName(item.get("name").toString());
-                            i.setEAN_CODE(item.get("ean").toString());
-                            i.setCategory(item.get("category").toString());
-                            i.setBrand(item.get("brand").toString());
-                            allItems.add(i);
+                            String name = item.get("name").toString();
+                            if(name.contains(description)){
+                                Item i = new Item();
+                                i.setQR_CODE(item.get("qrcode").toString());
+                                i.setName(name);
+                                i.setEAN_CODE(item.get("ean").toString());
+                                i.setCategory(item.get("category").toString());
+                                i.setBrand(item.get("brand").toString());
+                                allItems.add(i);
+                            }
                         }
                         adapterItems.notifyDataSetChanged();
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                     else{
                         Toast.makeText(AllItemsActivity.this, "Something went wrong with the database", Toast.LENGTH_SHORT);
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                 }
             });
         }
         else if(!brand.isEmpty() && description.isEmpty()){
-            HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("brand", brand).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            HomeActivity.currentWarehouseReference.collection("items").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if(task.isSuccessful()){
                         allItems.clear();
                         for(DocumentSnapshot item : task.getResult().getDocuments()){
-                            Item i = new Item();
-                            i.setQR_CODE(item.get("qrcode").toString());
-                            i.setName(item.get("name").toString());
-                            i.setEAN_CODE(item.get("ean").toString());
-                            i.setCategory(item.get("category").toString());
-                            i.setBrand(item.get("brand").toString());
-                            allItems.add(i);
+                            String brandName = item.get("brand").toString();
+                            if(brandName.contains(brand)){
+                                Item i = new Item();
+                                i.setQR_CODE(item.get("qrcode").toString());
+                                i.setName(item.get("name").toString());
+                                i.setEAN_CODE(item.get("ean").toString());
+                                i.setCategory(item.get("category").toString());
+                                i.setBrand(brandName);
+                                allItems.add(i);
+                            }
                         }
                         adapterItems.notifyDataSetChanged();
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                     else{
                         Toast.makeText(AllItemsActivity.this, "Something went wrong with the database", Toast.LENGTH_SHORT);
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                 }
             });
         }
         else{
-            HomeActivity.currentWarehouseReference.collection("items").whereEqualTo("name", description).whereEqualTo("brand", brand).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            HomeActivity.currentWarehouseReference.collection("items").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if(task.isSuccessful()){
                         allItems.clear();
                         for(DocumentSnapshot item : task.getResult().getDocuments()){
-                            Item i = new Item();
-                            i.setQR_CODE(item.get("qrcode").toString());
-                            i.setName(item.get("name").toString());
-                            i.setEAN_CODE(item.get("ean").toString());
-                            i.setCategory(item.get("category").toString());
-                            i.setBrand(item.get("brand").toString());
-                            allItems.add(i);
+                            String name = item.get("name").toString();
+                            String brandName = item.get("brand").toString();
+                            if(name.contains(description) && brandName.contains(brand)){
+                                Item i = new Item();
+                                i.setQR_CODE(item.get("qrcode").toString());
+                                i.setName(name);
+                                i.setEAN_CODE(item.get("ean").toString());
+                                i.setCategory(item.get("category").toString());
+                                i.setBrand(brandName);
+                                allItems.add(i);
+                            }
                         }
                         adapterItems.notifyDataSetChanged();
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                     else{
                         Toast.makeText(AllItemsActivity.this, "Something went wrong with the database", Toast.LENGTH_SHORT);
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                 }
             });
@@ -229,9 +251,11 @@ public class AllItemsActivity extends AppCompatActivity {
                             allItems.add(i);
                         }
                         adapterItems.notifyDataSetChanged();
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                     else{
                         Toast.makeText(AllItemsActivity.this, "Something went wrong with the database", Toast.LENGTH_SHORT);
+                        txtSelectedItems.setText(String.valueOf(allItems.size()) + " Items selected");
                     }
                 }
             });
