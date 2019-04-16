@@ -1,7 +1,12 @@
 package com.example.warehousemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -60,6 +65,7 @@ public class AllItemsActivity extends AppCompatActivity {
         adapterItems = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, allItems);
         listViewItems.setAdapter(adapterItems);
         loadAllItems();
+        registerForContextMenu(listViewItems);
 
         spinnerCategory = findViewById(R.id.spinner_category);
         adapterCategories = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, allCategories);
@@ -262,6 +268,31 @@ public class AllItemsActivity extends AppCompatActivity {
         }
         else{
            loadAllItems();
+        }
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.listViewItems) {
+            ListView lv = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            final Item obj = (Item) lv.getItemAtPosition(acmi.position);
+
+            menu.add("Delete Item").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Intent intent = new Intent(AllItemsActivity.this, RemoveItemActivity.class);
+                    intent.putExtra("item", obj);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+            menu.add("Update Item").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    //TODO: Implement
+                    return false;
+                }
+            });
         }
     }
 }

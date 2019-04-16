@@ -1,6 +1,7 @@
 package com.example.warehousemanager;
 
 import Misc.GlobalMethods;
+import Misc.Item;
 import Misc.Warehouse;
 import Misc.WarehouseLogger;
 import Misc.WarehouseUser;
@@ -10,7 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +42,7 @@ public class ManageEmployeesActivity extends AppCompatActivity {
     private Button btnFilterEmail;
     private Button btnAddEmployee;
     private EditText etxEmailFilter;
+    private TextView txtSelectedEmpl;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -57,6 +63,7 @@ public class ManageEmployeesActivity extends AppCompatActivity {
         listUser = new ArrayList<>();
 
         etxEmailFilter = findViewById(R.id.etxEmailFilter);
+        txtSelectedEmpl = findViewById(R.id.txtSelectedEmpl);
 
         btnRefresh = findViewById(R.id.btnRefresh);
         btnRefresh.setOnClickListener(new View.OnClickListener() {
@@ -82,9 +89,11 @@ public class ManageEmployeesActivity extends AppCompatActivity {
                 refreshView(filter);
             }
         });
+
         listViewManageEmp = findViewById(R.id.listViewManageEmp);
         listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listUser);
         listViewManageEmp.setAdapter(listAdapter);
+        registerForContextMenu(listViewManageEmp);
     }
     @Override
     public void onStart(){
@@ -104,6 +113,7 @@ public class ManageEmployeesActivity extends AppCompatActivity {
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             listUser.add(queryDocumentSnapshots.getDocuments().get(0).get("email").toString());
                             listAdapter.notifyDataSetChanged();
+                            txtSelectedEmpl.setText(listUser.size() + " Employees loaded");
                         }
                     });
                 }
@@ -126,14 +136,42 @@ public class ManageEmployeesActivity extends AppCompatActivity {
                             if(email.contains(filter)){
                                 listUser.add(email);
                                 listAdapter.notifyDataSetChanged();
+                                txtSelectedEmpl.setText(listUser.size() + " Employees loaded");
                             }
                         }
                     });
                 }
                 etxEmailFilter.clearAnimation();
                 etxEmailFilter.setText("");
+
                 Toast.makeText(ManageEmployeesActivity.this, "Data up to Date. Loaded: " + listUser.size() + " Items", Toast.LENGTH_SHORT);
             }
         });
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.listViewManageEmp) {
+            ListView lv = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            final String obj = (String) lv.getItemAtPosition(acmi.position);
+
+            menu.add("Remove Employee").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Intent intent = new Intent(ManageEmployeesActivity.this, RemoveItemActivity.class);
+                    intent.putExtra("item", obj);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
+            menu.add("Update Employee").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    //TODO: Implement
+                    return false;
+                }
+            });
+        }
     }
 }

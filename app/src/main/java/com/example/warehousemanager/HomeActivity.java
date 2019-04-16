@@ -18,6 +18,7 @@ import Misc.Warehouse;
 import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -27,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +52,8 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    private CoordinatorLayout rootLayoutHome;
+    private ConstraintLayout rootConstraint;
+    private FrameLayout content_frame_home;
     private DrawerLayout drawerLayoutHome;
     private NavigationView sideNavViewHome;
 
@@ -80,8 +83,19 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        rootLayoutHome = findViewById(R.id.rootHome);
-        rootLayoutHome.setOnClickListener(new View.OnClickListener() {
+        content_frame_home = findViewById(R.id.content_frame_home);
+        content_frame_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabAddHome.hide();
+                fabSearchHome.hide();
+                fabRemoveHome.hide();
+                fabMainHome.setImageResource(R.drawable.baseline_add_white_24dp);
+            }
+        });
+
+        rootConstraint = findViewById(R.id.rootConstraint);
+        rootConstraint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fabAddHome.hide();

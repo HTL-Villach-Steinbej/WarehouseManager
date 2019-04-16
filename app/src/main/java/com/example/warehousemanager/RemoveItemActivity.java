@@ -1,35 +1,57 @@
 package com.example.warehousemanager;
 
+import Misc.GlobalMethods;
+import Misc.Regal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import Misc.Item;
 import com.example.warehousemanager.R;
+import com.google.firebase.firestore.model.mutation.ArrayTransformOperation;
 
 import java.util.ArrayList;
 
 public class RemoveItemActivity extends AppCompatActivity {
-    private ArrayList<Item> items;
-    private ArrayAdapter<Item> adapter;
-    private ListView listView;
+    private TextView txtName;
+    private Button btnRemove;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
         setContentView(R.layout.activity_remove_item);
-        initComponents(intent);
+        initComponents();
     }
-    private void initComponents(Intent intent){
-        items = (ArrayList<Item>) intent.getSerializableExtra("items");
 
-        listView = findViewById(R.id.listview);
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                items);
-        listView.setAdapter(adapter);
+    private void initComponents(){
+        GlobalMethods.hideKeyboard(RemoveItemActivity.this);
+
+        Item item = (Item) getIntent().getSerializableExtra("item");
+
+        txtName = findViewById(R.id.txtRegalName);
+        //txtName.setText(item.getName());
+
+        btnRemove = findViewById(R.id.btnRemoveItem);
+        btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RemoveItemActivity.this, HomeActivity.class));
+            }
+        });
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+        getWindow().setLayout((int) (width * .8), (int) (height * .6));
     }
 }

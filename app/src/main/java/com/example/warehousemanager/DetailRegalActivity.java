@@ -32,6 +32,7 @@ public class DetailRegalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_regal);
         initComponents();
     }
+
     private void initComponents(){
         Intent intent = getIntent();
         final Regal regal = (Regal) intent.getSerializableExtra("regal");
