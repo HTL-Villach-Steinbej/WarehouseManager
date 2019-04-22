@@ -147,7 +147,7 @@ public class ManageWarehouseActivity extends AppCompatActivity {
     }
 
     private void saveCurrentState() {
-        WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.WAREHOUSE, "Done: Edit");
+
     }
     private void changeEditable(boolean editable){
         if(!editable){

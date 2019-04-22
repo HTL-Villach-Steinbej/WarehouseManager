@@ -96,7 +96,6 @@ public class SearchItemsActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()){
-                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Search");
                                     for(QueryDocumentSnapshot item : task.getResult()){
                                         Item tmp= new Item();
                                         tmp.setQR_CODE((String)item.get("qrcode"));
@@ -128,7 +127,6 @@ public class SearchItemsActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()){
-                                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Search");
                                     for(QueryDocumentSnapshot item : task.getResult()){
                                         Item tmp= new Item();
                                         tmp.setQR_CODE((String)item.get("qrcode"));
@@ -154,7 +152,6 @@ public class SearchItemsActivity extends AppCompatActivity {
                         });
                     }
                 }else{
-                    WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Error: Search");
                     Toast.makeText(SearchItemsActivity.this, "Überprüfen Sie Ihre Eingabe", Toast.LENGTH_SHORT).show();
                 }
             }

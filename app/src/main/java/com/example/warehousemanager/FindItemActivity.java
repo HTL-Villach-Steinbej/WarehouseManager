@@ -1,7 +1,6 @@
 package com.example.warehousemanager;
 
 import Misc.GlobalMethods;
-import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -136,8 +135,6 @@ public class FindItemActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                                WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Find");
-
                             }
 
                         });

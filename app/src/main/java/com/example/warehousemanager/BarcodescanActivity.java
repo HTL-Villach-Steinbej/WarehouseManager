@@ -2,7 +2,6 @@ package com.example.warehousemanager;
 
 import Misc.GlobalMethods;
 import Misc.Item;
-import Misc.WarehouseLogger;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -99,7 +98,6 @@ public class BarcodescanActivity extends AppCompatActivity {
                             i.setEAN_CODE(eancode);
                             i.setQR_CODE(qrcode);
                             items.add(i);
-                            WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Scan");
                             if(documentSnapshot.get("brand")==null) {
                                 productInfo.putExtra("itemfound", false);
                             }

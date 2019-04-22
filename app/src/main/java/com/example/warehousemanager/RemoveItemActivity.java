@@ -2,6 +2,7 @@ package com.example.warehousemanager;
 
 import Misc.GlobalMethods;
 import Misc.Regal;
+import Misc.WarehouseLogger;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,11 +16,19 @@ import android.widget.TextView;
 
 import Misc.Item;
 import com.example.warehousemanager.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.model.mutation.ArrayTransformOperation;
 
 import java.util.ArrayList;
 
 public class RemoveItemActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+
     private TextView txtName;
     private Button btnRemove;
 
@@ -32,16 +41,18 @@ public class RemoveItemActivity extends AppCompatActivity {
 
     private void initComponents(){
         GlobalMethods.hideKeyboard(RemoveItemActivity.this);
+        mAuth = FirebaseAuth.getInstance();
 
-        Item item = (Item) getIntent().getSerializableExtra("item");
+        final Item item = (Item) getIntent().getParcelableExtra("warehouseItem");
 
-        txtName = findViewById(R.id.txtRegalName);
-        //txtName.setText(item.getName());
+        txtName = findViewById(R.id.txtItemName);
+        txtName.setText(item.getName());
 
         btnRemove = findViewById(R.id.btnRemoveItem);
         btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeItem(item);
                 startActivity(new Intent(RemoveItemActivity.this, HomeActivity.class));
             }
         });
@@ -53,5 +64,21 @@ public class RemoveItemActivity extends AppCompatActivity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
+    }
+    private void removeItem(final Item item){
+        HomeActivity.currentWarehouseReference.collection("items").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots){
+                    if(snapshot.get("ean").toString().equals(item.getEAN_CODE()))
+                        snapshot.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: removing");
+                            }
+                        });
+                }
+            }
+        });
     }
 }

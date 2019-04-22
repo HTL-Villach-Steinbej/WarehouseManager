@@ -2,6 +2,7 @@ package com.example.warehousemanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -272,6 +273,7 @@ public class AllItemsActivity extends AppCompatActivity {
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
         if (v.getId() == R.id.listViewItems) {
             ListView lv = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -281,7 +283,8 @@ public class AllItemsActivity extends AppCompatActivity {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Intent intent = new Intent(AllItemsActivity.this, RemoveItemActivity.class);
-                    intent.putExtra("item", obj);
+                    intent.putExtra("warehouseItem", (Parcelable) obj);
+                    //intent.putExtra("warehouseItem", obj);
                     startActivity(intent);
                     return false;
                 }
