@@ -103,7 +103,9 @@ public class ManageWarehouseActivity extends AppCompatActivity {
         btnRemoveWarehouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(ManageWarehouseActivity.this, RemoveWarehouseActivity.class);
+                intent.putExtra("warehouse", HomeActivity.currentWarehouse);
+                startActivity(intent);
             }
         });
 

@@ -78,7 +78,9 @@ public class CreateWarehouseActivity extends AppCompatActivity {
                     warehouseData.put("admin", mAuth.getCurrentUser().getUid());
                     warehouseData.put("users", users);
                     warehouseData.put("created", Timestamp.now());
-                    warehouseData.put("subscribed_till", txtSubscribedTill.getText().toString());
+                    warehouseData.put("payment_method", spinnerMethod.getSelectedItem().toString());
+                    warehouseData.put("payment_interval", spinnerInterval.getSelectedItem().toString());
+                    warehouseData.put("subscribed_till", "2019.12.12");
                     db.collection("warehouses").add(warehouseData);
                     Toast.makeText(CreateWarehouseActivity.this, "Warehouse Created",
                             Toast.LENGTH_SHORT).show();
