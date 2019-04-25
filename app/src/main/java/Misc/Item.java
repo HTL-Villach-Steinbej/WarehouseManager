@@ -102,7 +102,7 @@ public class Item implements Parcelable {
 
     @Override
     public String toString() {
-        return "[" + category + "] " + name                                                                      ;
+        return QR_CODE+ " [" + category + "] " + name                                                                      ;
     }
 }
 

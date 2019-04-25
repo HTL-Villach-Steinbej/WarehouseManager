@@ -83,7 +83,7 @@ public class AddItemInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(txtBrand.getText())&&!TextUtils.isEmpty(txtName.getText()))    {
-                    Map<String,String> item = new HashMap<String,String>();
+                    final Map<String,String> item = new HashMap<String,String>();
                     item.put("brand",txtBrand.getText().toString().trim());
                     item.put("name",txtName.getText().toString().trim());
                     item.put("category",spinnerCategoryAddItem.getSelectedItem().toString());
@@ -95,7 +95,7 @@ public class AddItemInformationActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(AddItemInformationActivity.this, "Ware wurde im Lager hinzugefügt", Toast.LENGTH_SHORT).show();
-                            WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Add");
+                            WarehouseLogger.addLog(mAuth.getCurrentUser(), WarehouseLogger.LogType.ITEMS, "Done: Add " +item.get("brand")+" "+item.get("name"));
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
